@@ -46,7 +46,7 @@
 1. Clone the repository:
 
     ```bash
-    git clone https://github.com/yourusername/budgie-budget-tracker.git
+    git clone https://github.com/Ryan-Millard/Budgie-Budget-Tracker.git
     ```
 
 2. Open the project in Android Studio.
