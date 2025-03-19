@@ -5,7 +5,7 @@
 # Budgie - Budget Companion
 
 
-**Budgie** is your personal financial assistant, designed to make budgeting simple, engaging, and stress-free. Whether you're managing day-to-day expenses, keeping track of bills, or aiming for long-term savings, Budgie is here to guide you with powerful, intuitive tools. Inspired by the MyMoney app, Budgie takes it a step further with a sleek design and real-time insights.
+**Budgie** is your personal financial assistant, designed to make budgeting simple, engaging, and stress-free. Whether you're managing day-to-day expenses, keeping track of bills, or aiming for long-term savings, Budgie is here to guide you with powerful, intuitive tools. Budgie features a sleek design and real-time insights.
 
 ---
 
