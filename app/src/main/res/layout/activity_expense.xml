@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:padding="16dp"
+    android:background="@color/colorBackground"
+    tools:context=".ExpenseActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:gravity="center_horizontal">
+
+        <!-- Logo -->
+        <ImageView
+            android:id="@+id/logoImageView"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:layout_marginTop="40dp"
+            android:contentDescription="App Logo"
+            android:src="@mipmap/ic_logo"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+        <!-- Title -->
+        <TextView
+            android:id="@+id/expenseTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Monthly Expenses Overview"
+            android:textSize="24sp"
+            android:textColor="@color/colorTextPrimary"
+            android:textStyle="bold"
+            android:layout_gravity="center_horizontal"
+            android:paddingBottom="16dp" />
+
+        <!-- Graph placeholder -->
+        <FrameLayout
+            android:id="@+id/graphContainer"
+            android:layout_width="match_parent"
+            android:layout_height="200dp"
+            android:layout_marginBottom="24dp"
+            android:background="@color/colorSurface"
+            android:padding="8dp">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Graph goes here"
+                android:textColor="@color/colorTextPrimary" />
+        </FrameLayout>
+
+        <!-- Category List Title -->
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Expense Categories"
+            android:textSize="20sp"
+            android:textColor="@color/colorTextPrimary"
+            android:textStyle="bold"
+            android:paddingBottom="8dp" />
+
+        <!-- Categories List Placeholder -->
+        <LinearLayout
+            android:id="@+id/categoryList"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <!-- Example category -->
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:padding="12dp"
+                android:text="• Food"
+                android:textColor="@color/colorTextPrimary"
+                android:background="#E76F51"
+                android:layout_marginBottom="8dp" />
+        </LinearLayout>
+
+        <!-- Add New Category Button -->
+        <Button
+            android:id="@+id/addCategoryButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Add New Category"
+            android:backgroundTint="@color/colorPrimary"
+            android:textColor="@color/colorBackground"
+            android:layout_marginTop="16dp"/>
+
+        <!-- Go to Overview Page Button -->
+        <Button
+            android:id="@+id/goToOverviewButton"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Overview"
+            android:backgroundTint="#F4A261"
+            android:textColor="@color/colorBackground"
+            android:layout_marginTop="16dp"
+            android:layout_marginBottom="24dp"/>
+    </LinearLayout>
+</ScrollView>

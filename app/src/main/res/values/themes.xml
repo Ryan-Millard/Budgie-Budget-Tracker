@@ -1,0 +1,48 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+
+    <!-- Base Theme -->
+    <style name="Base.Theme.BudgieBudgetTracking" parent="Theme.Material3.DayNight.NoActionBar">
+        <!-- Primary brand color -->
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorOnPrimary">@color/colorBackground</item>
+
+        <!-- Secondary / Accent -->
+        <item name="colorSecondary">@color/colorAccent</item>
+        <item name="colorOnSecondary">@color/colorBackground</item>
+
+        <!-- Background and Surface -->
+        <item name="android:colorBackground">@color/colorBackground</item>
+        <item name="colorOnBackground">@color/colorOnBackground</item>
+
+        <item name="colorSurface">@color/colorSurface</item>
+        <item name="colorOnSurface">@color/colorOnSurface</item>
+
+        <!-- Error Colors -->
+        <item name="colorError">@color/colorError</item>
+        <item name="colorOnError">@color/colorOnError</item>
+
+        <!-- Typography (optional, for better design preview) -->
+        <item name="android:textColorPrimary">@color/colorTextPrimary</item>
+
+        <!-- Default button style (optional) -->
+        <item name="buttonStyle">@style/MyDefaultButtonStyle</item>
+    </style>
+
+    <style name="Theme.BudgieBudgetTracking" parent="Base.Theme.BudgieBudgetTracking" />
+
+    <!-- Custom rounded button style -->
+    <style name="RoundedButton" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">24dp</item>
+        <item name="android:padding">12dp</item>
+    </style>
+
+    <!-- Optional: Global default button style -->
+    <style name="MyDefaultButtonStyle" parent="Widget.Material3.Button">
+        <item name="android:backgroundTint">@color/colorPrimary</item>
+        <item name="android:textColor">@color/white</item>
+        <item name="cornerRadius">20dp</item>
+    </style>
+
+</resources>

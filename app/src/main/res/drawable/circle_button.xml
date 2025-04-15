@@ -1,0 +1,12 @@
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <shape xmlns:android="http://schemas.android.com/apk/res/android"
+        android:shape="rectangle">
+
+        <solid android:color="?android:attr/colorBackground"/> <!-- Placeholder, overridden by backgroundTint -->
+
+        <!-- Use a smaller radius for better proportion -->
+        <corners android:radius="32dp" /> <!-- Adjust this value as needed for perfect circle -->
+
+        <!-- Optional: Add padding if needed to keep the text centered -->
+    </shape>
+</selector>
