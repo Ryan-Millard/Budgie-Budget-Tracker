@@ -18,13 +18,15 @@ class SessionManager private constructor(context: Context) {
 		private const val PREF_NAME = "user_session"
 		private const val KEY_IS_LOGGED_IN = "is_logged_in"
 		private const val KEY_LOGIN_TIME = "login_time"
+		private const val KEY_USER_EMAIL = "user_email"
 		private const val SESSION_DURATION = 24 * 60 * 60 * 1000L // 24 hours in milliseconds
 	}
 
 	private val prefs: SharedPreferences = context.getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE)
 
-	fun login() {
+	fun login(email: String) {
 		prefs.edit().apply {
+			putString(KEY_USER_EMAIL, email)
 			putBoolean(KEY_IS_LOGGED_IN, true)
 			putLong(KEY_LOGIN_TIME, System.currentTimeMillis())
 			apply()
@@ -47,4 +49,11 @@ class SessionManager private constructor(context: Context) {
 		val currentTime = System.currentTimeMillis()
 		return (currentTime - loginTime) >= SESSION_DURATION
 	}
+
+	// In SessionManager
+	fun getUserEmail(): String {
+		// Assume you have a method that retrieves the current user's email from shared preferences or another secure location
+		return prefs.getString(KEY_USER_EMAIL, "") ?: ""
+	}
+
 }

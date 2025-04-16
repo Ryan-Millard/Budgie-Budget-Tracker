@@ -50,6 +50,8 @@
 					android:layout_width="100dp"
 					android:layout_height="100dp"
 					android:contentDescription="Profile Picture"
+					android:scaleType="centerCrop"
+					android:clipToOutline="true"
 					android:src="@drawable/ic_profile_placeholder"
 					android:background="@drawable/circle_border"
 					app:layout_constraintTop_toTopOf="parent"
