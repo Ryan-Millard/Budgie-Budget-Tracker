@@ -16,7 +16,16 @@ class ProfileActivity : BaseActivity() {
 
 		sessionManager = SessionManager.getInstance(applicationContext)
 
+		setupClickListeners()
+	}
+
+	private fun setupClickListeners() {
 		// Launch EditProfileActivity when edit button is clicked
+		val btnEditProfile = findViewById<Button>(R.id.btnEditProfile)
+		btnEditProfile.setOnClickListener {
+			startActivity(Intent(this, EditProfileActivity::class.java))
+		}
+
 		val btnLogout = findViewById<Button>(R.id.btnLogout)
 		btnLogout.setOnClickListener {
 			sessionManager.logout()

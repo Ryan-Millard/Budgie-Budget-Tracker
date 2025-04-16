@@ -8,5 +8,12 @@ data class User(
 	@PrimaryKey(autoGenerate = true) val id: Int = 0,
 	val fullName: String,
 	val email: String,
-	val password: String
+	val password: String,
+
+	// Non-imperative fields
+	val phone: String? = null,
+	val location: String? = null,
+	val bio: String? = null,
+	val profilePic: String? = null
 )
+
