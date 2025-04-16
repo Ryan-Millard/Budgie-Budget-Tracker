@@ -1,5 +1,6 @@
 package com.example.budgiebudgettracking
 
+import androidx.appcompat.app.AppCompatActivity
 import android.content.Intent
 import android.os.Bundle
 import android.text.TextUtils
@@ -10,11 +11,12 @@ import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import androidx.lifecycle.lifecycleScope
-
-import com.example.budgiebudgettracking.database.AppDatabase
 import kotlinx.coroutines.launch
 
-class LoginActivity : BaseActivity() {
+import com.example.budgiebudgettracking.database.AppDatabase
+import com.example.budgiebudgettracking.utils.SessionManager
+
+class LoginActivity : AppCompatActivity() {
 	// UI elements
 	private lateinit var emailInputLayout: TextInputLayout
 	private lateinit var emailEditText: TextInputEditText
@@ -23,9 +25,13 @@ class LoginActivity : BaseActivity() {
 	private lateinit var loginButton: Button
 	private lateinit var registerPrompt: TextView
 
+	private lateinit var sessionManager: SessionManager
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_login)
+
+		sessionManager = SessionManager.getInstance(applicationContext)
 
 		// Initialize UI elements
 		initializeViews()
@@ -54,8 +60,7 @@ class LoginActivity : BaseActivity() {
 
 		// Register prompt click listener
 		registerPrompt.setOnClickListener {
-			// Navigate to Register Activity using BaseActivity's method
-			navigateToActivity(RegisterActivity::class.java)
+			startActivity(Intent(this, RegisterActivity::class.java))
 		}
 	}
 
@@ -92,7 +97,8 @@ class LoginActivity : BaseActivity() {
 			val userDao = AppDatabase.getDatabase(applicationContext).userDao()
 			val user = userDao.login(email, password)
 			runOnUiThread {
-				if (user != null) {
+				if(user != null) {
+					sessionManager.login()
 					Toast.makeText(this@LoginActivity, "Login successful!", Toast.LENGTH_SHORT).show()
 					startActivity(Intent(this@LoginActivity, MainActivity::class.java))
 					finish()
