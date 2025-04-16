@@ -40,5 +40,9 @@ class MainActivity : BaseActivity() {
 		findViewById<Button>(R.id.btnMonthlyBudget).setOnClickListener {
 			startActivity(Intent(this, MonthlyBudgetActivity::class.java))
 		}
+
+		findViewById<Button>(R.id.btnProfile).setOnClickListener {
+			startActivity(Intent(this, ProfileActivity::class.java))
+		}
 	}
 }

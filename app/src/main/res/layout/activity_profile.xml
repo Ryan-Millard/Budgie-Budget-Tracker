@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+	android:fillViewport="true">
+
+	<androidx.constraintlayout.widget.ConstraintLayout
+		xmlns:android="http://schemas.android.com/apk/res/android"
+		xmlns:app="http://schemas.android.com/apk/res-auto"
+		android:id="@+id/profileLayout"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent">
+
+		<!-- Background Image -->
+		<ImageView
+			android:id="@+id/abstract_background"
+			android:layout_width="0dp"
+			android:layout_height="0dp"
+			android:scaleType="centerCrop"
+			android:src="@drawable/abstract_background"
+			android:alpha="0.3"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintBottom_toBottomOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent" />
+
+		<!-- Profile Header Section -->
+		<androidx.cardview.widget.CardView
+			android:id="@+id/profileHeaderCard"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="40dp"
+			app:cardCornerRadius="16dp"
+			app:cardElevation="4dp"
+			app:layout_constraintTop_toTopOf="parent"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp">
+
+				<!-- Profile Picture - Replaced CircleImageView with standard ImageView + shape -->
+				<ImageView
+					android:id="@+id/profileImageView"
+					android:layout_width="100dp"
+					android:layout_height="100dp"
+					android:contentDescription="Profile Picture"
+					android:src="@drawable/ic_profile_placeholder"
+					android:background="@drawable/circle_border"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Profile Name -->
+				<TextView
+					android:id="@+id/tvProfileName"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="John Doe"
+					android:textColor="@color/colorPrimary"
+					android:textSize="22sp"
+					android:textStyle="bold"
+					app:layout_constraintTop_toBottomOf="@id/profileImageView"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Profile Email -->
+				<TextView
+					android:id="@+id/tvProfileEmail"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="4dp"
+					android:text="john.doe@example.com"
+					android:textColor="@color/colorOnBackground"
+					android:textSize="16sp"
+					app:layout_constraintTop_toBottomOf="@id/tvProfileName"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Edit Profile Button -->
+				<Button
+					android:id="@+id/btnEditProfile"
+					android:layout_width="wrap_content"
+					android:layout_height="40dp"
+					android:layout_marginTop="16dp"
+					android:text="Edit Profile"
+					android:textSize="14sp"
+					style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+					app:layout_constraintTop_toBottomOf="@id/tvProfileEmail"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		</androidx.cardview.widget.CardView>
+
+		<!-- Profile Information Section -->
+		<androidx.cardview.widget.CardView
+			android:id="@+id/profileInfoCard"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="24dp"
+			app:cardCornerRadius="16dp"
+			app:cardElevation="4dp"
+			app:layout_constraintTop_toBottomOf="@id/profileHeaderCard"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp">
+
+				<TextView
+					android:id="@+id/tvInfoSectionTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Personal Information"
+					android:textColor="@color/colorPrimary"
+					android:textSize="18sp"
+					android:textStyle="bold"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintStart_toStartOf="parent" />
+
+				<!-- Phone Number -->
+				<TextView
+					android:id="@+id/tvPhoneLabel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="Phone"
+					android:textColor="@color/colorOnBackground"
+					android:textStyle="bold"
+					app:layout_constraintTop_toBottomOf="@id/tvInfoSectionTitle"
+					app:layout_constraintStart_toStartOf="parent" />
+
+				<TextView
+					android:id="@+id/tvPhoneValue"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="24dp"
+					android:text="+1 (555) 123-4567"
+					app:layout_constraintTop_toTopOf="@id/tvPhoneLabel"
+					app:layout_constraintStart_toEndOf="@id/tvLocationLabel"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Location -->
+				<TextView
+					android:id="@+id/tvLocationLabel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="Location"
+					android:textColor="@color/colorOnBackground"
+					android:textStyle="bold"
+					app:layout_constraintTop_toBottomOf="@id/tvPhoneLabel"
+					app:layout_constraintStart_toStartOf="parent" />
+
+				<TextView
+					android:id="@+id/tvLocationValue"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="24dp"
+					android:text="San Francisco, CA"
+					app:layout_constraintTop_toTopOf="@id/tvLocationLabel"
+					app:layout_constraintStart_toEndOf="@id/tvLocationLabel"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Date Joined -->
+				<TextView
+					android:id="@+id/tvJoinedLabel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="Joined"
+					android:textColor="@color/colorOnBackground"
+					android:textStyle="bold"
+					app:layout_constraintTop_toBottomOf="@id/tvLocationLabel"
+					app:layout_constraintStart_toStartOf="parent" />
+
+				<TextView
+					android:id="@+id/tvJoinedValue"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginStart="24dp"
+					android:text="April 2025"
+					app:layout_constraintTop_toTopOf="@id/tvJoinedLabel"
+					app:layout_constraintStart_toEndOf="@id/tvLocationLabel"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Bio -->
+				<TextView
+					android:id="@+id/tvBioLabel"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="Bio"
+					android:textColor="@color/colorOnBackground"
+					android:textStyle="bold"
+					app:layout_constraintTop_toBottomOf="@id/tvJoinedLabel"
+					app:layout_constraintStart_toStartOf="parent" />
+
+				<TextView
+					android:id="@+id/tvBioValue"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="8dp"
+					android:text="Software developer with a passion for creating user-friendly mobile applications. Love hiking and photography in my free time."
+					app:layout_constraintTop_toBottomOf="@id/tvBioLabel"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		</androidx.cardview.widget.CardView>
+
+		<!-- Settings Section -->
+		<androidx.cardview.widget.CardView
+			android:id="@+id/settingsCard"
+			android:layout_width="0dp"
+			android:layout_height="wrap_content"
+			android:layout_marginHorizontal="16dp"
+			android:layout_marginTop="24dp"
+			app:cardCornerRadius="16dp"
+			app:cardElevation="4dp"
+			app:layout_constraintTop_toBottomOf="@id/profileInfoCard"
+			app:layout_constraintStart_toStartOf="parent"
+			app:layout_constraintEnd_toEndOf="parent">
+
+			<androidx.constraintlayout.widget.ConstraintLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:padding="16dp">
+				
+				<TextView
+					android:id="@+id/tvSettingsSectionTitle"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:text="Account Settings"
+					android:textColor="@color/colorPrimary"
+					android:textSize="18sp"
+					android:textStyle="bold"
+					app:layout_constraintTop_toTopOf="parent"
+					app:layout_constraintStart_toStartOf="parent" />
+
+				<!-- Security Settings -->
+				<TextView
+					android:id="@+id/tvSecurity"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="Security"
+					android:drawableStart="@drawable/ic_security_icon"
+					android:drawablePadding="8dp"
+					android:paddingVertical="8dp"
+					app:layout_constraintTop_toBottomOf="@id/tvSettingsSectionTitle"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Notifications Settings -->
+				<TextView
+					android:id="@+id/tvNotifications"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="Notifications"
+					android:drawableStart="@drawable/ic_notification_icon"
+					android:drawablePadding="8dp"
+					android:paddingVertical="8dp"
+					app:layout_constraintTop_toBottomOf="@id/tvSecurity"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Privacy Settings -->
+				<TextView
+					android:id="@+id/tvPrivacy"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:text="Privacy"
+					android:drawableStart="@drawable/ic_privacy_icon"
+					android:drawablePadding="8dp"
+					android:paddingVertical="8dp"
+					app:layout_constraintTop_toBottomOf="@id/tvNotifications"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+
+				<!-- Logout Button -->
+				<Button
+					android:id="@+id/btnLogout"
+					android:layout_width="0dp"
+					android:layout_height="wrap_content"
+					android:layout_marginTop="16dp"
+					android:text="Logout"
+					style="@style/RoundedButton"
+					android:backgroundTint="@color/colorError"
+					app:layout_constraintTop_toBottomOf="@id/tvPrivacy"
+					app:layout_constraintStart_toStartOf="parent"
+					app:layout_constraintEnd_toEndOf="parent" />
+			</androidx.constraintlayout.widget.ConstraintLayout>
+		</androidx.cardview.widget.CardView>
+
+	</androidx.constraintlayout.widget.ConstraintLayout>
+</ScrollView>

@@ -52,8 +52,8 @@ open class BaseActivity : AppCompatActivity() {
 					true
 				}
 				R.id.nav_profile -> {
-					if (this !is LoginActivity) {
-						navigateToActivity(LoginActivity::class.java)
+					if (this !is ProfileActivity) {
+						navigateToActivity(ProfileActivity::class.java)
 					}
 					true
 				}
@@ -80,7 +80,7 @@ open class BaseActivity : AppCompatActivity() {
 			is CategoryActivity -> R.id.nav_category
 			is ExpenseActivity -> R.id.nav_expense
 			is MonthlyBudgetActivity -> R.id.nav_budget
-			is LoginActivity -> R.id.nav_profile
+			is ProfileActivity -> R.id.nav_profile
 			else -> R.id.nav_home
 		}
 
