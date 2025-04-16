@@ -1,3 +1,4 @@
+# Default from project creation
 *.iml
 .gradle
 /local.properties
@@ -13,3 +14,16 @@
 .externalNativeBuild
 .cxx
 local.properties
+
+# Vim swap files
+*.swp
+*.swo
+
+# Vim backup files
+*~
+
+# Vim undo history files (if you enable persistent undo)
+*.un~
+
+# Vim info file
+.viminfo
