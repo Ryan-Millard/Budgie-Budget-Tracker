@@ -18,6 +18,7 @@
 		<activity android:name=".CategoryActivity" />
 		<activity android:name=".ExpenseActivity" />
 		<activity android:name=".MonthlyBudgetActivity" />
+		<activity android:name=".ProfileActivity" />
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

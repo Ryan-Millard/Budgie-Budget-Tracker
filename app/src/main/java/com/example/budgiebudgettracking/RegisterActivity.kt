@@ -10,6 +10,11 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import androidx.lifecycle.lifecycleScope
+
+import com.example.budgiebudgettracking.database.AppDatabase
+import com.example.budgiebudgettracking.entities.User
+import kotlinx.coroutines.launch
 
 class RegisterActivity : AppCompatActivity() {
 	// UI elements
@@ -83,20 +88,28 @@ class RegisterActivity : AppCompatActivity() {
 	}
 
 	private fun registerUser() {
-		// Get form values
 		val fullName = etFullName.text.toString().trim()
 		val email = etEmail.text.toString().trim()
 		val password = etPassword.text.toString()
 
-		// Here you would typically implement your registration logic
-		// For example, using Firebase Auth, a custom API, etc.
+		val user = User(fullName = fullName, email = email, password = password)
 
-		// For now, we'll just show a success message and navigate to login
-		Toast.makeText(this, "Registration successful!", Toast.LENGTH_SHORT).show()
-
-		// Navigate to Login (or directly to Dashboard)
-		startActivity(Intent(this, LoginActivity::class.java))
-		finish()
+		lifecycleScope.launch {
+			val userDao = AppDatabase.getDatabase(applicationContext).userDao()
+			val existingUser = userDao.getUserByEmail(email)
+			if (existingUser != null) {
+				runOnUiThread {
+					emailLayout.error = "Email already registered"
+				}
+			} else {
+				userDao.insertUser(user)
+				runOnUiThread {
+					Toast.makeText(this@RegisterActivity, "Registration successful!", Toast.LENGTH_SHORT).show()
+					startActivity(Intent(this@RegisterActivity, LoginActivity::class.java))
+					finish()
+				}
+			}
+		}
 	}
 
 	private fun initializeViews() {
