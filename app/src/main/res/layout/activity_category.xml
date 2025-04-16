@@ -1,98 +1,114 @@
-<?xml version="1.0" encoding="utf-8"?>
-<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:padding="16dp">
+    android:layout_height="match_parent">
 
-    <LinearLayout
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/abstract_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:orientation="vertical"
-        android:gravity="center_horizontal">
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/abstract_background"
+        android:alpha="0.3" />
 
-        <!-- Logo -->
-        <ImageView
-            android:id="@+id/logoImageView"
-            android:layout_width="100dp"
-            android:layout_height="100dp"
-            android:layout_marginTop="24dp"
-            android:contentDescription="App Logo"
-            android:src="@mipmap/ic_logo" />
+    <!-- Main Content -->
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:padding="16dp">
 
-        <!-- Category -->
-        <TextView
-            android:id="@+id/categoryTitle"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="Groceries"
-            android:textSize="22sp"
-            android:textStyle="bold"
-            android:paddingBottom="12dp"
-            android:layout_marginTop="8dp" />
-
-        <!-- Input -->
-        <EditText
-            android:id="@+id/inputAmount"
+        <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="Enter amount"
-            android:inputType="numberDecimal"
-            android:textSize="18sp"
-            android:gravity="center"
-            android:layout_marginBottom="12dp" />
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
 
-        <!-- Calculator Grid -->
-        <GridLayout
-            android:id="@+id/calculatorGrid"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:columnCount="4"
-            android:rowCount="5"
-            android:alignmentMode="alignMargins"
-            android:columnOrderPreserved="false"
-            android:layout_marginTop="4dp"
-            android:layout_marginBottom="16dp">
+            <!-- Logo -->
+            <ImageView
+                android:id="@+id/logoImageView"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_marginTop="24dp"
+                android:contentDescription="App Logo"
+                android:src="@mipmap/ic_logo" />
 
-            <!-- Top Row -->
-            <Button android:text="AC" style="@style/CalcButtonGray"/>
-            <Button android:text="(   )" style="@style/CalcButtonGray"/>
-            <Button android:text="%" style="@style/CalcButtonGray"/>
-            <Button android:text="÷" style="@style/CalcButtonOrange"/>
+            <!-- Category Title -->
+            <TextView
+                android:id="@+id/categoryTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Groceries"
+                android:textSize="22sp"
+                android:textStyle="bold"
+                android:textColor="@color/colorPrimary"
+                android:paddingBottom="12dp"
+                android:layout_marginTop="8dp" />
 
-            <!-- Second Row -->
-            <Button android:text="7" style="@style/CalcButtonDark"/>
-            <Button android:text="8" style="@style/CalcButtonDark"/>
-            <Button android:text="9" style="@style/CalcButtonDark"/>
-            <Button android:text="×" style="@style/CalcButtonOrange"/>
+            <!-- Input Field -->
+            <EditText
+                android:id="@+id/inputAmount"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:hint="Enter amount"
+                android:inputType="numberDecimal"
+                android:textSize="18sp"
+                android:gravity="center"
+                android:layout_marginBottom="12dp" />
 
-            <!-- Third Row -->
-            <Button android:text="4" style="@style/CalcButtonDark"/>
-            <Button android:text="5" style="@style/CalcButtonDark"/>
-            <Button android:text="6" style="@style/CalcButtonDark"/>
-            <Button android:text="−" style="@style/CalcButtonOrange"/>
+            <!-- Calculator Grid -->
+            <GridLayout
+                android:id="@+id/calculatorGrid"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:columnCount="4"
+                android:rowCount="5"
+                android:alignmentMode="alignMargins"
+                android:columnOrderPreserved="false"
+                android:layout_marginTop="4dp"
+                android:layout_marginBottom="16dp"
+                android:padding="8dp">
 
-            <!-- Fourth Row -->
-            <Button android:text="1" style="@style/CalcButtonDark"/>
-            <Button android:text="2" style="@style/CalcButtonDark"/>
-            <Button android:text="3" style="@style/CalcButtonDark"/>
-            <Button android:text="+" style="@style/CalcButtonOrange"/>
+				<!-- Top Row -->
+				<Button android:text="AC" style="@style/CalcButtonGray"/>
+				<Button android:text="(   )" style="@style/CalcButtonGray"/>
+				<Button android:text="%" style="@style/CalcButtonGray"/>
+				<Button android:text="÷" style="@style/CalcButtonOrange"/>
 
-            <!-- Bottom Row -->
-            <Button android:text="+/−" style="@style/CalcButtonDark"/>
-            <Button android:text="0" style="@style/CalcButtonDark"/>
-            <Button android:text="." style="@style/CalcButtonDark"/>
-            <Button android:text="=" style="@style/CalcButtonOrange"/>
-        </GridLayout>
+				<!-- Second Row -->
+				<Button android:text="7" style="@style/CalcButtonDark"/>
+				<Button android:text="8" style="@style/CalcButtonDark"/>
+				<Button android:text="9" style="@style/CalcButtonDark"/>
+				<Button android:text="×" style="@style/CalcButtonOrange"/>
 
-        <!-- Confirm Button -->
-        <Button
-            android:id="@+id/confirmAmountBtn"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:text="Confirm"
-            android:layout_marginTop="8dp"
-            android:backgroundTint="#E9C46A"
-            android:textColor="@android:color/black"
-            android:textStyle="bold"/>
-    </LinearLayout>
-</ScrollView>
+				<!-- Third Row -->
+				<Button android:text="4" style="@style/CalcButtonDark"/>
+				<Button android:text="5" style="@style/CalcButtonDark"/>
+				<Button android:text="6" style="@style/CalcButtonDark"/>
+				<Button android:text="−" style="@style/CalcButtonOrange"/>
+
+				<!-- Fourth Row -->
+				<Button android:text="1" style="@style/CalcButtonDark"/>
+				<Button android:text="2" style="@style/CalcButtonDark"/>
+				<Button android:text="3" style="@style/CalcButtonDark"/>
+				<Button android:text="+" style="@style/CalcButtonOrange"/>
+
+				<!-- Bottom Row -->
+				<Button android:text="+/−" style="@style/CalcButtonDark"/>
+				<Button android:text="0" style="@style/CalcButtonDark"/>
+				<Button android:text="." style="@style/CalcButtonDark"/>
+				<Button android:text="=" style="@style/CalcButtonOrange"/>
+			</GridLayout>
+
+            <!-- Confirm Button -->
+            <Button
+                android:id="@+id/confirmAmountBtn"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Confirm"
+                android:layout_marginTop="8dp"
+                android:backgroundTint="@color/colorAccent"
+                android:textColor="@android:color/black"
+                android:textStyle="bold" />
+        </LinearLayout>
+    </ScrollView>
+</RelativeLayout>
