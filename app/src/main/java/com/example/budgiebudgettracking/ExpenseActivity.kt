@@ -1,9 +1,10 @@
 package com.example.budgiebudgettracking
 
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 
-class ExpenseActivity : AppCompatActivity() {
+import com.example.budgiebudgettracking.BaseActivity
+
+class ExpenseActivity : BaseActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_expense)

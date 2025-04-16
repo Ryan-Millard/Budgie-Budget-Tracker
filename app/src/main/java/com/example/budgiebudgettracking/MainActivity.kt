@@ -2,10 +2,11 @@ package com.example.budgiebudgettracking
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.appcompat.app.AppCompatActivity
 import android.widget.Button
 
-class MainActivity : AppCompatActivity() {
+import com.example.budgiebudgettracking.BaseActivity
+
+class MainActivity : BaseActivity() {
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_main)
