@@ -9,6 +9,10 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
+import androidx.lifecycle.lifecycleScope
+
+import com.example.budgiebudgettracking.database.AppDatabase
+import kotlinx.coroutines.launch
 
 class LoginActivity : BaseActivity() {
 	// UI elements
@@ -81,26 +85,21 @@ class LoginActivity : BaseActivity() {
 	}
 
 	private fun loginUser() {
-		// Get form values
 		val email = emailEditText.text.toString().trim()
 		val password = passwordEditText.text.toString()
 
-		// Here you would typically implement your authentication logic
-		// For example, using Firebase Auth, a custom API, etc.
-
-		// For demonstration purposes, let's assume login is successful
-		if (email.isNotEmpty() && password.isNotEmpty()) {
-			// Show success message
-			Toast.makeText(this, "Login successful!", Toast.LENGTH_SHORT).show()
-
-			// Navigate to Dashboard or Main Activity
-			val intent = Intent(this, MainActivity::class.java)
-			intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-			startActivity(intent)
-			finish()
-		} else {
-			// Show error message
-			Toast.makeText(this, "Login failed. Please try again.", Toast.LENGTH_SHORT).show()
+		lifecycleScope.launch { // Use lifecycleScope.launch
+			val userDao = AppDatabase.getDatabase(applicationContext).userDao()
+			val user = userDao.login(email, password)
+			runOnUiThread {
+				if (user != null) {
+					Toast.makeText(this@LoginActivity, "Login successful!", Toast.LENGTH_SHORT).show()
+					startActivity(Intent(this@LoginActivity, MainActivity::class.java))
+					finish()
+				} else {
+					Toast.makeText(this@LoginActivity, "Invalid email or password", Toast.LENGTH_SHORT).show()
+				}
+			}
 		}
 	}
 }
