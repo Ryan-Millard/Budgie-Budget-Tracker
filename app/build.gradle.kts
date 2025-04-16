@@ -51,4 +51,6 @@ dependencies {
 	implementation(libs.androidx.room.ktx)
 	ksp(libs.androidx.room.compiler) // For Kotlin Symbol Processing
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
+
+	implementation("com.github.bumptech.glide:glide:4.12.0")
 }

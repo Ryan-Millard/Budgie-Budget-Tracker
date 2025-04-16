@@ -58,6 +58,7 @@
                         android:src="@drawable/ic_profile_placeholder"
                         android:background="@drawable/circle_border"
                         android:scaleType="centerCrop"
+						android:clipToOutline="true"
                         android:contentDescription="Profile Picture" />
 
                     <!-- Overlay button to change profile picture -->

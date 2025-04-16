@@ -14,6 +14,6 @@ data class User(
 	val phone: String? = null,
 	val location: String? = null,
 	val bio: String? = null,
-	val profilePic: String? = null
+	val profilePicPath: String? = null
 )
 

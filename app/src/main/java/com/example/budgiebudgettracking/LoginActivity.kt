@@ -98,7 +98,7 @@ class LoginActivity : AppCompatActivity() {
 			val user = userDao.login(email, password)
 			runOnUiThread {
 				if(user != null) {
-					sessionManager.login()
+					sessionManager.login(email)
 					Toast.makeText(this@LoginActivity, "Login successful!", Toast.LENGTH_SHORT).show()
 					startActivity(Intent(this@LoginActivity, MainActivity::class.java))
 					finish()
