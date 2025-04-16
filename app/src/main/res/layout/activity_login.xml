@@ -9,11 +9,11 @@
 
     <!-- Background Image -->
     <ImageView
-        android:id="@+id/Background_no_Background"
+        android:id="@+id/abstract_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
-        android:src="@drawable/Background_no_Background"
+        android:src="@drawable/abstract_background"
         android:alpha="0.3" /> <!-- 0.0 = fully transparent, 1.0 = fully opaque -->
 
     <!-- Logo -->

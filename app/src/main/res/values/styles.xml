@@ -7,8 +7,6 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:backgroundTint">#264653</item>
         <item name="android:textSize">16sp</item>
-        <!-- Rounded corners without making it a full circle -->
-        <item name="android:shapeAppearance">@style/RoundedButton</item>
     </style>
 
     <style name="CalcButtonDark">
@@ -19,8 +17,6 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:backgroundTint">#2A9D8F</item>
         <item name="android:textSize">16sp</item>
-        <!-- Rounded corners -->
-        <item name="android:shapeAppearance">@style/RoundedButton</item>
     </style>
 
     <style name="CalcButtonOrange">
@@ -31,12 +27,5 @@
         <item name="android:textColor">#FFFFFF</item>
         <item name="android:backgroundTint">#F4A261</item>
         <item name="android:textSize">16sp</item>
-        <!-- Rounded corners -->
-        <item name="android:shapeAppearance">@style/RoundedButton</item>
-    </style>
-
-    <!-- Define rounded corners style -->
-    <style name="RoundedButton">
-        <item name="android:cornerRadius">16dp</item> <!-- Adjust the radius as needed -->
     </style>
 </resources>
