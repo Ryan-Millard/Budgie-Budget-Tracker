@@ -4,26 +4,33 @@ import android.os.Bundle
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 
+import com.example.budgiebudgettracking.database.AppDatabase
+import com.example.budgiebudgettracking.dao.CategoryDao
+
 class CategoryActivity : BaseActivity() {
+	private lateinit var db: AppDatabase
+	private lateinit var adapter: CategoryAdapter
+
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_category)
 
-		// Hardcoded list of expense categories
-		val categoryList = listOf(
-			"Groceries",
-			"Transport",
-			"Entertainment",
-			"Utilities",
-			"Healthcare",
-			"Dining Out",
-			"Shopping",
-			"Travel"
-		)
+		// 1) Get DB instance
+		db = AppDatabase.getDatabase(this)
 
-		// Initialize RecyclerView
+		// 2) Prepare RecyclerView + adapter
 		val recyclerView: RecyclerView = findViewById(R.id.categoryRecyclerView)
 		recyclerView.layoutManager = LinearLayoutManager(this)
-		recyclerView.adapter = CategoryAdapter(categoryList)
+		adapter = CategoryAdapter()
+		recyclerView.adapter = adapter
+
+		// 3) Load categories from DB
+		loadCategories()
 	}
-}
+
+	private fun loadCategories() {
+		db.categoryDao().getCategoriesByUserLive(null).observe(this) {
+				adapter.updateCategories(it)
+			}
+		}
+	}

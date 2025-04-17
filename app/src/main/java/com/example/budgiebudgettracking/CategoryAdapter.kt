@@ -6,8 +6,10 @@ import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 
+import com.example.budgiebudgettracking.entities.Category
+
 class CategoryAdapter(
-	private val categories: List<String>
+	private val categories: MutableList<Category> = mutableListOf()
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
 	inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -21,8 +23,14 @@ class CategoryAdapter(
 	}
 
 	override fun onBindViewHolder(holder: CategoryViewHolder, position: Int) {
-		holder.tvName.text = categories[position]
+		holder.tvName.text = categories[position].categoryName
 	}
 
 	override fun getItemCount(): Int = categories.size
+
+	fun updateCategories(newList: List<Category>) {
+		categories.clear()
+		categories.addAll(newList)
+		notifyDataSetChanged()
+	}
 }

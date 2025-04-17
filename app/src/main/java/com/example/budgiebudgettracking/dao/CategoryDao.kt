@@ -1,11 +1,12 @@
 package com.example.budgiebudgettracking.dao
 
+import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.example.budgiebudgettracking.entities.Category
 
 @Dao
 interface CategoryDao {
-	@Insert
+	@Insert(onConflict = OnConflictStrategy.REPLACE)
 	suspend fun insert(category: Category)
 
 	@Update
@@ -15,7 +16,7 @@ interface CategoryDao {
 	suspend fun delete(category: Category)
 
 	@Query("SELECT * FROM categories WHERE userId = :userId OR userId IS NULL")
-	suspend fun getCategoriesByUser(userId: Int?): List<Category>
+	fun getCategoriesByUserLive(userId: Int?): LiveData<List<Category>>
 
 	@Query("SELECT * FROM categories WHERE id = :categoryId")
 	suspend fun getCategoryById(categoryId: Int): Category?
