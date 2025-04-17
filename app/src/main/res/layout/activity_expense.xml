@@ -1,76 +1,78 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/expenseLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ExpenseActivity">
+<RelativeLayout
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/expenseLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ExpenseActivity">
 
-    <!-- Background Image -->
-    <ImageView
-        android:id="@+id/abstract_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/abstract_background"
-        android:alpha="0.3" />
+	<!-- Background Image -->
+	<ImageView
+		android:id="@+id/abstract_background"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scaleType="centerCrop"
+		android:src="@drawable/abstract_background"
+		android:alpha="0.3" />
 
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+	<ScrollView
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:padding="16dp">
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center_horizontal">
 
-            <!-- Logo -->
-            <ImageView
-                android:id="@+id/logoImageView"
-                android:layout_width="120dp"
-                android:layout_height="120dp"
-                android:layout_marginTop="40dp"
-                android:contentDescription="App Logo"
-                android:src="@mipmap/ic_logo" />
+			<!-- Logo -->
+			<ImageView
+				android:id="@+id/logoImageView"
+				android:layout_width="120dp"
+				android:layout_height="120dp"
+				android:layout_marginTop="40dp"
+				android:contentDescription="App Logo"
+				android:src="@mipmap/ic_logo" />
 
-            <!-- Title -->
-            <TextView
-                android:id="@+id/expenseTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Monthly Expenses Overview"
-                android:textSize="22sp"
-                android:textColor="@color/colorPrimary"
-                android:textStyle="bold"
-                android:paddingBottom="20dp" />
+			<!-- Title -->
+			<TextView
+				android:id="@+id/expenseTitle"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Monthly Expenses Overview"
+				android:textSize="22sp"
+				android:textColor="@color/colorPrimary"
+				android:textStyle="bold"
+				android:paddingBottom="20dp" />
 
-            <!-- Graph Container -->
-            <FrameLayout
-                android:id="@+id/graphContainer"
-                android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:layout_marginBottom="24dp"
-                android:background="@color/colorSurface"
-                android:padding="8dp">
+			<!-- Graph Container -->
+			<FrameLayout
+				android:id="@+id/graphContainer"
+				android:layout_width="match_parent"
+				android:layout_height="200dp"
+				android:layout_marginBottom="24dp"
+				android:background="@color/colorSurface"
+				android:padding="8dp">
 
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="Graph goes here"
-                    android:textColor="@color/colorOnBackground" />
-            </FrameLayout>
+				<TextView
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:layout_gravity="center"
+					android:text="Graph goes here"
+					android:textColor="@color/colorOnBackground" />
+			</FrameLayout>
 
-            <!-- Category List -->
-            <LinearLayout
-                android:id="@+id/categoryList"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="vertical"
+			<!-- Category List -->
+			<LinearLayout
+				android:id="@+id/categoryList"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
 				android:background="#E76F51"
-                android:layout_marginBottom="16dp">
+				android:layout_marginBottom="16dp">
 
 				<!-- Expense Category Title -->
 				<TextView
@@ -82,35 +84,48 @@
 					android:textStyle="bold"
 					android:paddingBottom="8dp" />
 
-                <!-- Example Category -->
-                <TextView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:padding="12dp"
-                    android:text="• Food"
-                    android:textColor="@color/colorOnBackground"
-                    android:layout_marginBottom="8dp" />
-            </LinearLayout>
+				<!-- Example Category -->
+				<TextView
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:padding="12dp"
+					android:text="• Food"
+					android:textColor="@color/colorOnBackground"
+					android:layout_marginBottom="8dp" />
+			</LinearLayout>
 
-            <!-- Add Category Button -->
-            <Button
-                android:id="@+id/addCategoryButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Add New Category"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/colorBackground"
-                android:layout_marginBottom="16dp" />
+			<!-- Add Category Button -->
+			<Button
+				android:id="@+id/addCategoryButton"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Add New Category"
+				android:backgroundTint="@color/colorPrimary"
+				android:textColor="@color/colorBackground"
+				android:layout_marginBottom="16dp" />
 
-            <!-- Go to Overview Button -->
-            <Button
-                android:id="@+id/goToOverviewButton"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Overview"
-                android:backgroundTint="#F4A261"
-                android:textColor="@color/colorBackground"
-                android:layout_marginBottom="24dp" />
-        </LinearLayout>
-    </ScrollView>
+			<!-- Go to Overview Button -->
+			<Button
+				android:id="@+id/goToOverviewButton"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Overview"
+				android:backgroundTint="#F4A261"
+				android:textColor="@color/colorBackground"
+				android:layout_marginBottom="24dp" />
+		</LinearLayout>
+	</ScrollView>
+
+	<!-- Add Expense Floating Action Button -->
+	<com.google.android.material.floatingactionbutton.FloatingActionButton
+		android:id="@+id/addExpenseFab"
+		android:layout_width="wrap_content"
+		android:layout_height="wrap_content"
+		android:layout_alignParentBottom="true"
+		android:layout_alignParentEnd="true"
+		android:layout_margin="24dp"
+		android:contentDescription="Add Expense"
+		android:src="@android:drawable/ic_input_add"
+		app:backgroundTint="@color/colorPrimary"
+		app:tint="@color/colorBackground" />
 </RelativeLayout>

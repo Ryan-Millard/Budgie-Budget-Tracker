@@ -19,6 +19,7 @@
 		<activity android:name=".RegisterActivity" />
 		<activity android:name=".CategoryActivity" />
 		<activity android:name=".ExpenseActivity" />
+		<activity android:name=".ExpenseCalculatorActivity" />
 		<activity android:name=".MonthlyBudgetActivity" />
 		<activity android:name=".ProfileActivity" />
 		<activity android:name=".EditProfileActivity" />
