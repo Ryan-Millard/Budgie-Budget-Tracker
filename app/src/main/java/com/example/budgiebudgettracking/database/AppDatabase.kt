@@ -6,13 +6,14 @@ import androidx.room.Room
 import androidx.room.RoomDatabase
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
-import com.example.budgiebudgettracking.entities.User
-import com.example.budgiebudgettracking.dao.UserDao
+import com.example.budgiebudgettracking.entities.*
+import com.example.budgiebudgettracking.dao.*
 
-@Database(entities = [User::class], version = 2, exportSchema = false)
+@Database(entities = [User::class, Category::class], version = 2, exportSchema = false)
 abstract class AppDatabase : RoomDatabase() {
 
 	abstract fun userDao(): UserDao
+	abstract fun categoryDao(): CategoryDao
 
 	companion object {
 		@Volatile 
