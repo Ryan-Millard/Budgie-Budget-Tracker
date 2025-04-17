@@ -11,104 +11,13 @@
         android:src="@drawable/abstract_background"
         android:alpha="0.3" />
 
-    <!-- Main Content -->
-    <ScrollView
+    <!-- RecyclerView for Expense Categories -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/categoryRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:padding="16dp">
+        android:padding="16dp"
+        android:clipToPadding="false"
+        android:layout_centerInParent="true" />
 
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
-
-            <!-- Logo -->
-            <ImageView
-                android:id="@+id/logoImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="24dp"
-                android:contentDescription="App Logo"
-                android:src="@mipmap/ic_logo" />
-
-            <!-- Category Title -->
-            <TextView
-                android:id="@+id/categoryTitle"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Groceries"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:paddingBottom="12dp"
-                android:layout_marginTop="8dp" />
-
-            <!-- Input Field -->
-            <EditText
-                android:id="@+id/inputAmount"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Enter amount"
-                android:inputType="numberDecimal"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Calculator Grid -->
-            <GridLayout
-                android:id="@+id/calculatorGrid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="4"
-                android:rowCount="5"
-                android:alignmentMode="alignMargins"
-                android:columnOrderPreserved="false"
-                android:layout_marginTop="4dp"
-                android:layout_marginBottom="16dp"
-                android:padding="8dp">
-
-				<!-- Top Row -->
-				<Button android:text="AC" style="@style/CalcButtonGray"/>
-				<Button android:text="(   )" style="@style/CalcButtonGray"/>
-				<Button android:text="%" style="@style/CalcButtonGray"/>
-				<Button android:text="÷" style="@style/CalcButtonOrange"/>
-
-				<!-- Second Row -->
-				<Button android:text="7" style="@style/CalcButtonDark"/>
-				<Button android:text="8" style="@style/CalcButtonDark"/>
-				<Button android:text="9" style="@style/CalcButtonDark"/>
-				<Button android:text="×" style="@style/CalcButtonOrange"/>
-
-				<!-- Third Row -->
-				<Button android:text="4" style="@style/CalcButtonDark"/>
-				<Button android:text="5" style="@style/CalcButtonDark"/>
-				<Button android:text="6" style="@style/CalcButtonDark"/>
-				<Button android:text="−" style="@style/CalcButtonOrange"/>
-
-				<!-- Fourth Row -->
-				<Button android:text="1" style="@style/CalcButtonDark"/>
-				<Button android:text="2" style="@style/CalcButtonDark"/>
-				<Button android:text="3" style="@style/CalcButtonDark"/>
-				<Button android:text="+" style="@style/CalcButtonOrange"/>
-
-				<!-- Bottom Row -->
-				<Button android:text="+/−" style="@style/CalcButtonDark"/>
-				<Button android:text="0" style="@style/CalcButtonDark"/>
-				<Button android:text="." style="@style/CalcButtonDark"/>
-				<Button android:text="=" style="@style/CalcButtonOrange"/>
-			</GridLayout>
-
-            <!-- Confirm Button -->
-            <Button
-                android:id="@+id/confirmAmountBtn"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Confirm"
-                android:layout_marginTop="8dp"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
-        </LinearLayout>
-    </ScrollView>
 </RelativeLayout>
