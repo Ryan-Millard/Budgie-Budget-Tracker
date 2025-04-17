@@ -33,6 +33,14 @@
         <activity android:name=".LoginActivity" />
         <activity android:name=".RegisterActivity" />
         <activity android:name=".CategoryActivity" />
+		<activity
+			android:name=".AddCategoryActivity"
+			android:exported="false"
+			android:parentActivityName=".CategoryActivity">
+			<meta-data
+				android:name="android.support.PARENT_ACTIVITY"
+				android:value=".CategoryActivity" />
+		</activity>
         <activity android:name=".ExpenseActivity" />
         <activity android:name=".ExpenseCalculatorActivity" />
         <activity android:name=".MonthlyBudgetActivity" />

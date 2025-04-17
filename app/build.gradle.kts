@@ -56,4 +56,6 @@ dependencies {
 	annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
 	implementation("net.objecthunter:exp4j:0.4.8") // For calculator
+
+	implementation("com.github.skydoves:colorpickerview:2.2.4") // For color picker
 }
