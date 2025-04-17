@@ -1,4 +1,6 @@
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -23,81 +25,168 @@
             android:orientation="vertical"
             android:gravity="center_horizontal">
 
-            <!-- Logo -->
-            <ImageView
-                android:id="@+id/logoImageView"
-                android:layout_width="100dp"
-                android:layout_height="100dp"
-                android:layout_marginTop="24dp"
-                android:contentDescription="App Logo"
-                android:src="@mipmap/ic_logo" />
+            <!-- Receipt Image Section -->
+            <androidx.cardview.widget.CardView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="16dp">
 
-            <!-- Category Title -->
-            <TextView
-                android:id="@+id/categoryTitle"
+                <FrameLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="140dp"
+                    android:background="#F0F0F0">
+
+                    <ImageView
+                        android:id="@+id/receiptImageView"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:scaleType="centerInside"
+                        android:contentDescription="Receipt Image" />
+
+                    <ImageView
+                        android:id="@+id/placeholderImageView"
+                        android:layout_width="64dp"
+                        android:layout_height="64dp"
+                        android:layout_gravity="center"
+                        android:src="@drawable/ic_add_photo"
+                        android:contentDescription="Add Photo" />
+                </FrameLayout>
+            </androidx.cardview.widget.CardView>
+
+            <!-- Transaction Type Selector -->
+            <RadioGroup
+                android:id="@+id/radioGroupType"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Groceries"
-                android:textSize="22sp"
-                android:textStyle="bold"
-                android:textColor="@color/colorPrimary"
-                android:paddingBottom="12dp"
-                android:layout_marginTop="8dp" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="12dp">
 
-            <!-- Input Field -->
+                <RadioButton
+                    android:id="@+id/radioIncome"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Income" />
+
+                <RadioButton
+                    android:id="@+id/radioExpense"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Expense" />
+            </RadioGroup>
+
+            <!-- Description Input -->
             <EditText
-                android:id="@+id/inputAmount"
+                android:id="@+id/inputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter amount"
-                android:inputType="numberDecimal"
-                android:textSize="18sp"
-                android:gravity="center"
-                android:layout_marginBottom="12dp" />
-
-            <!-- Calculator Grid -->
-            <GridLayout
-                android:id="@+id/calculatorGrid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="4"
-                android:rowCount="5"
-                android:alignmentMode="alignMargins"
-                android:columnOrderPreserved="false"
-                android:layout_marginTop="4dp"
+                android:hint="Enter description"
+                android:inputType="text"
+                android:textSize="16sp"
                 android:layout_marginBottom="16dp"
-                android:padding="8dp">
+                android:padding="12dp"
+                android:background="@drawable/edit_text_background" />
 
-				<!-- Top Row -->
-				<Button android:text="AC" style="@style/CalcButtonGray"/>
-				<Button android:text="(   )" style="@style/CalcButtonGray"/>
-				<Button android:text="%" style="@style/CalcButtonGray"/>
-				<Button android:text="÷" style="@style/CalcButtonOrange"/>
+            <!-- Category Button -->
+            <Button
+                android:id="@+id/btnCategory"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Category"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorBackground"
+                android:layout_marginBottom="16dp" />
 
-				<!-- Second Row -->
-				<Button android:text="7" style="@style/CalcButtonDark"/>
-				<Button android:text="8" style="@style/CalcButtonDark"/>
-				<Button android:text="9" style="@style/CalcButtonDark"/>
-				<Button android:text="×" style="@style/CalcButtonOrange"/>
+            <!-- Amount Section -->
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:layout_marginBottom="16dp">
 
-				<!-- Third Row -->
-				<Button android:text="4" style="@style/CalcButtonDark"/>
-				<Button android:text="5" style="@style/CalcButtonDark"/>
-				<Button android:text="6" style="@style/CalcButtonDark"/>
-				<Button android:text="−" style="@style/CalcButtonOrange"/>
+                <!-- Amount Input with Delete Button -->
+                <LinearLayout
+                    android:id="@+id/amountInputLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginBottom="8dp">
 
-				<!-- Fourth Row -->
-				<Button android:text="1" style="@style/CalcButtonDark"/>
-				<Button android:text="2" style="@style/CalcButtonDark"/>
-				<Button android:text="3" style="@style/CalcButtonDark"/>
-				<Button android:text="+" style="@style/CalcButtonOrange"/>
+                    <EditText
+                        android:id="@+id/inputAmount"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:hint="Enter amount"
+                        android:inputType="textVisiblePassword"
+                        android:digits="0123456789.+-*/()"
+                        android:textSize="24sp"
+                        android:gravity="center"
+                        android:focusable="false"
+                        android:clickable="true" />
 
-				<!-- Bottom Row -->
-				<Button android:text="+/−" style="@style/CalcButtonDark"/>
-				<Button android:text="0" style="@style/CalcButtonDark"/>
-				<Button android:text="." style="@style/CalcButtonDark"/>
-				<Button android:text="=" style="@style/CalcButtonOrange"/>
-			</GridLayout>
+                    <ImageButton
+                        android:id="@+id/btnDelete"
+                        android:layout_width="48dp"
+                        android:layout_height="48dp"
+                        android:src="@android:drawable/ic_input_delete"
+                        android:contentDescription="Delete"
+                        android:background="?attr/selectableItemBackground" />
+                </LinearLayout>
+
+                <!-- Calculator Toggle Button -->
+                <Button
+                    android:id="@+id/btnToggleCalculator"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="Show Calculator"
+                    android:background="@drawable/toggle_button_background"
+                    android:textColor="@color/colorPrimary" />
+
+                <!-- Calculator Grid -->
+                <GridLayout
+                    android:id="@+id/calculatorGrid"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:columnCount="4"
+                    android:rowCount="5"
+                    android:alignmentMode="alignMargins"
+                    android:columnOrderPreserved="false"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:padding="8dp"
+                    android:visibility="gone">
+
+                    <!-- Top Row -->
+                    <Button android:id="@+id/btnClear"    android:text="AC"  style="@style/CalcButtonGray"/>
+                    <Button android:id="@+id/btnParen"    android:text="( )" style="@style/CalcButtonGray"/>
+                    <Button android:id="@+id/btnPercent"  android:text="%"   style="@style/CalcButtonGray"/>
+                    <Button android:id="@+id/btnDivide"   android:text="÷"   style="@style/CalcButtonOrange"/>
+
+                    <!-- Second Row -->
+                    <Button android:id="@+id/btn7"        android:text="7"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn8"        android:text="8"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn9"        android:text="9"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btnMultiply" android:text="×"   style="@style/CalcButtonOrange"/>
+
+                    <!-- Third Row -->
+                    <Button android:id="@+id/btn4"        android:text="4"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn5"        android:text="5"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn6"        android:text="6"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btnMinus"    android:text="−"   style="@style/CalcButtonOrange"/>
+
+                    <!-- Fourth Row -->
+                    <Button android:id="@+id/btn1"        android:text="1"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn2"        android:text="2"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn3"        android:text="3"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btnPlus"     android:text="+"   style="@style/CalcButtonOrange"/>
+
+                    <!-- Bottom Row -->
+                    <Button android:id="@+id/btnNegate"   android:text="±"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btn0"        android:text="0"   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btnDot"      android:text="."   style="@style/CalcButtonDark"/>
+                    <Button android:id="@+id/btnEquals"   android:text="="   style="@style/CalcButtonOrange"/>
+                </GridLayout>
+            </LinearLayout>
 
             <!-- Confirm Button -->
             <Button

@@ -1,8 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
-
-	<uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <!-- Storage permissions -->
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" android:maxSdkVersion="32" />
+    <!-- For Android 13+ -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+    <!-- Camera permission -->
+    <uses-permission android:name="android.permission.CAMERA" />
+    <!-- Write external storage (for saving camera photos) -->
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" 
+                     android:maxSdkVersion="32" />
 
     <application
         android:allowBackup="true"
@@ -14,15 +21,23 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.BudgieBudgetTracking"
         tools:targetApi="31">
-
-		<activity android:name=".LoginActivity" />
-		<activity android:name=".RegisterActivity" />
-		<activity android:name=".CategoryActivity" />
-		<activity android:name=".ExpenseActivity" />
-		<activity android:name=".ExpenseCalculatorActivity" />
-		<activity android:name=".MonthlyBudgetActivity" />
-		<activity android:name=".ProfileActivity" />
-		<activity android:name=".EditProfileActivity" />
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="${applicationId}.fileprovider"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_paths" />
+        </provider>
+        <activity android:name=".LoginActivity" />
+        <activity android:name=".RegisterActivity" />
+        <activity android:name=".CategoryActivity" />
+        <activity android:name=".ExpenseActivity" />
+        <activity android:name=".ExpenseCalculatorActivity" />
+        <activity android:name=".MonthlyBudgetActivity" />
+        <activity android:name=".ProfileActivity" />
+        <activity android:name=".EditProfileActivity" />
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
@@ -30,5 +45,4 @@
             </intent-filter>
         </activity>
     </application>
-
 </manifest>

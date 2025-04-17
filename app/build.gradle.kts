@@ -52,5 +52,8 @@ dependencies {
 	ksp(libs.androidx.room.compiler) // For Kotlin Symbol Processing
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
-	implementation("com.github.bumptech.glide:glide:4.12.0")
+	implementation("com.github.bumptech.glide:glide:4.15.1") // For images
+	annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+
+	implementation("net.objecthunter:exp4j:0.4.8") // For calculator
 }
