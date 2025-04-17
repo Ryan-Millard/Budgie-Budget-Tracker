@@ -52,14 +52,46 @@ abstract class AppDatabase : RoomDatabase() {
 				GlobalScope.launch(Dispatchers.IO) {
 					val instance = getDatabase(context)
 					val defaultCategories = listOf(
-						Category(categoryName = "Groceries"),
-						Category(categoryName = "Transport"),
-						Category(categoryName = "Entertainment"),
-						Category(categoryName = "Utilities"),
-						Category(categoryName = "Healthcare"),
-						Category(categoryName = "Dining Out"),
-						Category(categoryName = "Shopping"),
-						Category(categoryName = "Travel")
+						Category(
+							categoryName = "Groceries",
+							description = "Everyday food and household supplies",
+							hexColorCode = "#4CAF50" // Green
+						),
+						Category(
+							categoryName = "Transport",
+							description = "Public transport, fuel, and commuting",
+							hexColorCode = "#2196F3" // Blue
+						),
+						Category(
+							categoryName = "Entertainment",
+							description = "Movies, games, and fun activities",
+							hexColorCode = "#9C27B0" // Purple
+						),
+						Category(
+							categoryName = "Utilities",
+							description = "Electricity, water, internet, etc.",
+							hexColorCode = "#FF9800" // Orange
+						),
+						Category(
+							categoryName = "Healthcare",
+							description = "Doctor visits, medicine, and insurance",
+							hexColorCode = "#F44336" // Red
+						),
+						Category(
+							categoryName = "Dining Out",
+							description = "Restaurants, takeout, and coffee shops",
+							hexColorCode = "#FF5722" // Deep Orange
+						),
+						Category(
+							categoryName = "Shopping",
+							description = "Clothes, gadgets, and other purchases",
+							hexColorCode = "#795548" // Brown
+						),
+						Category(
+							categoryName = "Travel",
+							description = "Flights, hotels, and holiday expenses",
+							hexColorCode = "#3F51B5" // Indigo
+						)
 					)
 
 					// Insert using suspend function properly
