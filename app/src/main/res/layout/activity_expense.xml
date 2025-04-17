@@ -115,17 +115,4 @@
 				android:layout_marginBottom="24dp" />
 		</LinearLayout>
 	</ScrollView>
-
-	<!-- Add Expense Floating Action Button -->
-	<com.google.android.material.floatingactionbutton.FloatingActionButton
-		android:id="@+id/addExpenseFab"
-		android:layout_width="wrap_content"
-		android:layout_height="wrap_content"
-		android:layout_alignParentBottom="true"
-		android:layout_alignParentEnd="true"
-		android:layout_margin="24dp"
-		android:contentDescription="Add Expense"
-		android:src="@android:drawable/ic_input_add"
-		app:backgroundTint="@color/colorPrimary"
-		app:tint="@color/colorBackground" />
 </RelativeLayout>

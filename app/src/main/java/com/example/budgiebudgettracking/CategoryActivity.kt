@@ -7,13 +7,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.budgiebudgettracking.database.AppDatabase
 import com.example.budgiebudgettracking.dao.CategoryDao
 
-class CategoryActivity : BaseActivity() {
+class CategoryActivity : BaseActivity(), FloatingActionButtonHandler {
 	private lateinit var db: AppDatabase
 	private lateinit var adapter: CategoryAdapter
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_category)
+
+		createAndAttachFab(destination = AddCategoryActivity::class.java)
 
 		// 1) Get DB instance
 		db = AppDatabase.getDatabase(this)
