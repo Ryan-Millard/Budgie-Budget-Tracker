@@ -59,7 +59,7 @@ abstract class AppDatabase : RoomDatabase() {
 						isExpense INTEGER NOT NULL,
 						date INTEGER NOT NULL,
 						userId INTEGER NOT NULL,
-						categoryId INTEGER,
+						categoryId INTEGER NOT NULL,
 						receiptImagePath TEXT,
 						isRecurring INTEGER NOT NULL DEFAULT 0,
 						createdAt INTEGER NOT NULL,

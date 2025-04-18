@@ -71,7 +71,8 @@
                     android:id="@+id/radioExpense"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="Expense" />
+                    android:text="Expense"
+                    android:checked="true" />
             </RadioGroup>
 
             <!-- Description Input -->
@@ -79,12 +80,22 @@
                 android:id="@+id/inputDescription"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="Enter description"
+                android:hint="Enter description (optional)"
                 android:inputType="text"
                 android:textSize="16sp"
                 android:layout_marginBottom="16dp"
                 android:padding="12dp"
                 android:background="@drawable/edit_text_background" />
+
+            <!-- Date Selector -->
+            <Button
+                android:id="@+id/btnDatePicker"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Select Date"
+                android:backgroundTint="@color/colorPrimary"
+                android:textColor="@color/colorBackground"
+                android:layout_marginBottom="16dp" />
 
             <!-- Category Button -->
             <Button
@@ -193,7 +204,7 @@
                 android:id="@+id/confirmAmountBtn"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Confirm"
+                android:text="Save Transaction"
                 android:layout_marginTop="8dp"
                 android:backgroundTint="@color/colorAccent"
                 android:textColor="@android:color/black"

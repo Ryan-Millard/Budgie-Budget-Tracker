@@ -22,97 +22,14 @@
 		android:layout_height="match_parent"
 		android:padding="16dp">
 
-		<LinearLayout
+		<androidx.recyclerview.widget.RecyclerView
+			android:id="@+id/transactionsRecyclerView"
 			android:layout_width="match_parent"
 			android:layout_height="wrap_content"
-			android:orientation="vertical"
-			android:gravity="center_horizontal">
-
-			<!-- Logo -->
-			<ImageView
-				android:id="@+id/logoImageView"
-				android:layout_width="120dp"
-				android:layout_height="120dp"
-				android:layout_marginTop="40dp"
-				android:contentDescription="App Logo"
-				android:src="@mipmap/ic_logo" />
-
-			<!-- Title -->
-			<TextView
-				android:id="@+id/expenseTitle"
-				android:layout_width="wrap_content"
-				android:layout_height="wrap_content"
-				android:text="Monthly Expenses Overview"
-				android:textSize="22sp"
-				android:textColor="@color/colorPrimary"
-				android:textStyle="bold"
-				android:paddingBottom="20dp" />
-
-			<!-- Graph Container -->
-			<FrameLayout
-				android:id="@+id/graphContainer"
-				android:layout_width="match_parent"
-				android:layout_height="200dp"
-				android:layout_marginBottom="24dp"
-				android:background="@color/colorSurface"
-				android:padding="8dp">
-
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:layout_gravity="center"
-					android:text="Graph goes here"
-					android:textColor="@color/colorOnBackground" />
-			</FrameLayout>
-
-			<!-- Category List -->
-			<LinearLayout
-				android:id="@+id/categoryList"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:orientation="vertical"
-				android:background="#E76F51"
-				android:layout_marginBottom="16dp">
-
-				<!-- Expense Category Title -->
-				<TextView
-					android:layout_width="wrap_content"
-					android:layout_height="wrap_content"
-					android:text="Expense Categories"
-					android:textSize="18sp"
-					android:textColor="@color/colorOnBackground"
-					android:textStyle="bold"
-					android:paddingBottom="8dp" />
-
-				<!-- Example Category -->
-				<TextView
-					android:layout_width="match_parent"
-					android:layout_height="wrap_content"
-					android:padding="12dp"
-					android:text="• Food"
-					android:textColor="@color/colorOnBackground"
-					android:layout_marginBottom="8dp" />
-			</LinearLayout>
-
-			<!-- Add Category Button -->
-			<Button
-				android:id="@+id/addCategoryButton"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="Add New Category"
-				android:backgroundTint="@color/colorPrimary"
-				android:textColor="@color/colorBackground"
-				android:layout_marginBottom="16dp" />
-
-			<!-- Go to Overview Button -->
-			<Button
-				android:id="@+id/goToOverviewButton"
-				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
-				android:text="Overview"
-				android:backgroundTint="#F4A261"
-				android:textColor="@color/colorBackground"
-				android:layout_marginBottom="24dp" />
-		</LinearLayout>
+			android:layout_marginTop="16dp"
+			android:layout_marginBottom="16dp"
+			android:padding="8dp"
+			android:clipToPadding="false"
+			tools:listitem="@layout/item_transaction" />
 	</ScrollView>
 </RelativeLayout>

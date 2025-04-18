@@ -35,7 +35,7 @@ data class Transaction(
 	val isExpense: Boolean,
 	val date: Long = System.currentTimeMillis(),
 	val userId: Int,
-	val categoryId: Int? = null,
+	val categoryId: Int,
 	val receiptImagePath: String? = null,
 	// Additional fields that might be useful
 	val isRecurring: Boolean = false,
