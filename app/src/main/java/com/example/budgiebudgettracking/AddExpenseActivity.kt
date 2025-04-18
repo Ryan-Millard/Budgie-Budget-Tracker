@@ -26,7 +26,7 @@ import java.text.SimpleDateFormat
 import java.util.Date
 import java.util.Locale
 
-class ExpenseCalculatorActivity : AppCompatActivity() {
+class AddExpenseActivity : AppCompatActivity() {
 	private lateinit var input: EditText
 	private lateinit var descriptionInput: EditText
 	private lateinit var calculatorGrid: View
@@ -102,7 +102,7 @@ class ExpenseCalculatorActivity : AppCompatActivity() {
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
-		setContentView(R.layout.activity_expense_calculator)
+		setContentView(R.layout.activity_add_expense)
 
 		input = findViewById(R.id.inputAmount)
 		descriptionInput = findViewById(R.id.inputDescription)

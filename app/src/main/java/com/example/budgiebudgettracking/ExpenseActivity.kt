@@ -10,6 +10,6 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_expense)
 
-		createAndAttachFab(destination = ExpenseCalculatorActivity::class.java)
+		createAndAttachFab(destination = AddExpenseActivity::class.java)
 	}
 }
