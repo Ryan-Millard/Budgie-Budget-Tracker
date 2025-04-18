@@ -11,13 +11,16 @@ import com.example.budgiebudgettracking.dao.*
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.withContext
 
-@Database(entities = [User::class, Category::class], version = 2, exportSchema = false)
+@Database(
+	entities = [User::class, Category::class, Transaction::class], 
+	version = 3, 
+	exportSchema = false
+)
 abstract class AppDatabase : RoomDatabase() {
-
 	abstract fun userDao(): UserDao
 	abstract fun categoryDao(): CategoryDao
+	abstract fun transactionDao(): TransactionDao
 
 	companion object {
 		@Volatile
@@ -30,7 +33,7 @@ abstract class AppDatabase : RoomDatabase() {
 				AppDatabase::class.java, "budgie_db"
 			)
 			.addCallback(DatabaseCallback(context))
-			.addMigrations(MIGRATION_1_2)
+			.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
 			.build()
 			.also { INSTANCE = it }
 		}
@@ -44,10 +47,38 @@ abstract class AppDatabase : RoomDatabase() {
 			}
 		}
 
+		private val MIGRATION_2_3 = object : Migration(2, 3) {
+			override fun migrate(database: SupportSQLiteDatabase) {
+				// Create the transactions table
+				database.execSQL(
+					"""
+					CREATE TABLE IF NOT EXISTS transactions (
+						id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+						amount REAL NOT NULL,
+						description TEXT,
+						isExpense INTEGER NOT NULL,
+						date INTEGER NOT NULL,
+						userId INTEGER NOT NULL,
+						categoryId INTEGER,
+						receiptImagePath TEXT,
+						isRecurring INTEGER NOT NULL DEFAULT 0,
+						createdAt INTEGER NOT NULL,
+						updatedAt INTEGER NOT NULL,
+						FOREIGN KEY(userId) REFERENCES users(id) ON DELETE CASCADE,
+						FOREIGN KEY(categoryId) REFERENCES categories(id) ON DELETE SET NULL
+					)
+					"""
+				)
+
+				// Create indices for better query performance
+				database.execSQL("CREATE INDEX IF NOT EXISTS index_transactions_userId ON transactions(userId)")
+				database.execSQL("CREATE INDEX IF NOT EXISTS index_transactions_categoryId ON transactions(categoryId)")
+			}
+		}
+
 		private class DatabaseCallback(private val context: Context) : RoomDatabase.Callback() {
 			override fun onCreate(db: SupportSQLiteDatabase) {
 				super.onCreate(db)
-
 				// Run insertion in the background using IO dispatcher
 				GlobalScope.launch(Dispatchers.IO) {
 					val instance = getDatabase(context)
@@ -93,7 +124,6 @@ abstract class AppDatabase : RoomDatabase() {
 							hexColorCode = "#3F51B5" // Indigo
 						)
 					)
-
 					// Insert using suspend function properly
 					defaultCategories.forEach {
 						instance.categoryDao().insert(it)
