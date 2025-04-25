@@ -4,6 +4,7 @@ import android.app.Application
 import androidx.lifecycle.*
 import com.example.budgiebudgettracking.database.AppDatabase
 import com.example.budgiebudgettracking.entities.Transaction
+import com.example.budgiebudgettracking.entities.TransactionWithCategory
 import com.example.budgiebudgettracking.utils.SessionManager
 import kotlinx.coroutines.launch
 import java.util.Calendar
@@ -15,9 +16,6 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 	private val transactionDao = AppDatabase.getDatabase(application).transactionDao()
 	private val userDao = AppDatabase.getDatabase(application).userDao()
 	private val sessionManager = SessionManager.getInstance(application)
-
-	private val _allTransactions = MediatorLiveData<List<Transaction>>()
-	val allTransactions: LiveData<List<Transaction>> = _allTransactions
 
 	private val _expenses = MediatorLiveData<List<Transaction>>()
 	val expenses: LiveData<List<Transaction>> = _expenses
@@ -40,6 +38,10 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 	private val _monthlyIncome = MediatorLiveData<Double>()
 	val monthlyIncome: LiveData<Double> = _monthlyIncome
 
+	private val _allTransactions = MediatorLiveData<List<Transaction>>()
+	private val _allWithCategory = MediatorLiveData<List<TransactionWithCategory>>()
+	val allWithCategory: LiveData<List<TransactionWithCategory>> = _allWithCategory
+
 	init {
 		loadData()
 	}
@@ -47,6 +49,12 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 	private fun loadData() {
 		viewModelScope.launch {
 			val userId = getUserId() ?: return@launch
+
+			// Load transactions with category
+			val withCatSource = transactionDao.getAllWithCategoryLive(userId)
+			_allWithCategory.addSource(withCatSource) { list ->
+				_allWithCategory.value = list
+			}
 
 			// Load all transactions
 			val allTransactionsSource = transactionDao.getAllTransactionsLive(userId)
@@ -188,6 +196,31 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
 	fun refresh() {
 		loadData()
+	}
+
+	// in TransactionViewModel.kt
+	fun addNewTransaction(
+		amount: Double,
+		description: String?,
+		isExpense: Boolean,
+		date: Long,
+		categoryId: Int,
+		receiptImagePath: String?
+	) {
+		viewModelScope.launch {
+			val userId = getUserId() ?: return@launch
+			val tx = Transaction(
+				amount           = amount,
+				description      = description,
+				isExpense        = isExpense,
+				date             = date,
+				categoryId       = categoryId,
+				receiptImagePath = receiptImagePath,
+				userId           = userId
+			)
+			transactionDao.insert(tx)
+			_operationResult.postValue(true)
+		}
 	}
 
 	class Factory(private val application: Application) : ViewModelProvider.Factory {

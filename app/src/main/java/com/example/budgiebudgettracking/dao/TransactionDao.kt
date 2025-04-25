@@ -2,7 +2,9 @@ package com.example.budgiebudgettracking.dao
 
 import androidx.lifecycle.LiveData
 import androidx.room.*
+import androidx.room.Transaction as RoomTransaction
 import com.example.budgiebudgettracking.entities.Transaction
+import com.example.budgiebudgettracking.entities.TransactionWithCategory
 import java.util.Date
 
 @Dao
@@ -42,4 +44,12 @@ interface TransactionDao {
 
 	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 0 AND date BETWEEN :startDate AND :endDate")
 	fun getIncomeByDateRangeLive(userId: Int, startDate: Long, endDate: Long): LiveData<Double?>
+
+	@RoomTransaction
+	@Query("SELECT * FROM transactions ORDER BY date DESC")
+	fun getAllTransactionsWithCategory(): LiveData<List<TransactionWithCategory>>
+
+	@RoomTransaction
+	@Query("SELECT * FROM transactions WHERE userId = :userId ORDER BY date DESC")
+	fun getAllWithCategoryLive(userId: Int): LiveData<List<TransactionWithCategory>>
 }
