@@ -13,8 +13,8 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.Dispatchers
 
 @Database(
-	entities = [User::class, Category::class, Transaction::class], 
-	version = 3, 
+	entities = [User::class, Category::class, Transaction::class],
+	version = 4,
 	exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {
@@ -23,8 +23,7 @@ abstract class AppDatabase : RoomDatabase() {
 	abstract fun transactionDao(): TransactionDao
 
 	companion object {
-		@Volatile
-		private var INSTANCE: AppDatabase? = null
+		@Volatile private var INSTANCE: AppDatabase? = null
 
 		fun getDatabase(context: Context): AppDatabase =
 		INSTANCE ?: synchronized(this) {
@@ -33,7 +32,7 @@ abstract class AppDatabase : RoomDatabase() {
 				AppDatabase::class.java, "budgie_db"
 			)
 			.addCallback(DatabaseCallback(context))
-			.addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+			.addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
 			.build()
 			.also { INSTANCE = it }
 		}
@@ -76,11 +75,21 @@ abstract class AppDatabase : RoomDatabase() {
 			}
 		}
 
+		// New migration: 3 → 4
+		private val MIGRATION_3_4 = object : Migration(3, 4) {
+			override fun migrate(db: SupportSQLiteDatabase) {
+				// 1) Add startTime and endTime columns to transactions
+				db.execSQL("ALTER TABLE transactions ADD COLUMN startTime INTEGER NOT NULL DEFAULT 0")
+				db.execSQL("ALTER TABLE transactions ADD COLUMN endTime   INTEGER NOT NULL DEFAULT 0")
+				db.execSQL("CREATE INDEX IF NOT EXISTS index_transactions_date ON transactions(date)") // Speed up ordering by date
+			}
+		}
+
 		private class DatabaseCallback(private val context: Context) : RoomDatabase.Callback() {
 			override fun onCreate(db: SupportSQLiteDatabase) {
 				super.onCreate(db)
-				// Run insertion in the background using IO dispatcher
 				GlobalScope.launch(Dispatchers.IO) {
+					// pre-populate default categories
 					val instance = getDatabase(context)
 					val defaultCategories = listOf(
 						Category(
@@ -124,7 +133,6 @@ abstract class AppDatabase : RoomDatabase() {
 							hexColorCode = "#3F51B5" // Indigo
 						)
 					)
-					// Insert using suspend function properly
 					defaultCategories.forEach {
 						instance.categoryDao().insert(it)
 					}
