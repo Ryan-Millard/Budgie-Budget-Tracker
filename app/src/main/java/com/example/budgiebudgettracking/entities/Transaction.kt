@@ -4,7 +4,6 @@ import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.Index
 import androidx.room.PrimaryKey
-import java.util.Date
 
 @Entity(
 	tableName = "transactions",
@@ -33,12 +32,14 @@ data class Transaction(
 	val amount: Double,
 	val description: String? = null,
 	val isExpense: Boolean,
-	val date: Long = System.currentTimeMillis(),
-	val userId: Int,
+	val date: Long = System.currentTimeMillis(),     // epoch-millis for the calendar date
+	val startTime: Long = date,                      // epoch-millis for start time
+	val endTime: Long = date,                        // epoch-millis for end time
+	val userId: Int?,
 	val categoryId: Int,
 	val receiptImagePath: String? = null,
-	// Additional fields that might be useful
 	val isRecurring: Boolean = false,
 	val createdAt: Long = System.currentTimeMillis(),
 	val updatedAt: Long = System.currentTimeMillis()
 )
+

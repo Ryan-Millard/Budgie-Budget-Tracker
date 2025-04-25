@@ -5,7 +5,6 @@ import androidx.room.*
 import androidx.room.Transaction as RoomTransaction
 import com.example.budgiebudgettracking.entities.Transaction
 import com.example.budgiebudgettracking.entities.TransactionWithCategory
-import java.util.Date
 
 @Dao
 interface TransactionDao {
