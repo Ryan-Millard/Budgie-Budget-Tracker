@@ -35,7 +35,10 @@ interface FloatingActionButtonHandler {
 		}
 
 		// Add to root content frame to ensure proper positioning
-		findViewById<ViewGroup>(R.id.content_frame).addView(fab)
+		val parent = findViewById<ViewGroup>(R.id.content_frame)
+		?: findViewById(android.R.id.content) as ViewGroup
+
+		parent.addView(fab)
 	}
 
 	private fun Activity.createFabLayoutParams(): ViewGroup.MarginLayoutParams {

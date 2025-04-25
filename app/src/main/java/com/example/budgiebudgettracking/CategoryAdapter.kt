@@ -14,6 +14,12 @@ class CategoryAdapter(
 	private val categories: MutableList<Category> = mutableListOf()
 ) : RecyclerView.Adapter<CategoryAdapter.CategoryViewHolder>() {
 
+	private var onItemClick: ((Category) -> Unit)? = null
+
+	fun setOnItemClickListener(listener: (Category) -> Unit) {
+		onItemClick = listener
+	}
+
 	inner class CategoryViewHolder(view: View) : RecyclerView.ViewHolder(view) {
 		val tvName: TextView = view.findViewById(R.id.tvCategoryName)
 	}
@@ -53,6 +59,10 @@ class CategoryAdapter(
 
 			} catch (e: IllegalArgumentException) { }
 		} ?: run { }
+
+		holder.itemView.setOnClickListener {
+			onItemClick?.invoke(category)
+		}
 	}
 
 	override fun getItemCount(): Int = categories.size

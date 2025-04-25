@@ -18,7 +18,7 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		createAndAttachFab(destination = AddExpenseActivity::class.java)
 
 		recyclerView = findViewById(R.id.transactionsRecyclerView)
-		recyclerView.layoutManager = LinearLayoutManager(this)       // ← missing!
+		recyclerView.layoutManager = LinearLayoutManager(this)
 		adapter = TransactionAdapter(emptyList())
 		recyclerView.adapter = adapter
 

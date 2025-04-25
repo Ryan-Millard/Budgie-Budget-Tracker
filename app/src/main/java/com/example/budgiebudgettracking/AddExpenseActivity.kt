@@ -23,6 +23,7 @@ import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
 import com.example.budgiebudgettracking.entities.Transaction
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
+import com.example.budgiebudgettracking.CategoryPickerActivity
 import com.bumptech.glide.Glide
 import net.objecthunter.exp4j.ExpressionBuilder
 import java.io.File
@@ -131,13 +132,11 @@ class AddExpenseActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_add_expense)
 
-		// ─── 1) Single, correct VM init ──────────────────────────────
 		viewModel = ViewModelProvider(
 			this,
 			TransactionViewModel.Factory(application)
 		)[TransactionViewModel::class.java]
 
-		// ─── 2) Observe before any saveTransaction() call ───────────
 		viewModel.operationResult.observe(this) { success ->
 			if (success) {
 				Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
@@ -148,7 +147,6 @@ class AddExpenseActivity : AppCompatActivity() {
 			}
 		}
 
-		// ─── 3) Initialize your views ───────────────────────────────
 		input               = findViewById(R.id.inputAmount)
 		descriptionInput    = findViewById(R.id.inputDescription)
 		calculatorGrid      = findViewById(R.id.calculatorGrid)
@@ -157,30 +155,23 @@ class AddExpenseActivity : AppCompatActivity() {
 		receiptImageView    = findViewById(R.id.receiptImageView)
 		placeholderImageView= findViewById(R.id.placeholderImageView)
 
-		// ─── 4) Date picker setup ──────────────────────────────────
 		updateDateButtonText()
 		datePickerButton.setOnClickListener { showDatePicker() }
 
-		// ─── 5) Category picker placeholder (your TODO) ───────────
 		findViewById<Button>(R.id.btnCategory).setOnClickListener {
-			Toast.makeText(this, "Must implement intent", Toast.LENGTH_SHORT).show()
-			// val intent = Intent(this, CategoryPickerActivity::class.java)
-			// categoryPickerLauncher.launch(intent)
+			val intent = Intent(this, CategoryPickerActivity::class.java)
+			categoryPickerLauncher.launch(intent)
 		}
 
-		// ─── 6) Image pickers ───────────────────────────────────────
 		placeholderImageView.setOnClickListener { showImagePickerOptions() }
 		receiptImageView     .setOnClickListener { showImagePickerOptions() }
 
-		// ─── 7) Calculator toggling ─────────────────────────────────
 		input.setOnClickListener { showCalculator() }
 		toggleCalculatorButton.setOnClickListener { toggleCalculator() }
 
-		// ─── 8) Delete/backspace ───────────────────────────────────
 		findViewById<ImageButton>(R.id.btnDelete)
 		.setOnClickListener { deleteLastCharacter() }
 
-		// ─── 9) Number buttons 0–9 ─────────────────────────────────
 		for (i in 0..9) {
 			val btnId = resources.getIdentifier("btn$i", "id", packageName)
 			findViewById<Button>(btnId).setOnClickListener {
@@ -188,7 +179,6 @@ class AddExpenseActivity : AppCompatActivity() {
 			}
 		}
 
-		// ─── 10) Operator buttons ───────────────────────────────────
 		findViewById<Button>(R.id.btnPlus)    .setOnClickListener { input.append("+") }
 		findViewById<Button>(R.id.btnMinus)   .setOnClickListener { input.append("-") }
 		findViewById<Button>(R.id.btnMultiply).setOnClickListener { input.append("*") }
@@ -203,12 +193,10 @@ class AddExpenseActivity : AppCompatActivity() {
 		findViewById<Button>(R.id.btnNegate)  .setOnClickListener { onToggleSign() }
 		findViewById<Button>(R.id.btnEquals)  .setOnClickListener { calculateExpression() }
 
-		// ─── 11) Confirm button ────────────────────────────────────
 		findViewById<Button>(R.id.confirmAmountBtn).setOnClickListener {
 			saveTransaction()
 		}
 
-		// ─── 12) Pull transactionId and, if editing, load it ───────
 		transactionId = intent.getIntExtra("TRANSACTION_ID", -1)
 		if (transactionId != -1) {
 			loadExistingTransaction(transactionId)
