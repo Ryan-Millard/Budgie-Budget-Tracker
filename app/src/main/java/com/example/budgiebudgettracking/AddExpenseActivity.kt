@@ -33,6 +33,8 @@ import java.util.Date
 import java.util.Locale
 
 class AddExpenseActivity : AppCompatActivity() {
+	private var transactionId: Int = -1
+
 	private lateinit var input: EditText
 	private lateinit var descriptionInput: EditText
 	private lateinit var calculatorGrid: View
@@ -129,111 +131,89 @@ class AddExpenseActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_add_expense)
 
-		// Initialize ViewModel
-		viewModel = ViewModelProvider(this, 
-		TransactionViewModel.Factory(application)
-	).get(TransactionViewModel::class.java)
+		// ─── 1) Single, correct VM init ──────────────────────────────
+		viewModel = ViewModelProvider(
+			this,
+			TransactionViewModel.Factory(application)
+		)[TransactionViewModel::class.java]
 
-	// Initialize views
-	input = findViewById(R.id.inputAmount)
-	descriptionInput = findViewById(R.id.inputDescription)
-	calculatorGrid = findViewById(R.id.calculatorGrid)
-	toggleCalculatorButton = findViewById(R.id.btnToggleCalculator)
-	receiptImageView = findViewById(R.id.receiptImageView)
-	placeholderImageView = findViewById(R.id.placeholderImageView)
-	datePickerButton = findViewById(R.id.btnDatePicker)
+		// ─── 2) Observe before any saveTransaction() call ───────────
+		viewModel.operationResult.observe(this) { success ->
+			if (success) {
+				Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
+				setResult(Activity.RESULT_OK)
+				finish()
+			} else {
+				Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show()
+			}
+		}
 
-	// Initialize date picker button with current date
-	updateDateButtonText()
+		// ─── 3) Initialize your views ───────────────────────────────
+		input               = findViewById(R.id.inputAmount)
+		descriptionInput    = findViewById(R.id.inputDescription)
+		calculatorGrid      = findViewById(R.id.calculatorGrid)
+		toggleCalculatorButton = findViewById(R.id.btnToggleCalculator)
+		datePickerButton    = findViewById(R.id.btnDatePicker)
+		receiptImageView    = findViewById(R.id.receiptImageView)
+		placeholderImageView= findViewById(R.id.placeholderImageView)
 
-	// Set up date picker
-	datePickerButton.setOnClickListener {
-		showDatePicker()
-	}
+		// ─── 4) Date picker setup ──────────────────────────────────
+		updateDateButtonText()
+		datePickerButton.setOnClickListener { showDatePicker() }
 
-	// Set up category picker
-	findViewById<Button>(R.id.btnCategory).setOnClickListener {
-		Toast.makeText(this, "Must implement intent", Toast.LENGTH_SHORT).show()
-		// Launch category picker activity
-		// val intent = Intent(this, CategoryPickerActivity::class.java)
-		// categoryPickerLauncher.launch(intent)
-	}
+		// ─── 5) Category picker placeholder (your TODO) ───────────
+		findViewById<Button>(R.id.btnCategory).setOnClickListener {
+			Toast.makeText(this, "Must implement intent", Toast.LENGTH_SHORT).show()
+			// val intent = Intent(this, CategoryPickerActivity::class.java)
+			// categoryPickerLauncher.launch(intent)
+		}
 
-	// Set up image click listeners for placeholder and user's image
-	placeholderImageView.setOnClickListener {
-		showImagePickerOptions()
-	}
-	receiptImageView.setOnClickListener {
-		showImagePickerOptions()
-	}
+		// ─── 6) Image pickers ───────────────────────────────────────
+		placeholderImageView.setOnClickListener { showImagePickerOptions() }
+		receiptImageView     .setOnClickListener { showImagePickerOptions() }
 
-	// Set up amount field to show calculator
-	input.setOnClickListener {
-		showCalculator()
-	}
+		// ─── 7) Calculator toggling ─────────────────────────────────
+		input.setOnClickListener { showCalculator() }
+		toggleCalculatorButton.setOnClickListener { toggleCalculator() }
 
-	// Set up toggle calculator button
-	toggleCalculatorButton.setOnClickListener {
-		toggleCalculator()
-	}
+		// ─── 8) Delete/backspace ───────────────────────────────────
+		findViewById<ImageButton>(R.id.btnDelete)
+		.setOnClickListener { deleteLastCharacter() }
 
-	// Set up delete button
-	findViewById<ImageButton>(R.id.btnDelete).setOnClickListener {
-		deleteLastCharacter()
-	}
+		// ─── 9) Number buttons 0–9 ─────────────────────────────────
+		for (i in 0..9) {
+			val btnId = resources.getIdentifier("btn$i", "id", packageName)
+			findViewById<Button>(btnId).setOnClickListener {
+				input.append(i.toString())
+			}
+		}
 
-	// Set up number buttons (0-9)
-	for (i in 0..9) {
-		val buttonId = resources.getIdentifier("btn$i", "id", packageName)
-		findViewById<Button>(buttonId).setOnClickListener {
-			input.append(i.toString())
+		// ─── 10) Operator buttons ───────────────────────────────────
+		findViewById<Button>(R.id.btnPlus)    .setOnClickListener { input.append("+") }
+		findViewById<Button>(R.id.btnMinus)   .setOnClickListener { input.append("-") }
+		findViewById<Button>(R.id.btnMultiply).setOnClickListener { input.append("*") }
+		findViewById<Button>(R.id.btnDivide)  .setOnClickListener { input.append("/") }
+		findViewById<Button>(R.id.btnDot)     .setOnClickListener { input.append(".") }
+		findViewById<Button>(R.id.btnPercent) .setOnClickListener { onPercent() }
+		findViewById<Button>(R.id.btnParen)   .setOnClickListener { handleParentheses() }
+		findViewById<Button>(R.id.btnClear)   .setOnClickListener {
+			input.text.clear()
+			openParenCount = 0
+		}
+		findViewById<Button>(R.id.btnNegate)  .setOnClickListener { onToggleSign() }
+		findViewById<Button>(R.id.btnEquals)  .setOnClickListener { calculateExpression() }
+
+		// ─── 11) Confirm button ────────────────────────────────────
+		findViewById<Button>(R.id.confirmAmountBtn).setOnClickListener {
+			saveTransaction()
+		}
+
+		// ─── 12) Pull transactionId and, if editing, load it ───────
+		transactionId = intent.getIntExtra("TRANSACTION_ID", -1)
+		if (transactionId != -1) {
+			loadExistingTransaction(transactionId)
 		}
 	}
-
-	// Set up operator buttons individually
-	findViewById<Button>(R.id.btnPlus).setOnClickListener { input.append("+") }
-	findViewById<Button>(R.id.btnMinus).setOnClickListener { input.append("-") }
-	findViewById<Button>(R.id.btnMultiply).setOnClickListener { input.append("*") }
-	findViewById<Button>(R.id.btnDivide).setOnClickListener { input.append("/") }
-	findViewById<Button>(R.id.btnDot).setOnClickListener { input.append(".") }
-
-	// Percentage button (%)
-	findViewById<Button>(R.id.btnPercent).setOnClickListener { 
-		onPercent()
-	}
-
-	// Parentheses button
-	findViewById<Button>(R.id.btnParen).setOnClickListener {
-		handleParentheses()
-	}
-
-	// Clear button
-	findViewById<Button>(R.id.btnClear).setOnClickListener {
-		input.text.clear()
-		openParenCount = 0
-	}
-
-	// Negate button
-	findViewById<Button>(R.id.btnNegate).setOnClickListener {
-		onToggleSign()
-	}
-
-	// Equals button
-	findViewById<Button>(R.id.btnEquals).setOnClickListener {
-		calculateExpression()
-	}
-
-	// Confirm button
-	findViewById<Button>(R.id.confirmAmountBtn).setOnClickListener {
-		saveTransaction()
-	}
-
-	// Check if we're editing an existing transaction
-	val transactionId = intent.getIntExtra("TRANSACTION_ID", -1)
-	if (transactionId != -1) {
-		loadExistingTransaction(transactionId)
-	}
-}
 
 private fun updateDateButtonText() {
 	val sdf = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
@@ -471,42 +451,20 @@ private fun saveTransaction() {
 	// Get image path if available
 	val imagePath = currentPhotoUri?.toString()
 
-	// Create transaction object
-	val transactionId = intent.getIntExtra("TRANSACTION_ID", -1)
-	val transaction = Transaction(
-		id = if (transactionId != -1) transactionId else 0,
-		amount = amount,
-		description = description,
-		date = selectedDate,
-		isExpense = isExpense,
-		categoryId = selectedCategoryId,
-		receiptImagePath = imagePath,
-		userId = 1 // Current user ID (should be retrieved from session)
-	)
-
-	// Save transaction to database
+	// Let the VM build & save a transaction with the correct userId
 	if (transactionId != -1) {
-		viewModel.updateTransaction(transaction)
+		// for updates, you’ll still need to pass an existing txId + full object,
+		// so you might add a similar updateNewTransaction(...) helper
 	} else {
-		viewModel.addTransaction(transaction)
-	}
-
-	// Observe result
-	viewModel.operationResult.observe(this) { success ->
-		if (success) {
-			val action = if (transactionId != -1) "updated" else "added"
-			Toast.makeText(this, "Transaction $action successfully", Toast.LENGTH_SHORT).show()
-
-			// Send result back to calling activity
-			val resultIntent = Intent()
-			resultIntent.putExtra("TRANSACTION_SAVED", true)
-			setResult(Activity.RESULT_OK, resultIntent)
-
-			// Close activity
-			finish()
-		} else {
-			Toast.makeText(this, "Error saving transaction", Toast.LENGTH_SHORT).show()
-		}
+		// …validate, build your fields…
+		viewModel.addNewTransaction(
+			amount           = amount,
+			description      = description,
+			isExpense        = isExpense,
+			date             = selectedDate,
+			categoryId       = selectedCategoryId,
+			receiptImagePath = imagePath
+		)
 	}
 }
 

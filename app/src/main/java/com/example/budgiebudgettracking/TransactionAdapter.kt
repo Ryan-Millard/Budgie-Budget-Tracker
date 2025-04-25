@@ -3,20 +3,24 @@ package com.example.budgiebudgettracking
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
-import com.example.budgiebudgettracking.entities.Transaction
+import com.bumptech.glide.Glide
+import com.example.budgiebudgettracking.entities.TransactionWithCategory
 import java.text.SimpleDateFormat
-import java.util.Date
 import java.util.Locale
 
-class TransactionAdapter(private var transactions: List<Transaction>) :
-RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+class TransactionAdapter(
+	private var transactions: List<TransactionWithCategory>
+) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 
 	inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-		val amountText: TextView = itemView.findViewById(R.id.amountTextView)
+		val receiptImage: ImageView   = itemView.findViewById(R.id.receiptImageView)
+		val amountText: TextView      = itemView.findViewById(R.id.amountTextView)
+		val categoryText: TextView    = itemView.findViewById(R.id.categoryTextView)
+		val dateText: TextView        = itemView.findViewById(R.id.dateTextView)
 		val descriptionText: TextView = itemView.findViewById(R.id.descriptionTextView)
-		val dateText: TextView = itemView.findViewById(R.id.dateTextView)
 	}
 
 	override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): TransactionViewHolder {
@@ -26,19 +30,33 @@ RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
 	}
 
 	override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
-		val transaction = transactions[position]
-		val sign = if (transaction.isExpense) "-" else "+"
-		holder.amountText.text = "$sign R ${"%.2f".format(transaction.amount)}"
-		holder.descriptionText.text = transaction.description ?: "No description"
+		val wrapper = transactions[position]
+		val tx = wrapper.transaction
+
+		val sign = if (tx.isExpense) "-" else "+"
+		holder.amountText.text = "$sign R ${"%.2f".format(tx.amount)}"
+
+		holder.categoryText.text = wrapper.category?.categoryName ?: "Uncategorized"
+		holder.descriptionText.text = tx.description ?: "No description"
 
 		val sdf = SimpleDateFormat("dd MMM yyyy", Locale.getDefault())
-		holder.dateText.text = sdf.format(Date(transaction.date))
+		holder.dateText.text = sdf.format(tx.date)
+
+		// Load receipt thumbnail (if path is non-null)
+		if (!tx.receiptImagePath.isNullOrEmpty()) {
+			Glide.with(holder.itemView)
+			.load(tx.receiptImagePath)
+			.placeholder(R.drawable.ic_camera)
+			.into(holder.receiptImage)
+		} else {
+			holder.receiptImage.setImageResource(R.drawable.ic_camera)
+		}
 	}
 
 	override fun getItemCount(): Int = transactions.size
 
-	fun updateData(newTransactions: List<Transaction>) {
-		transactions = newTransactions
+	fun updateData(newList: List<TransactionWithCategory>) {
+		transactions = newList
 		notifyDataSetChanged()
 	}
 }
