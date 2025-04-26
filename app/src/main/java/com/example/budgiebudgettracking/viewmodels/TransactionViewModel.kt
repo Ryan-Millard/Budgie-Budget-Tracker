@@ -46,6 +46,16 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 		loadData()
 	}
 
+	fun getTransactionsWithCategoryByDateRange(startDate: Long, endDate: Long): LiveData<List<TransactionWithCategory>> {
+		val result = MediatorLiveData<List<TransactionWithCategory>>()
+		viewModelScope.launch {
+			val userId = getUserId() ?: return@launch
+			val source = transactionDao.getWithCategoryByDateRangeLive(userId, startDate, endDate)
+			result.addSource(source) { list -> result.value = list }
+		}
+		return result
+	}
+
 	private fun loadData() {
 		viewModelScope.launch {
 			val userId = getUserId() ?: return@launch

@@ -17,9 +17,17 @@
 		android:src="@drawable/abstract_background"
 		android:alpha="0.3" />
 
+	<com.example.budgiebudgettracking.components.NavigationSelector
+		android:id="@+id/month_selector"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		app:leftButtonIcon="@drawable/ic_arrow_left"
+		app:rightButtonIcon="@drawable/ic_arrow_right" />
+
 	<ScrollView
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
+		android:layout_below="@id/month_selector"
 		android:padding="16dp">
 
 		<androidx.recyclerview.widget.RecyclerView
