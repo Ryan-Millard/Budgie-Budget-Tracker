@@ -5,4 +5,8 @@
     <string name="cancel_changes_message">You have unsaved changes. Are you sure you want to discard them?</string>
     <string name="cancel_yes">Yes</string>
     <string name="cancel_no">No</string>
+
+	<!-- Navigation Component -->
+	<string name="navigate_previous">Previous</string>
+	<string name="navigate_next">Next</string>
 </resources>

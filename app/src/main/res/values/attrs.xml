@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="NavigationSelector">
+        <attr name="textAppearance" format="reference" />
+        <attr name="leftButtonIcon" format="reference" />
+        <attr name="rightButtonIcon" format="reference" />
+    </declare-styleable>
+</resources>

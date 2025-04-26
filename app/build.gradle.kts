@@ -1,7 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
-	alias(libs.plugins.ksp)
+    alias(libs.plugins.ksp)
 }
 
 android {
@@ -27,35 +27,44 @@ android {
             )
         }
     }
+
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        // Enable Java 8+ API desugaring
+        isCoreLibraryDesugaringEnabled = true
+        // Java compatibility
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
+
     kotlinOptions {
-        jvmTarget = "11"
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
+    // Desugaring library for Java 8+ APIs
+    coreLibraryDesugaring("com.android.tools:desugar_jdk_libs:1.1.8")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
     implementation(libs.androidx.activity)
     implementation(libs.androidx.constraintlayout)
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
 
-	implementation(libs.androidx.room.runtime)
-	implementation(libs.androidx.room.ktx)
-	ksp(libs.androidx.room.compiler) // For Kotlin Symbol Processing
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.8.7")
 
-	implementation("com.github.bumptech.glide:glide:4.15.1") // For images
-	annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
+    implementation("com.github.bumptech.glide:glide:4.15.1")
+    annotationProcessor("com.github.bumptech.glide:compiler:4.15.1")
 
-	implementation("net.objecthunter:exp4j:0.4.8") // For calculator
-
-	implementation("com.github.skydoves:colorpickerview:2.2.4") // For color picker
+    implementation("net.objecthunter:exp4j:0.4.8")
+    implementation("com.github.skydoves:colorpickerview:2.2.4")
 }
+
