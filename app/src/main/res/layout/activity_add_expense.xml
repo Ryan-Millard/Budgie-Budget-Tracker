@@ -144,15 +144,6 @@
                         android:background="?attr/selectableItemBackground" />
                 </LinearLayout>
 
-                <!-- Calculator Toggle Button -->
-                <Button
-                    android:id="@+id/btnToggleCalculator"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:text="Show Calculator"
-                    android:background="@drawable/toggle_button_background"
-                    android:textColor="@color/colorPrimary" />
-
                 <!-- Calculator Grid -->
                 <GridLayout
                     android:id="@+id/calculatorGrid"
@@ -164,8 +155,7 @@
                     android:columnOrderPreserved="false"
                     android:layout_marginTop="8dp"
                     android:layout_marginBottom="8dp"
-                    android:padding="8dp"
-                    android:visibility="gone">
+                    android:padding="8dp">
 
                     <!-- Top Row -->
                     <Button android:id="@+id/btnClear"    android:text="AC"  style="@style/CalcButtonGray"/>
