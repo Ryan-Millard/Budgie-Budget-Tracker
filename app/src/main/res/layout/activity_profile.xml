@@ -258,6 +258,7 @@
 					android:drawableStart="@drawable/ic_security_icon"
 					android:drawablePadding="8dp"
 					android:paddingVertical="8dp"
+					android:fillColor="?attr/colorPrimary"
 					app:layout_constraintTop_toBottomOf="@id/tvSettingsSectionTitle"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintEnd_toEndOf="parent" />
@@ -271,6 +272,7 @@
 					android:drawableStart="@drawable/ic_notification_icon"
 					android:drawablePadding="8dp"
 					android:paddingVertical="8dp"
+					android:fillColor="?attr/colorPrimary"
 					app:layout_constraintTop_toBottomOf="@id/tvSecurity"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintEnd_toEndOf="parent" />
@@ -284,6 +286,7 @@
 					android:drawableStart="@drawable/ic_privacy_icon"
 					android:drawablePadding="8dp"
 					android:paddingVertical="8dp"
+					android:fillColor="?attr/colorPrimary"
 					app:layout_constraintTop_toBottomOf="@id/tvNotifications"
 					app:layout_constraintStart_toStartOf="parent"
 					app:layout_constraintEnd_toEndOf="parent" />
