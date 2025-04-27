@@ -11,7 +11,8 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
-import android.widget.EditText
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
 import android.widget.ImageButton
 import android.widget.ImageView
 import android.widget.RadioButton
@@ -48,8 +49,11 @@ class AddExpenseActivity : AppCompatActivity() {
 
 	private var transactionId: Int = -1
 
-	private lateinit var amountInput: EditText
-	private lateinit var descriptionInput: EditText
+	private lateinit var amountInputLayout: TextInputLayout
+	private lateinit var amountInput: TextInputEditText
+	private lateinit var descriptionInputLayout: TextInputLayout
+	private lateinit var descriptionInput: TextInputEditText
+
 	private lateinit var calculatorGrid: View
 	private lateinit var datePickerButton: Button
 	private var calculatedResult: Double = 0.0
@@ -166,12 +170,15 @@ class AddExpenseActivity : AppCompatActivity() {
 			currentUserId = user?.id ?: -1
 		}
 
-		amountInput               = findViewById(R.id.inputAmount)
-		descriptionInput    = findViewById(R.id.inputDescription)
-		calculatorGrid      = findViewById(R.id.calculatorGrid)
-		datePickerButton    = findViewById(R.id.btnDatePicker)
-		receiptImageView    = findViewById(R.id.receiptImageView)
-		placeholderImageView= findViewById(R.id.placeholderImageView)
+		amountInput            = findViewById(R.id.inputAmount)
+		amountInputLayout      = findViewById(R.id.amountLayout)
+		descriptionInput       = findViewById(R.id.inputDescription)
+		descriptionInputLayout = findViewById(R.id.descriptionLayout)
+
+		calculatorGrid         = findViewById(R.id.calculatorGrid)
+		datePickerButton       = findViewById(R.id.btnDatePicker)
+		receiptImageView       = findViewById(R.id.receiptImageView)
+		placeholderImageView   = findViewById(R.id.placeholderImageView)
 
 		updateDateButtonText()
 		datePickerButton.setOnClickListener { showDatePicker() }
@@ -202,7 +209,7 @@ class AddExpenseActivity : AppCompatActivity() {
 		findViewById<Button>(R.id.btnPercent) .setOnClickListener { onPercent() }
 		findViewById<Button>(R.id.btnParen)   .setOnClickListener { handleParentheses() }
 		findViewById<Button>(R.id.btnClear)   .setOnClickListener {
-			amountInput.text.clear()
+			amountInput.getText()?.clear()
 			openParenCount = 0
 		}
 		findViewById<Button>(R.id.btnNegate)  .setOnClickListener { onToggleSign() }
@@ -394,12 +401,14 @@ class AddExpenseActivity : AppCompatActivity() {
 	}
 
 	private fun isValidTransaction(): Boolean {
-		if (descriptionInput.text.isBlank()) {
+		if (descriptionInput.getText()?.isBlank() as Boolean) {
+			descriptionInputLayout.error = "Please enter a description"
 			Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
 			return false
 		}
 
-		if (amountInput.text.isBlank()) {
+		if (amountInput.getText()?.isBlank() as Boolean) {
+			amountInputLayout.error = "Please enter an amount"
 			Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show()
 			return false
 		}
@@ -482,7 +491,7 @@ class AddExpenseActivity : AppCompatActivity() {
 				openParenCount--
 			}
 			// Delete the character
-			amountInput.text.delete(cursorPosition - 1, cursorPosition)
+			amountInput.getText()?.delete(cursorPosition - 1, cursorPosition)
 		}
 	}
 
@@ -494,15 +503,15 @@ class AddExpenseActivity : AppCompatActivity() {
 			val textBeforeCursor = currentText.substring(0, cursorPosition)
 			val lastChar = if (textBeforeCursor.isNotEmpty()) textBeforeCursor.last() else ' '
 			if (lastChar !in listOf('+', '-', '*', '/', '(', ' ')) {
-				amountInput.text.insert(cursorPosition, ")")
+				amountInput.getText()?.insert(cursorPosition, ")")
 				openParenCount--
 			} else {
-				amountInput.text.insert(cursorPosition, "(")
+				amountInput.getText()?.insert(cursorPosition, "(")
 				openParenCount++
 			}
 		} else {
 			// Just add an opening parenthesis
-			amountInput.text.insert(cursorPosition, "(")
+			amountInput.getText()?.insert(cursorPosition, "(")
 			openParenCount++
 		}
 	}
@@ -576,7 +585,7 @@ class AddExpenseActivity : AppCompatActivity() {
 			} else {
 				amountInput.setText("-$currentText")
 			}
-			amountInput.setSelection(amountInput.text.length)
+			amountInput.setSelection(amountInput.getText()?.length as Int)
 		}
 	}
 
