@@ -79,7 +79,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="4dp"
 					android:text="john.doe@example.com"
-					android:textColor="@color/colorOnBackground"
+					android:textColor="?android:textColorPrimary"
 					android:textSize="16sp"
 					app:layout_constraintTop_toBottomOf="@id/tvProfileName"
 					app:layout_constraintStart_toStartOf="parent"
@@ -136,7 +136,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="16dp"
 					android:text="Phone"
-					android:textColor="@color/colorOnBackground"
+					android:textColor="?android:textColorPrimary"
 					android:textStyle="bold"
 					app:layout_constraintTop_toBottomOf="@id/tvInfoSectionTitle"
 					app:layout_constraintStart_toStartOf="parent" />
@@ -158,7 +158,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="16dp"
 					android:text="Location"
-					android:textColor="@color/colorOnBackground"
+					android:textColor="?android:textColorPrimary"
 					android:textStyle="bold"
 					app:layout_constraintTop_toBottomOf="@id/tvPhoneLabel"
 					app:layout_constraintStart_toStartOf="parent" />
@@ -180,7 +180,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="16dp"
 					android:text="Joined"
-					android:textColor="@color/colorOnBackground"
+					android:textColor="?android:textColorPrimary"
 					android:textStyle="bold"
 					app:layout_constraintTop_toBottomOf="@id/tvLocationLabel"
 					app:layout_constraintStart_toStartOf="parent" />
@@ -202,7 +202,7 @@
 					android:layout_height="wrap_content"
 					android:layout_marginTop="16dp"
 					android:text="Bio"
-					android:textColor="@color/colorOnBackground"
+					android:textColor="?android:textColorPrimary"
 					android:textStyle="bold"
 					app:layout_constraintTop_toBottomOf="@id/tvJoinedLabel"
 					app:layout_constraintStart_toStartOf="parent" />
