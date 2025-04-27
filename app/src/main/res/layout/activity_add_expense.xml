@@ -145,7 +145,7 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
             </LinearLayout>
 
-            <!-- Amount Card -->
+            <!-- Amount Card with Calculator -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -159,6 +159,7 @@
                     android:orientation="vertical"
                     android:padding="8dp">
 
+                    <!-- Amount Input Display (just a display, actual input is in calculator) -->
                     <com.google.android.material.textfield.TextInputLayout
                         android:id="@+id/amountLayout"
                         android:layout_width="match_parent"
@@ -180,46 +181,11 @@
                             android:clickable="true" />
                     </com.google.android.material.textfield.TextInputLayout>
 
-                    <!-- Calculator Grid -->
-                    <GridLayout
-                        android:id="@+id/calculatorGrid"
+                    <!-- Our new Calculator Component -->
+                    <com.example.budgiebudgettracking.components.CalculatorView
+                        android:id="@+id/calculatorView"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:columnCount="4"
-                        android:rowCount="5"
-                        android:alignmentMode="alignMargins"
-                        android:columnOrderPreserved="false">
-
-                        <!-- Top Row -->
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnClear" android:text="AC" style="@style/CalcButtonGray" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnParen" android:text="( )" style="@style/CalcButtonGray" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnPercent" android:text="%" style="@style/CalcButtonGray" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnDivide" android:text="÷" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
-
-                        <!-- Second Row -->
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn7" android:text="7" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn8" android:text="8" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn9" android:text="9" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnMultiply" android:text="×" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
-
-                        <!-- Third Row -->
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn4" android:text="4" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn5" android:text="5" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn6" android:text="6" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnMinus" android:text="-" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
-
-                        <!-- Fourth Row -->
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn1" android:text="1" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn2" android:text="2" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn3" android:text="3" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnPlus" android:text="+" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
-
-                        <!-- Bottom Row -->
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnNegate" android:text="±" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btn0" android:text="0" style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnDot" android:text="." style="@style/CalcButtonDark" android:layout_margin="2dp" />
-                        <com.google.android.material.button.MaterialButton android:id="@+id/btnEquals" android:text="=" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
-                    </GridLayout>
+                        android:layout_height="wrap_content" />
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>
 
