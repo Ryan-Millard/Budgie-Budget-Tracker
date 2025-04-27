@@ -12,8 +12,13 @@ import java.text.SimpleDateFormat
 import java.util.Locale
 
 class TransactionAdapter(
-	private var transactions: List<TransactionWithCategory>
+	private var transactions: List<TransactionWithCategory>,
+	private val listener: OnItemClickListener
 ) : RecyclerView.Adapter<TransactionAdapter.TransactionViewHolder>() {
+
+	interface OnItemClickListener {
+		fun onItemClick(item: TransactionWithCategory)
+	}
 
 	inner class TransactionViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
 		val receiptImage: ImageView   = itemView.findViewById(R.id.receiptImageView)
@@ -31,8 +36,12 @@ class TransactionAdapter(
 
 	override fun onBindViewHolder(holder: TransactionViewHolder, position: Int) {
 		val wrapper = transactions[position]
-		val tx = wrapper.transaction
 
+		holder.itemView.setOnClickListener {
+			listener.onItemClick(wrapper)
+		}
+
+		val tx = wrapper.transaction
 		val sign = if (tx.isExpense) "-" else "+"
 		holder.amountText.text = "$sign R ${"%.2f".format(tx.amount)}"
 

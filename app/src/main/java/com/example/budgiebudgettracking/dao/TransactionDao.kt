@@ -55,4 +55,8 @@ interface TransactionDao {
 	@RoomTransaction
 	@Query("SELECT * FROM transactions WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date DESC")
 	fun getWithCategoryByDateRangeLive(userId: Int, startDate: Long, endDate: Long): LiveData<List<TransactionWithCategory>>
+
+	@RoomTransaction
+	@Query("SELECT * FROM transactions WHERE userId = :userId AND id = :txId")
+	fun getTransactionWithCategoryById(userId: Int, txId: Int): LiveData<TransactionWithCategory>
 }

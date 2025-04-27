@@ -10,6 +10,8 @@ import java.time.format.DateTimeFormatter
 import java.time.YearMonth
 import java.time.ZoneId
 import java.util.Locale
+import com.google.android.material.bottomsheet.BottomSheetDialogFragment
+import androidx.fragment.app.FragmentActivity   // if needed
 
 import com.example.budgiebudgettracking.components.NavigationSelector
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
@@ -27,7 +29,13 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 
 		recyclerView = findViewById(R.id.transactionsRecyclerView)
 		recyclerView.layoutManager = LinearLayoutManager(this)
-		adapter = TransactionAdapter(emptyList())
+		adapter = TransactionAdapter(emptyList(), object : TransactionAdapter.OnItemClickListener {
+			override fun onItemClick(item: TransactionWithCategory) {
+				TransactionDetailBottomSheet
+				.newInstance(item.transaction.id)
+				.show(supportFragmentManager, "transaction_detail")
+			}
+		})
 		recyclerView.adapter = adapter
 
 		viewModel = ViewModelProvider(this, TransactionViewModel.Factory(application))
