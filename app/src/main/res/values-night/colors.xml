@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#2A9D8F</color> <!-- Teal/Green -->
+    <color name="colorAccent">#F4A261</color> <!-- Peach/Orange -->
+    <color name="colorBackground">#121212</color> <!-- Dark Background -->
+    <color name="colorSurface">#333333</color> <!-- Dark Surface -->
+    <color name="colorTextPrimary">#FFFFFF</color> <!-- White Text for Dark Mode -->
+    <color name="colorError">#E76F51</color> <!-- Coral Red -->
+
+    <color name="colorOnError">#FFFFFF</color> <!-- Text on error (white for contrast) -->
+    <color name="colorOnSurface">#FFFFFF</color> <!-- White text on surface -->
+    <color name="colorOnBackground">#FFFFFF</color> <!-- White text for background -->
+</resources>
