@@ -53,7 +53,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:text="Email:"
-        android:textColor="@color/colorOnBackground"
+        android:textColor="?android:textColorPrimary"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/loginTitle"
         app:layout_constraintStart_toStartOf="parent" />
@@ -75,7 +75,7 @@
             android:layout_height="wrap_content"
             android:hint="e.g. bob@gmail.com"
             android:inputType="textEmailAddress"
-            android:textColor="@color/colorOnBackground" />
+            android:textColor="?android:textColorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Password Label -->
@@ -86,7 +86,7 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="16dp"
         android:text="Password:"
-        android:textColor="@color/colorOnBackground"
+        android:textColor="?android:textColorPrimary"
         android:textSize="16sp"
         app:layout_constraintTop_toBottomOf="@id/emailInputLayout"
         app:layout_constraintStart_toStartOf="parent" />
@@ -108,7 +108,7 @@
             android:layout_height="wrap_content"
             android:hint="bob'scatisfat43"
             android:inputType="textPassword"
-            android:textColor="@color/colorOnBackground" />
+            android:textColor="?android:textColorPrimary" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <!-- Login Button -->
