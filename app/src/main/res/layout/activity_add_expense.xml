@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
+<androidx.coordinatorlayout.widget.CoordinatorLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -11,12 +12,13 @@
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/abstract_background"
-        android:alpha="0.3" />
+        android:alpha="0.2"
+        android:contentDescription="Background" />
 
-    <!-- Main Content -->
-    <ScrollView
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:fillViewport="true"
         android:padding="16dp">
 
         <LinearLayout
@@ -29,12 +31,14 @@
             <androidx.cardview.widget.CardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp">
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="4dp">
 
                 <FrameLayout
                     android:layout_width="match_parent"
-                    android:layout_height="140dp"
-                    android:background="#F0F0F0">
+                    android:layout_height="160dp"
+                    android:background="#F5F5F5">
 
                     <ImageView
                         android:id="@+id/receiptImageView"
@@ -43,45 +47,62 @@
                         android:scaleType="centerInside"
                         android:contentDescription="Receipt Image" />
 
-                    <ImageView
-                        android:id="@+id/placeholderImageView"
-                        android:layout_width="64dp"
-                        android:layout_height="64dp"
+                    <com.google.android.material.floatingactionbutton.FloatingActionButton
+                        android:id="@+id/addPhotoButton"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
                         android:layout_gravity="center"
                         android:src="@drawable/ic_add_photo"
-                        android:contentDescription="Add Photo" />
+                        app:fabSize="normal"
+                        app:tint="@android:color/white"
+                        android:contentDescription="Add Receipt Photo" />
                 </FrameLayout>
             </androidx.cardview.widget.CardView>
 
             <!-- Transaction Type Selector -->
-            <RadioGroup
-                android:id="@+id/radioGroupType"
-                android:layout_width="wrap_content"
+            <com.google.android.material.card.MaterialCardView
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="horizontal"
-                android:layout_marginBottom="12dp">
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
 
-                <RadioButton
-                    android:id="@+id/radioIncome"
-                    android:layout_width="wrap_content"
+                <RadioGroup
+                    android:id="@+id/radioGroupType"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Income" />
+                    android:orientation="horizontal"
+                    android:padding="8dp"
+                    android:gravity="center">
 
-                <RadioButton
-                    android:id="@+id/radioExpense"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Expense"
-                    android:checked="true" />
-            </RadioGroup>
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/radioIncome"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Income"
+                        android:textAlignment="center" />
+
+                    <com.google.android.material.radiobutton.MaterialRadioButton
+                        android:id="@+id/radioExpense"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:text="Expense"
+                        android:checked="true"
+                        android:textAlignment="center" />
+                </RadioGroup>
+            </com.google.android.material.card.MaterialCardView>
 
             <!-- Description Input -->
             <com.google.android.material.textfield.TextInputLayout
                 android:id="@+id/descriptionLayout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="8dp">
+                android:layout_marginBottom="16dp"
+                app:startIconDrawable="@drawable/ic_description"
+                app:startIconContentDescription="Description"
+                style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/inputDescription"
@@ -89,119 +110,131 @@
                     android:layout_height="wrap_content"
                     android:hint="Enter description (optional)"
                     android:inputType="text"
-                    android:textSize="16sp"
-                    android:layout_marginBottom="16dp"
-                    android:padding="12dp"
-                    android:background="@drawable/edit_text_background" />
+                    android:textSize="16sp" />
             </com.google.android.material.textfield.TextInputLayout>
 
-            <!-- Date Selector -->
-            <Button
-                android:id="@+id/btnDatePicker"
+            <!-- Date and Category Selection -->
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Date"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/colorBackground"
-                android:layout_marginBottom="16dp" />
+                android:orientation="horizontal"
+                android:layout_marginBottom="16dp">
 
-            <!-- Category Button -->
-            <Button
-                android:id="@+id/btnCategory"
+                <!-- Date Selector -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnDatePicker"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Select Date"
+                    android:layout_marginEnd="4dp"
+                    app:icon="@drawable/ic_calendar"
+                    app:iconGravity="textStart"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+                <!-- Category Button -->
+                <com.google.android.material.button.MaterialButton
+                    android:id="@+id/btnCategory"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="Category"
+                    android:layout_marginStart="4dp"
+                    app:icon="@drawable/ic_category"
+                    app:iconGravity="textStart"
+                    style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+            </LinearLayout>
+
+            <!-- Amount Card -->
+            <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Select Category"
-                android:backgroundTint="@color/colorPrimary"
-                android:textColor="@color/colorBackground"
-                android:layout_marginBottom="16dp" />
+                android:layout_marginBottom="16dp"
+                app:cardCornerRadius="8dp"
+                app:cardElevation="2dp">
 
-            <!-- Amount Section -->
-            <com.google.android.material.textfield.TextInputLayout
-                android:id="@+id/amountLayout"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="24dp"
-                android:layout_marginTop="8dp">
-
-                <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/inputAmount"
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="Enter amount"
-                    android:inputType="textVisiblePassword"
-                    android:digits="0123456789.+-*/()"
-                    android:textSize="24sp"
-                    android:gravity="center"
-                    android:focusable="false"
-                    android:clickable="true" />
-            </com.google.android.material.textfield.TextInputLayout>
+                    android:orientation="vertical"
+                    android:padding="8dp">
 
-            <!-- Delete Button -->
-            <ImageButton
-                android:id="@+id/btnDelete"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:src="@android:drawable/ic_input_delete"
-                android:contentDescription="Delete"
-                android:background="?attr/selectableItemBackground"
-                android:layout_gravity="end"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp" />
+                    <com.google.android.material.textfield.TextInputLayout
+                        android:id="@+id/amountLayout"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="8dp"
+                        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
 
-            <!-- Calculator Grid -->
-            <GridLayout
-                android:id="@+id/calculatorGrid"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:columnCount="4"
-                android:rowCount="5"
-                android:alignmentMode="alignMargins"
-                android:columnOrderPreserved="false"
-                android:layout_marginTop="8dp"
-                android:layout_marginBottom="8dp"
-                android:padding="8dp">
+                        <com.google.android.material.textfield.TextInputEditText
+                            android:id="@+id/inputAmount"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:hint="Amount"
+                            android:inputType="textVisiblePassword"
+                            android:digits="0123456789.+-*/()"
+                            android:gravity="center"
+                            android:textSize="20sp"
+                            android:textStyle="bold"
+                            android:focusable="false"
+                            android:clickable="true" />
+                    </com.google.android.material.textfield.TextInputLayout>
 
-                <!-- Top Row -->
-                <Button android:id="@+id/btnClear"    android:text="AC"  style="@style/CalcButtonGray"/>
-                <Button android:id="@+id/btnParen"    android:text="( )" style="@style/CalcButtonGray"/>
-                <Button android:id="@+id/btnPercent"  android:text="%"   style="@style/CalcButtonGray"/>
-                <Button android:id="@+id/btnDivide"   android:text="÷"   style="@style/CalcButtonOrange"/>
+                    <!-- Calculator Grid -->
+                    <GridLayout
+                        android:id="@+id/calculatorGrid"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:columnCount="4"
+                        android:rowCount="5"
+                        android:alignmentMode="alignMargins"
+                        android:columnOrderPreserved="false">
 
-                <!-- Second Row -->
-                <Button android:id="@+id/btn7"        android:text="7"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn8"        android:text="8"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn9"        android:text="9"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btnMultiply" android:text="×"   style="@style/CalcButtonOrange"/>
+                        <!-- Top Row -->
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnClear" android:text="AC" style="@style/CalcButtonGray" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnParen" android:text="( )" style="@style/CalcButtonGray" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnPercent" android:text="%" style="@style/CalcButtonGray" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnDivide" android:text="÷" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
 
-                <!-- Third Row -->
-                <Button android:id="@+id/btn4"        android:text="4"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn5"        android:text="5"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn6"        android:text="6"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btnMinus"    android:text="−"   style="@style/CalcButtonOrange"/>
+                        <!-- Second Row -->
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn7" android:text="7" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn8" android:text="8" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn9" android:text="9" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnMultiply" android:text="×" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
 
-                <!-- Fourth Row -->
-                <Button android:id="@+id/btn1"        android:text="1"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn2"        android:text="2"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn3"        android:text="3"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btnPlus"     android:text="+"   style="@style/CalcButtonOrange"/>
+                        <!-- Third Row -->
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn4" android:text="4" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn5" android:text="5" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn6" android:text="6" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnMinus" android:text="-" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
 
-                <!-- Bottom Row -->
-                <Button android:id="@+id/btnNegate"   android:text="±"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btn0"        android:text="0"   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btnDot"      android:text="."   style="@style/CalcButtonDark"/>
-                <Button android:id="@+id/btnEquals"   android:text="="   style="@style/CalcButtonOrange"/>
-            </GridLayout>
+                        <!-- Fourth Row -->
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn1" android:text="1" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn2" android:text="2" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn3" android:text="3" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnPlus" android:text="+" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
 
-            <!-- Confirm Button -->
-            <Button
+                        <!-- Bottom Row -->
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnNegate" android:text="±" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btn0" android:text="0" style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnDot" android:text="." style="@style/CalcButtonDark" android:layout_margin="2dp" />
+                        <com.google.android.material.button.MaterialButton android:id="@+id/btnEquals" android:text="=" style="@style/CalcButtonOrange" android:layout_margin="2dp" />
+                    </GridLayout>
+                </LinearLayout>
+            </com.google.android.material.card.MaterialCardView>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
                 android:id="@+id/confirmAmountBtn"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Save Transaction"
+                android:layout_height="60dp"
+                android:text="SAVE TRANSACTION"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_save"
+                app:iconGravity="textStart"
                 android:layout_marginTop="8dp"
-                android:backgroundTint="@color/colorAccent"
-                android:textColor="@android:color/black"
-                android:textStyle="bold" />
+                android:layout_marginBottom="16dp" />
         </LinearLayout>
-    </ScrollView>
-</RelativeLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
