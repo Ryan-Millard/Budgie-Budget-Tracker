@@ -24,6 +24,7 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.budgiebudgettracking.entities.Transaction
 import com.example.budgiebudgettracking.entities.TransactionWithCategory
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
+import com.example.budgiebudgettracking.viewmodels.UserViewModel
 import com.example.budgiebudgettracking.CategoryPickerActivity
 import com.bumptech.glide.Glide
 import net.objecthunter.exp4j.ExpressionBuilder
@@ -39,6 +40,11 @@ class AddExpenseActivity : AppCompatActivity() {
 	companion object {
 		const val EXTRA_TX_ID = "TRANSACTION_ID"
 	}
+
+	// holds the current user’s ID once we fetch it
+	private var currentUserId: Int = -1
+	// separate ViewModel just for user/session look-ups
+	private lateinit var userViewModel: UserViewModel
 
 	private var transactionId: Int = -1
 
@@ -60,7 +66,7 @@ class AddExpenseActivity : AppCompatActivity() {
 	private var imageSelected = false
 
 	// ViewModel
-	private lateinit var viewModel: TransactionViewModel
+	private lateinit var transactionViewModel: TransactionViewModel
 
 	// Permission request launchers
 	private val requestCameraPermissionLauncher = registerForActivityResult(
@@ -138,12 +144,12 @@ class AddExpenseActivity : AppCompatActivity() {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_add_expense)
 
-		viewModel = ViewModelProvider(
+		transactionViewModel = ViewModelProvider(
 			this,
 			TransactionViewModel.Factory(application)
 		)[TransactionViewModel::class.java]
 
-		viewModel.operationResult.observe(this) { success ->
+		transactionViewModel.operationResult.observe(this) { success ->
 			if (success) {
 				Toast.makeText(this, "Saved!", Toast.LENGTH_SHORT).show()
 				setResult(Activity.RESULT_OK)
@@ -151,6 +157,15 @@ class AddExpenseActivity : AppCompatActivity() {
 			} else {
 				Toast.makeText(this, "Save failed", Toast.LENGTH_SHORT).show()
 			}
+		}
+
+		userViewModel = ViewModelProvider(
+			this,
+			UserViewModel.Factory(application)
+		)[UserViewModel::class.java]
+		// fire off the lookup; when it returns we'll stash the ID
+		userViewModel.getCurrentUser { user ->
+			currentUserId = user?.id ?: -1
 		}
 
 		input               = findViewById(R.id.inputAmount)
@@ -241,7 +256,7 @@ class AddExpenseActivity : AppCompatActivity() {
 
 	private fun loadExistingTransaction(txId: Int) {
 		// Observe the single-transaction LiveData
-		viewModel.getTransactionWithCategoryById(txId)
+		transactionViewModel.getTransactionWithCategoryById(txId)
 		.observe(this) { itemWithCat ->
 			if (itemWithCat != null) bindExistingTransaction(itemWithCat)
 		}
@@ -413,6 +428,12 @@ class AddExpenseActivity : AppCompatActivity() {
 			return
 		}
 
+		// ensure we actually have a logged-in user
+		if (currentUserId == -1) {
+			Toast.makeText(this, "No user logged in", Toast.LENGTH_SHORT).show()
+			return
+		}
+
 		// Get the amount
 		val amount = if (calculatedResult != 0.0) {
 			calculatedResult
@@ -444,11 +465,11 @@ class AddExpenseActivity : AppCompatActivity() {
 				date              = selectedDate,
 				categoryId        = selectedCategoryId,
 				receiptImagePath  = imagePath,
-				userId            = 1
+				userId            = currentUserId
 			)
-			viewModel.updateTransaction(tx)
+			transactionViewModel.updateTransaction(tx)
 		} else {
-			viewModel.addNewTransaction(
+			transactionViewModel.addNewTransaction(
 				amount           = amount,
 				description      = description,
 				isExpense        = isExpense,
@@ -619,6 +640,6 @@ class AddExpenseActivity : AppCompatActivity() {
 	override fun onDestroy() {
 		super.onDestroy()
 		// Clean up any observers if needed
-		viewModel.operationResult.removeObservers(this)
+		transactionViewModel.operationResult.removeObservers(this)
 	}
 }
