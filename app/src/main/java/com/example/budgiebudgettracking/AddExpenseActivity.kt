@@ -51,9 +51,7 @@ class AddExpenseActivity : AppCompatActivity() {
 	private lateinit var input: EditText
 	private lateinit var descriptionInput: EditText
 	private lateinit var calculatorGrid: View
-	private lateinit var toggleCalculatorButton: Button
 	private lateinit var datePickerButton: Button
-	private var calculatorVisible = false
 	private var calculatedResult: Double = 0.0
 	private var openParenCount = 0
 	private var selectedDate: Long = System.currentTimeMillis()
@@ -171,7 +169,6 @@ class AddExpenseActivity : AppCompatActivity() {
 		input               = findViewById(R.id.inputAmount)
 		descriptionInput    = findViewById(R.id.inputDescription)
 		calculatorGrid      = findViewById(R.id.calculatorGrid)
-		toggleCalculatorButton = findViewById(R.id.btnToggleCalculator)
 		datePickerButton    = findViewById(R.id.btnDatePicker)
 		receiptImageView    = findViewById(R.id.receiptImageView)
 		placeholderImageView= findViewById(R.id.placeholderImageView)
@@ -186,9 +183,6 @@ class AddExpenseActivity : AppCompatActivity() {
 
 		placeholderImageView.setOnClickListener { showImagePickerOptions() }
 		receiptImageView     .setOnClickListener { showImagePickerOptions() }
-
-		input.setOnClickListener { showCalculator() }
-		toggleCalculatorButton.setOnClickListener { toggleCalculator() }
 
 		findViewById<ImageButton>(R.id.btnDelete)
 		.setOnClickListener { deleteLastCharacter() }
@@ -272,9 +266,6 @@ class AddExpenseActivity : AppCompatActivity() {
 		// 3. Amount & calculator state
 		input.setText(item.transaction.amount.toString())
 		calculatedResult = item.transaction.amount
-		calculatorGrid.visibility = View.GONE
-		toggleCalculatorButton.text = "Show Calculator"
-		calculatorVisible = false
 
 		// 4. Date
 		selectedDate = item.transaction.date
@@ -399,26 +390,6 @@ class AddExpenseActivity : AppCompatActivity() {
 			.into(receiptImageView)
 		} catch (e: Exception) {
 			Toast.makeText(this, "Error loading image: ${e.message}", Toast.LENGTH_SHORT).show()
-		}
-	}
-
-	private fun showCalculator() {
-		if (!calculatorVisible) {
-			calculatorGrid.visibility = View.VISIBLE
-			toggleCalculatorButton.text = "Hide Calculator"
-			calculatorVisible = true
-		}
-	}
-
-	private fun toggleCalculator() {
-		if (calculatorVisible) {
-			calculatorGrid.visibility = View.GONE
-			toggleCalculatorButton.text = "Show Calculator"
-			calculatorVisible = false
-		} else {
-			calculatorGrid.visibility = View.VISIBLE
-			toggleCalculatorButton.text = "Hide Calculator"
-			calculatorVisible = true
 		}
 	}
 
@@ -600,7 +571,6 @@ class AddExpenseActivity : AppCompatActivity() {
 		outState.putInt("OPEN_PAREN_COUNT", openParenCount)
 		outState.putLong("SELECTED_DATE", selectedDate)
 		outState.putInt("SELECTED_CATEGORY_ID", selectedCategoryId)
-		outState.putBoolean("CALCULATOR_VISIBLE", calculatorVisible)
 		currentPhotoUri?.let { outState.putString("CURRENT_PHOTO_URI", it.toString()) }
 		outState.putBoolean("IMAGE_SELECTED", imageSelected)
 	}
@@ -614,15 +584,6 @@ class AddExpenseActivity : AppCompatActivity() {
 		openParenCount = savedInstanceState.getInt("OPEN_PAREN_COUNT", 0)
 		selectedDate = savedInstanceState.getLong("SELECTED_DATE", System.currentTimeMillis())
 		selectedCategoryId = savedInstanceState.getInt("SELECTED_CATEGORY_ID", 1)
-
-		calculatorVisible = savedInstanceState.getBoolean("CALCULATOR_VISIBLE", false)
-		if (calculatorVisible) {
-			calculatorGrid.visibility = View.VISIBLE
-			toggleCalculatorButton.text = "Hide Calculator"
-		} else {
-			calculatorGrid.visibility = View.GONE
-			toggleCalculatorButton.text = "Show Calculator"
-		}
 
 		savedInstanceState.getString("CURRENT_PHOTO_URI")?.let {
 			currentPhotoUri = Uri.parse(it)
