@@ -10,4 +10,9 @@
     <color name="colorOnError">#FFFFFF</color> <!-- Text on error (white for contrast) -->
     <color name="colorOnSurface">#FFFFFF</color> <!-- White text on surface -->
     <color name="colorOnBackground">#FFFFFF</color> <!-- White text for background -->
+
+    <color name="bottom_nav_background">#333333</color> <!-- Dark Grey -->
+    <color name="bottom_nav_item_color">#F4A261</color> <!-- Peach/Orange -->
+    <color name="bottom_nav_item_color_selected">#E9C46A</color> <!-- Warm Yellow -->
+
 </resources>
