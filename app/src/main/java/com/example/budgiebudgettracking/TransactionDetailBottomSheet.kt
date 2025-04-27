@@ -75,8 +75,9 @@ class TransactionDetailBottomSheet : BottomSheetDialogFragment() {
 		// 4. Edit button → launch AddExpenseActivity with ID&#8203;:contentReference[oaicite:6]{index=6}
 		root.findViewById<Button>(R.id.editButton).setOnClickListener {
 			startActivity(
-				Intent(requireContext(), AddExpenseActivity::class.java)
-				.putExtra("transactionId", item.transaction.id)
+				Intent(requireContext(), AddExpenseActivity::class.java).apply {
+					putExtra(AddExpenseActivity.EXTRA_TX_ID, item.transaction.id)
+				}
 			)
 			dismiss()
 		}
