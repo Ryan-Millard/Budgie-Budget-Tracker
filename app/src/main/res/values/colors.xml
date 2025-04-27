@@ -10,4 +10,9 @@
     <color name="colorOnError">#FFFFFF</color> <!-- Text on error (white for contrast) -->
     <color name="colorOnSurface">#264653</color> <!-- Matches your text color -->
     <color name="colorOnBackground">#264653</color> <!-- Same as text color for consistency -->
+
+    <color name="bottom_nav_background">#FFFFFF</color> <!-- White or light color -->
+    <color name="bottom_nav_item_color">#2A9D8F</color> <!-- Teal/Green -->
+    <color name="bottom_nav_item_color_selected">#264653</color> <!-- Dark Blue-Grey -->
+
 </resources>
