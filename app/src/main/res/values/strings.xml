@@ -1,12 +1,17 @@
 <resources>
-    <string name="app_name">Budgie</string>
+	<string name="app_name">Budgie</string>
 
 	<string name="cancel_changes_title">Discard Changes?</string>
-    <string name="cancel_changes_message">You have unsaved changes. Are you sure you want to discard them?</string>
-    <string name="cancel_yes">Yes</string>
-    <string name="cancel_no">No</string>
+	<string name="cancel_changes_message">You have unsaved changes. Are you sure you want to discard them?</string>
+	<string name="cancel_yes">Yes</string>
+	<string name="cancel_no">No</string>
 
 	<!-- Navigation Component -->
 	<string name="navigate_previous">Previous</string>
 	<string name="navigate_next">Next</string>
+
+	<!-- TransactionDetailBottomSheet -->
+	<string name="receipt_image">Receipt image</string>
+	<string name="edit">Edit</string>
+	<string name="delete">Delete</string>
 </resources>

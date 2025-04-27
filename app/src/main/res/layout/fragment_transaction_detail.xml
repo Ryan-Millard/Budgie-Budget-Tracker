@@ -1,0 +1,66 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    android:padding="16dp">
+
+  <!-- Receipt Thumbnail -->
+  <ImageView
+      android:id="@+id/receiptDetailImage"
+      android:layout_width="match_parent"
+      android:layout_height="200dp"
+      android:scaleType="centerCrop"
+      android:contentDescription="@string/receipt_image" />
+
+  <!-- Amount -->
+  <TextView
+      android:id="@+id/amountDetailText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textStyle="bold"
+      android:textSize="18sp"
+      android:layout_marginTop="8dp" />
+
+  <!-- Category -->
+  <TextView
+      android:id="@+id/categoryDetailText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="16sp" />
+
+  <!-- Date -->
+  <TextView
+      android:id="@+id/dateDetailText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14sp" />
+
+  <!-- Description -->
+  <TextView
+      android:id="@+id/descriptionDetailText"
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:textSize="14sp"
+      android:layout_marginBottom="16dp" />
+
+  <!-- Action Buttons -->
+  <LinearLayout
+      android:layout_width="match_parent"
+      android:layout_height="wrap_content"
+      android:orientation="horizontal"
+      android:gravity="end">
+
+    <Button
+        android:id="@+id/editButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/edit" />
+
+    <Button
+        android:id="@+id/deleteButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/delete"
+        android:layout_marginStart="8dp" />
+  </LinearLayout>
+</LinearLayout>

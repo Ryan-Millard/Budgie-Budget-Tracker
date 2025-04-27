@@ -233,6 +233,16 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 		}
 	}
 
+	fun getTransactionWithCategoryById(txId: Int): LiveData<TransactionWithCategory> {
+		val result = MediatorLiveData<TransactionWithCategory>()  // Non-nullable LiveData
+		viewModelScope.launch {
+			val userId = getUserId() ?: return@launch              // suspend call within coroutine&#8203;:contentReference[oaicite:2]{index=2}
+			val source = transactionDao.getTransactionWithCategoryById(userId, txId)
+			result.addSource(source) { item -> result.value = item }
+		}
+		return result
+	}
+
 	class Factory(private val application: Application) : ViewModelProvider.Factory {
 		override fun <T : ViewModel> create(modelClass: Class<T>): T {
 			if (modelClass.isAssignableFrom(TransactionViewModel::class.java)) {
