@@ -48,14 +48,14 @@ class AddExpenseActivity : AppCompatActivity() {
 
 	private var transactionId: Int = -1
 
-	private lateinit var input: EditText
+	private lateinit var amountInput: EditText
 	private lateinit var descriptionInput: EditText
 	private lateinit var calculatorGrid: View
 	private lateinit var datePickerButton: Button
 	private var calculatedResult: Double = 0.0
 	private var openParenCount = 0
 	private var selectedDate: Long = System.currentTimeMillis()
-	private var selectedCategoryId: Int = 1 // Default category
+	private var selectedCategoryId: Int = -1 // Default category
 
 	// Image related variables
 	private lateinit var receiptImageView: ImageView
@@ -166,7 +166,7 @@ class AddExpenseActivity : AppCompatActivity() {
 			currentUserId = user?.id ?: -1
 		}
 
-		input               = findViewById(R.id.inputAmount)
+		amountInput               = findViewById(R.id.inputAmount)
 		descriptionInput    = findViewById(R.id.inputDescription)
 		calculatorGrid      = findViewById(R.id.calculatorGrid)
 		datePickerButton    = findViewById(R.id.btnDatePicker)
@@ -190,19 +190,19 @@ class AddExpenseActivity : AppCompatActivity() {
 		for (i in 0..9) {
 			val btnId = resources.getIdentifier("btn$i", "id", packageName)
 			findViewById<Button>(btnId).setOnClickListener {
-				input.append(i.toString())
+				amountInput.append(i.toString())
 			}
 		}
 
-		findViewById<Button>(R.id.btnPlus)    .setOnClickListener { input.append("+") }
-		findViewById<Button>(R.id.btnMinus)   .setOnClickListener { input.append("-") }
-		findViewById<Button>(R.id.btnMultiply).setOnClickListener { input.append("*") }
-		findViewById<Button>(R.id.btnDivide)  .setOnClickListener { input.append("/") }
-		findViewById<Button>(R.id.btnDot)     .setOnClickListener { input.append(".") }
+		findViewById<Button>(R.id.btnPlus)    .setOnClickListener { amountInput.append("+") }
+		findViewById<Button>(R.id.btnMinus)   .setOnClickListener { amountInput.append("-") }
+		findViewById<Button>(R.id.btnMultiply).setOnClickListener { amountInput.append("*") }
+		findViewById<Button>(R.id.btnDivide)  .setOnClickListener { amountInput.append("/") }
+		findViewById<Button>(R.id.btnDot)     .setOnClickListener { amountInput.append(".") }
 		findViewById<Button>(R.id.btnPercent) .setOnClickListener { onPercent() }
 		findViewById<Button>(R.id.btnParen)   .setOnClickListener { handleParentheses() }
 		findViewById<Button>(R.id.btnClear)   .setOnClickListener {
-			input.text.clear()
+			amountInput.text.clear()
 			openParenCount = 0
 		}
 		findViewById<Button>(R.id.btnNegate)  .setOnClickListener { onToggleSign() }
@@ -264,7 +264,7 @@ class AddExpenseActivity : AppCompatActivity() {
 		descriptionInput.setText(item.transaction.description)
 
 		// 3. Amount & calculator state
-		input.setText(item.transaction.amount.toString())
+		amountInput.setText(item.transaction.amount.toString())
 		calculatedResult = item.transaction.amount
 
 		// 4. Date
@@ -393,9 +393,27 @@ class AddExpenseActivity : AppCompatActivity() {
 		}
 	}
 
-	private fun saveTransaction() {
-		if (input.text.isBlank()) {
+	private fun isValidTransaction(): Boolean {
+		if (descriptionInput.text.isBlank()) {
+			Toast.makeText(this, "Please enter a description", Toast.LENGTH_SHORT).show()
+			return false
+		}
+
+		if (amountInput.text.isBlank()) {
 			Toast.makeText(this, "Please enter an amount", Toast.LENGTH_SHORT).show()
+			return false
+		}
+
+		if (selectedCategoryId == -1) {
+			Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
+			return false
+		}
+
+		return true
+	}
+
+	private fun saveTransaction() {
+		if(!isValidTransaction()) {
 			return
 		}
 
@@ -414,7 +432,7 @@ class AddExpenseActivity : AppCompatActivity() {
 				calculatedResult
 			} catch (e: Exception) {
 				try {
-					input.text.toString().toDouble()
+					amountInput.text.toString().toDouble()
 				} catch (e: NumberFormatException) {
 					Toast.makeText(this, "Invalid amount", Toast.LENGTH_SHORT).show()
 					return
@@ -452,8 +470,8 @@ class AddExpenseActivity : AppCompatActivity() {
 	}
 
 	private fun deleteLastCharacter() {
-		val currentText = input.text.toString()
-		val cursorPosition = input.selectionStart
+		val currentText = amountInput.text.toString()
+		val cursorPosition = amountInput.selectionStart
 		if (currentText.isNotEmpty() && cursorPosition > 0) {
 			// Check if we're deleting a closing parenthesis
 			if (currentText[cursorPosition - 1] == ')') {
@@ -464,33 +482,33 @@ class AddExpenseActivity : AppCompatActivity() {
 				openParenCount--
 			}
 			// Delete the character
-			input.text.delete(cursorPosition - 1, cursorPosition)
+			amountInput.text.delete(cursorPosition - 1, cursorPosition)
 		}
 	}
 
 	private fun handleParentheses() {
-		val currentText = input.text.toString()
-		val cursorPosition = input.selectionStart
+		val currentText = amountInput.text.toString()
+		val cursorPosition = amountInput.selectionStart
 		if (openParenCount > 0) {
 			// Check if we should add a closing parenthesis
 			val textBeforeCursor = currentText.substring(0, cursorPosition)
 			val lastChar = if (textBeforeCursor.isNotEmpty()) textBeforeCursor.last() else ' '
 			if (lastChar !in listOf('+', '-', '*', '/', '(', ' ')) {
-				input.text.insert(cursorPosition, ")")
+				amountInput.text.insert(cursorPosition, ")")
 				openParenCount--
 			} else {
-				input.text.insert(cursorPosition, "(")
+				amountInput.text.insert(cursorPosition, "(")
 				openParenCount++
 			}
 		} else {
 			// Just add an opening parenthesis
-			input.text.insert(cursorPosition, "(")
+			amountInput.text.insert(cursorPosition, "(")
 			openParenCount++
 		}
 	}
 
 	private fun calculateExpression() {
-		val expr = input.text.toString()
+		val expr = amountInput.text.toString()
 		if (expr.isBlank()) return
 		try {
 			// Auto-close any open parentheses
@@ -505,8 +523,8 @@ class AddExpenseActivity : AppCompatActivity() {
 			calculatedResult.toLong().toString()
 			else
 			calculatedResult.toString()
-			input.setText(resultText)
-			input.setSelection(resultText.length)
+			amountInput.setText(resultText)
+			amountInput.setSelection(resultText.length)
 			openParenCount = 0 // Reset after calculation
 		} catch (e: Exception) {
 			Toast.makeText(this, "Error in calculation", Toast.LENGTH_SHORT).show()
@@ -514,7 +532,7 @@ class AddExpenseActivity : AppCompatActivity() {
 	}
 
 	private fun onPercent() {
-		val currentText = input.text.toString()
+		val currentText = amountInput.text.toString()
 		if (currentText.isEmpty()) return
 		try {
 			// Replace display symbols first
@@ -527,15 +545,15 @@ class AddExpenseActivity : AppCompatActivity() {
 			calculatedResult.toLong().toString()
 			else
 			calculatedResult.toString()
-			input.setText(resultText)
-			input.setSelection(resultText.length)
+			amountInput.setText(resultText)
+			amountInput.setSelection(resultText.length)
 		} catch (e: Exception) {
 			Toast.makeText(this, "Error calculating percentage", Toast.LENGTH_SHORT).show()
 		}
 	}
 
 	private fun onToggleSign() {
-		val currentText = input.text.toString()
+		val currentText = amountInput.text.toString()
 		if (currentText.isEmpty()) return
 
 		try {
@@ -549,23 +567,23 @@ class AddExpenseActivity : AppCompatActivity() {
 			calculatedResult.toLong().toString()
 			else
 			calculatedResult.toString()
-			input.setText(resultText)
-			input.setSelection(resultText.length)
+			amountInput.setText(resultText)
+			amountInput.setSelection(resultText.length)
 		} catch (e: Exception) {
 			// If evaluation fails, just add a negative sign at the beginning
 			if (currentText.startsWith("-")) {
-				input.setText(currentText.substring(1))
+				amountInput.setText(currentText.substring(1))
 			} else {
-				input.setText("-$currentText")
+				amountInput.setText("-$currentText")
 			}
-			input.setSelection(input.text.length)
+			amountInput.setSelection(amountInput.text.length)
 		}
 	}
 
 	override fun onSaveInstanceState(outState: Bundle) {
 		super.onSaveInstanceState(outState)
 		// Save important state data
-		outState.putString("CURRENT_INPUT", input.text.toString())
+		outState.putString("CURRENT_INPUT", amountInput.text.toString())
 		outState.putString("DESCRIPTION", descriptionInput.text.toString())
 		outState.putDouble("CALCULATED_RESULT", calculatedResult)
 		outState.putInt("OPEN_PAREN_COUNT", openParenCount)
@@ -578,7 +596,7 @@ class AddExpenseActivity : AppCompatActivity() {
 	override fun onRestoreInstanceState(savedInstanceState: Bundle) {
 		super.onRestoreInstanceState(savedInstanceState)
 		// Restore state data
-		input.setText(savedInstanceState.getString("CURRENT_INPUT", ""))
+		amountInput.setText(savedInstanceState.getString("CURRENT_INPUT", ""))
 		descriptionInput.setText(savedInstanceState.getString("DESCRIPTION", ""))
 		calculatedResult = savedInstanceState.getDouble("CALCULATED_RESULT", 0.0)
 		openParenCount = savedInstanceState.getInt("OPEN_PAREN_COUNT", 0)
