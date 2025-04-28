@@ -54,11 +54,18 @@ class TransactionAdapter(
 		// Load receipt thumbnail (if path is non-null)
 		if (!tx.receiptImagePath.isNullOrEmpty()) {
 			Glide.with(holder.itemView)
-			.load(tx.receiptImagePath)
-			.placeholder(R.drawable.ic_camera)
-			.into(holder.receiptImage)
+				.load(tx.receiptImagePath)
+				.placeholder(R.drawable.ic_camera)
+				.into(holder.receiptImage)
 		} else {
 			holder.receiptImage.setImageResource(R.drawable.ic_camera)
+		}
+
+
+		if (tx.isExpense) {
+			holder.amountText.setTextColor(android.graphics.Color.parseColor("#E76F51")) // Expense (negative)
+		} else {
+			holder.amountText.setTextColor(android.graphics.Color.parseColor("#2A9D8F")) // Income (positive)
 		}
 	}
 
