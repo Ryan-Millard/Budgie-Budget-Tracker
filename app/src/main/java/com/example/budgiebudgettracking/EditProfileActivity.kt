@@ -14,13 +14,13 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
 import com.bumptech.glide.Glide
+import android.net.Uri
+import java.io.File
+
 import com.example.budgiebudgettracking.database.AppDatabase
 import com.example.budgiebudgettracking.utils.SessionManager
+import com.example.budgiebudgettracking.utils.FileUtils
 import com.example.budgiebudgettracking.dao.UserDao
-import java.io.File
-import java.io.FileOutputStream
-import android.net.Uri
-import android.provider.OpenableColumns
 
 class EditProfileActivity : AppCompatActivity() {
 
@@ -43,7 +43,7 @@ class EditProfileActivity : AppCompatActivity() {
 
 	private val pickImageLauncher = registerForActivityResult(ActivityResultContracts.GetContent()) { uri: Uri? ->
 		uri?.let {
-			val savedImagePath = saveImageToInternalStorage(it)
+			val savedImagePath = FileUtils.saveImageToInternalStorage(this, it)
 			savedImagePath?.let { path ->
 				profilePicPath = path
 				Glide.with(this).load(File(path)).into(profileImageView)
@@ -90,34 +90,6 @@ class EditProfileActivity : AppCompatActivity() {
 		}
 
 		loadProfileData()
-	}
-
-	private fun saveImageToInternalStorage(uri: Uri): String? {
-		return try {
-			val inputStream = contentResolver.openInputStream(uri)
-			val fileName = getFileName(uri)
-			val file = File(filesDir, fileName)
-			val outputStream = FileOutputStream(file)
-			inputStream?.copyTo(outputStream)
-			inputStream?.close()
-			outputStream.close()
-			file.absolutePath
-		} catch (e: Exception) {
-			e.printStackTrace()
-			null
-		}
-	}
-
-	private fun getFileName(uri: Uri): String {
-		var name = "profile_image"
-		val cursor = contentResolver.query(uri, null, null, null, null)
-		cursor?.use {
-			val nameIndex = it.getColumnIndex(OpenableColumns.DISPLAY_NAME)
-			if (it.moveToFirst()) {
-				name = it.getString(nameIndex)
-			}
-		}
-		return name
 	}
 
 	private fun loadProfileData() {
