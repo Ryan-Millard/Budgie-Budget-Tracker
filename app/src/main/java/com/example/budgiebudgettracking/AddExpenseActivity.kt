@@ -21,11 +21,6 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.content.FileProvider
 import androidx.lifecycle.ViewModelProvider
-import com.example.budgiebudgettracking.components.CalculatorView
-import com.example.budgiebudgettracking.entities.Transaction
-import com.example.budgiebudgettracking.entities.TransactionWithCategory
-import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
-import com.example.budgiebudgettracking.viewmodels.UserViewModel
 import com.bumptech.glide.Glide
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import java.io.File
@@ -34,6 +29,13 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+
+import com.example.budgiebudgettracking.components.CalculatorView
+import com.example.budgiebudgettracking.entities.Transaction
+import com.example.budgiebudgettracking.entities.TransactionWithCategory
+import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
+import com.example.budgiebudgettracking.viewmodels.UserViewModel
+import com.example.budgiebudgettracking.utils.FileUtils
 
 class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListener {
 
@@ -62,7 +64,8 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 	// Image related variables
 	private lateinit var receiptImageView: ImageView
 	private lateinit var addPhotoButton: FloatingActionButton
-	private var currentPhotoUri: Uri? = null
+	private var photoCaptureUri: Uri? = null          // for camera intent
+	private var receiptImagePath: String? = null      // the actual saved file path
 	private var imageSelected = false
 
 	// ViewModel
@@ -106,10 +109,19 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 	) { result ->
 		if (result.resultCode == Activity.RESULT_OK) {
 			result.data?.data?.let { uri ->
-				loadImageWithGlide(uri)
-				currentPhotoUri = uri
-				imageSelected = true
-				addPhotoButton.visibility = View.GONE
+				// keep the raw Uri if you ever need it…
+				photoCaptureUri = uri
+
+				// save and show
+				FileUtils.saveImageToInternalStorage(this, uri)?.let { path ->
+					receiptImagePath = path
+					Glide.with(this)
+					.load(File(path))
+					.centerCrop()
+					.into(receiptImageView)
+					imageSelected = true
+					addPhotoButton.visibility = View.GONE
+				}
 			}
 		}
 	}
@@ -119,10 +131,16 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 		ActivityResultContracts.StartActivityForResult()
 	) { result ->
 		if (result.resultCode == Activity.RESULT_OK) {
-			currentPhotoUri?.let { uri ->
-				loadImageWithGlide(uri)
-				imageSelected = true
-				addPhotoButton.visibility = View.GONE
+			photoCaptureUri?.let { uri ->
+				FileUtils.saveImageToInternalStorage(this, uri)?.let { path ->
+					receiptImagePath = path
+					Glide.with(this)
+					.load(File(path))
+					.centerCrop()
+					.into(receiptImageView)
+					imageSelected = true
+					addPhotoButton.visibility = View.GONE
+				}
 			}
 		}
 	}
@@ -242,8 +260,8 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 
 				// Set image if exists
 				transaction.receiptImagePath?.let { uriString ->
-					currentPhotoUri = Uri.parse(uriString)
-					loadImageWithGlide(currentPhotoUri!!)
+					photoCaptureUri = Uri.parse(uriString)
+					loadImageWithGlide(photoCaptureUri!!)
 					imageSelected = true
 					addPhotoButton.visibility = View.GONE
 				}
@@ -347,14 +365,14 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 		}
 
 		photoFile?.let {
-			currentPhotoUri = FileProvider.getUriForFile(
+			photoCaptureUri = FileProvider.getUriForFile(
 				this,
 				"${applicationContext.packageName}.fileprovider",
 				it
 			)
 
 			val takePictureIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
-			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, currentPhotoUri)
+			takePictureIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoCaptureUri)
 			takePictureLauncher.launch(takePictureIntent)
 		}
 	}
@@ -414,7 +432,7 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 			amount = amount,
 			description = description,
 			date = selectedDate,
-			receiptImagePath = currentPhotoUri?.toString(),
+			receiptImagePath = receiptImagePath,
 			isExpense = isExpense,
 			createdAt = if (transactionId != -1) 0L else System.currentTimeMillis() // Only set for new records
 		)
