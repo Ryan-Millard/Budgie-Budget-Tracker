@@ -89,4 +89,16 @@ class CategoryViewModel(application: Application) : AndroidViewModel(application
 			throw IllegalArgumentException("Unknown ViewModel class")
 		}
 	}
+
+	fun getByMonth(userId: Int, yearMonth: String): LiveData<List<Category>> {
+		// convert YYYY-MM to timestamps
+		val parts = yearMonth.split('-')
+		val year = parts[0].toInt()
+		val month = parts[1].toInt() - 1 // Calendar months are 0-based
+		val cal = Calendar.getInstance().apply { set(year, month, 1, 0, 0, 0) }
+		val start = cal.timeInMillis
+		cal.add(Calendar.MONTH, 1)
+		val end = cal.timeInMillis - 1
+		return dao.getCategoriesForMonth(getSessionUserId(), start, end)
+	}
 }
