@@ -32,4 +32,17 @@
         android:clipToPadding="false"
         android:layout_below="@id/loginTitle" />
 
+    <EditText
+        android:id="@+id/filterMonth"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Filter Month (YYYY-MM)"
+        android:inputType="text"/>
+
+    <Button
+        android:id="@+id/btnFilter"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Filter"/>
+
 </RelativeLayout>
