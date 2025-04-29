@@ -23,4 +23,12 @@ interface CategoryDao {
 
 	@Query("SELECT * FROM categories WHERE categoryName = :name AND userId IS NULL")
     suspend fun getCategoryByName(name: String): Category?
+
+	@Query(
+		"SELECT DISTINCT c.* FROM categories c"
+				+ " JOIN transactions t ON c.id = t.categoryId"
+				+ " WHERE t.transactionDate BETWEEN :startTs AND :endTs"
+				+ " AND c.userId = :userId"
+	)
+	fun getCategoriesForMonth(userId: Int, startTs: Long, endTs: Long): LiveData<List<Category>>
 }

@@ -28,6 +28,14 @@ class CategoryActivity : BaseActivity(), FloatingActionButtonHandler {
 
 		// 3) Load categories from DB
 		loadCategories()
+		val etFilter = findViewById<EditText>(R.id.filterMonth)
+		val btnFilter = findViewById<Button>(R.id.btnFilter)
+		btnFilter.setOnClickListener {
+			val ym = etFilter.text.toString().trim()
+			viewModel.getByMonth(userId, ym).observe(this) { list ->
+				adapter.submitList(list)
+			}
+		}
 	}
 
 	private fun loadCategories() {
