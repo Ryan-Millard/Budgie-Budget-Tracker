@@ -41,4 +41,14 @@
         <item name="android:backgroundTint">#F4A261</item>
         <item name="android:textSize">16sp</item>
     </style>
+
+	<!-- Full-screen, no ActionBar theme -->
+    <style name="Theme.App.Fullscreen" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <!-- Remove the window title -->
+        <item name="android:windowNoTitle">true</item>
+        <!-- Make the window full-screen (hides status bar) -->
+        <item name="android:windowFullscreen">true</item>
+        <!-- Optional: keep content behind system bars -->
+        <item name="android:fitsSystemWindows">false</item>
+    </style>
 </resources>

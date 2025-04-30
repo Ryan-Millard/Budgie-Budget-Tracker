@@ -44,5 +44,10 @@ class MainActivity : BaseActivity() {
 		findViewById<Button>(R.id.btnProfile).setOnClickListener {
 			startActivity(Intent(this, ProfileActivity::class.java))
 		}
+		val button = findViewById<Button>(R.id.buttonOpenSetBudget)
+		button.setOnClickListener {
+			val intent = Intent(this, SetBudgetActivity::class.java)
+			startActivity(intent)
+		}
 	}
 }
