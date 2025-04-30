@@ -17,8 +17,8 @@ interface TransactionDao {
 	@Delete
 	suspend fun delete(transaction: Transaction)
 
-	@Query("SELECT * FROM transactions WHERE id = :transactionId")
-	suspend fun getTransactionById(transactionId: Int): Transaction?
+	@Query("SELECT * FROM transactions WHERE id = :transactionId AND userId = :userId")
+	suspend fun getTransactionById(userId: Int, transactionId: Int): Transaction?
 
 	@Query("SELECT * FROM transactions WHERE userId = :userId ORDER BY date DESC")
 	fun getAllTransactionsLive(userId: Int): LiveData<List<Transaction>>
@@ -45,18 +45,50 @@ interface TransactionDao {
 	fun getIncomeByDateRangeLive(userId: Int, startDate: Long, endDate: Long): LiveData<Double?>
 
 	@RoomTransaction
-	@Query("SELECT * FROM transactions ORDER BY date DESC")
-	fun getAllTransactionsWithCategory(): LiveData<List<TransactionWithCategory>>
-
-	@RoomTransaction
 	@Query("SELECT * FROM transactions WHERE userId = :userId ORDER BY date DESC")
 	fun getAllWithCategoryLive(userId: Int): LiveData<List<TransactionWithCategory>>
 
 	@RoomTransaction
-	@Query("SELECT * FROM transactions WHERE userId = :userId AND date BETWEEN :startDate AND :endDate ORDER BY date DESC")
+	@Query("""
+	SELECT * FROM transactions
+	WHERE userId = :userId
+	AND (
+		(date BETWEEN :startDate AND :endDate)
+		OR
+		(:startDate BETWEEN startTime AND endTime)
+		OR
+		(:endDate BETWEEN startTime AND endTime)
+	)
+	ORDER BY date DESC
+	""")
 	fun getWithCategoryByDateRangeLive(userId: Int, startDate: Long, endDate: Long): LiveData<List<TransactionWithCategory>>
 
 	@RoomTransaction
 	@Query("SELECT * FROM transactions WHERE userId = :userId AND id = :txId")
 	fun getTransactionWithCategoryById(userId: Int, txId: Int): LiveData<TransactionWithCategory>
+
+	@RoomTransaction
+	@Query("SELECT * FROM transactions WHERE userId = :userId AND isRecurring = :isRecurring ORDER BY date DESC")
+	fun getWithCategoryByRecurringLive(userId: Int, isRecurring: Boolean): LiveData<List<TransactionWithCategory>>
+
+	@RoomTransaction
+	@Query("""
+	SELECT * FROM transactions
+	WHERE userId = :userId
+	AND (
+		(date BETWEEN :startDate AND :endDate)
+		OR
+		(:startDate BETWEEN startTime AND endTime)
+		OR
+		(:endDate BETWEEN startTime AND endTime)
+	)
+	AND isRecurring = :isRecurring
+	ORDER BY date DESC
+	""")
+	fun getWithCategoryByDateRangeAndRecurringLive(
+		userId: Int,
+		startDate: Long,
+		endDate: Long,
+		isRecurring: Boolean
+	): LiveData<List<TransactionWithCategory>>
 }
