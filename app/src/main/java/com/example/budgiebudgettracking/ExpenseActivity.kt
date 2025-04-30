@@ -125,14 +125,6 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 				}
 
 				try {
-					// Show a more helpful toast
-					Toast.makeText(
-						this@ExpenseActivity, 
-						"Opening transaction details...", 
-						Toast.LENGTH_SHORT
-					).show()
-					Toast.makeText(this@ExpenseActivity, "${item.transaction.id}", Toast.LENGTH_SHORT).show()
-
 					// Create and show the bottom sheet with proper error handling
 					val bottomSheet = TransactionDetailBottomSheet.newInstance(item.transaction.id)
 					bottomSheet.show(supportFragmentManager, null)
