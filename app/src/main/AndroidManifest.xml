@@ -64,5 +64,6 @@
 				<category android:name="android.intent.category.LAUNCHER" />
 			</intent-filter>
 		</activity>
+		<activity android:name=".FullScreenImageActivity" android:theme="@style/Theme.App.Fullscreen" />
 	</application>
 </manifest>
