@@ -63,7 +63,9 @@ class TransactionDetailBottomSheet : BottomSheetDialogFragment() {
 		val receiptView = root.findViewById<ImageView>(R.id.receiptDetailImage)
 		if (!item.transaction.receiptImagePath.isNullOrEmpty()) {
 			Glide.with(this).load(item.transaction.receiptImagePath)
-			.placeholder(R.drawable.ic_camera).into(receiptView)
+			.placeholder(R.drawable.feather).into(receiptView)
+		} else {
+			receiptView.setImageResource(R.drawable.feather)
 		}
 
 		// Amount, category, date, description
