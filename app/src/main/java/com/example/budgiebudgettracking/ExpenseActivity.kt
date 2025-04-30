@@ -7,6 +7,7 @@ import android.content.Intent
 import android.widget.Toast
 import android.os.Bundle
 import android.widget.RadioGroup
+import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.lifecycle.ViewModelProvider
@@ -21,6 +22,8 @@ import androidx.activity.result.contract.ActivityResultContracts
 import android.app.Activity
 import androidx.activity.result.ActivityResult
 import com.google.android.material.switchmaterial.SwitchMaterial
+import java.text.NumberFormat
+import java.util.Currency
 
 import com.example.budgiebudgettracking.components.NavigationSelector
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
@@ -34,6 +37,10 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 	private lateinit var adapter: TransactionAdapter
 	private lateinit var monthNavigator: NavigationSelector
 	private lateinit var filterGroup: RadioGroup
+	
+	// Summary views
+	private lateinit var tvTotalAmount: TextView
+	private lateinit var tvTransactionCount: TextView
 
 	// Current filter state
 	private lateinit var btnCategory: MaterialButton
@@ -79,6 +86,10 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		filterGroup = findViewById(R.id.rg_recurring_filter)
 		btnCategory = findViewById(R.id.btnCategory)
 		categoryFilterSwitch = findViewById(R.id.categoryFilterSwitch)
+		
+		// Initialize summary views
+		tvTotalAmount = findViewById(R.id.tv_total_amount)
+		tvTransactionCount = findViewById(R.id.tv_transaction_count)
 
 		recyclerView.layoutManager = LinearLayoutManager(this)
 
@@ -188,6 +199,27 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		.atStartOfDay(ZoneId.systemDefault())
 		.toInstant().toEpochMilli()
 	}
+	
+	/**
+	 * Format amount as currency
+	 */
+	private fun formatCurrency(amount: Double): String {
+		val format = NumberFormat.getCurrencyInstance()
+		format.currency = Currency.getInstance(Locale.getDefault())
+		return format.format(amount)
+	}
+	
+	/**
+	 * Calculate and display transaction summary
+	 */
+	private fun updateTransactionSummary(transactions: List<TransactionWithCategory>) {
+		// Calculate total amount
+		val totalAmount = transactions.sumOf { it.transaction.amount }
+		
+		// Update UI
+		tvTotalAmount.text = formatCurrency(totalAmount)
+		tvTransactionCount.text = transactions.size.toString()
+	}
 
 	private fun refreshTransactions() {
 		// First get transactions based on the selected mode (ALL, ONE_OFF, RECURRING)
@@ -210,7 +242,11 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 			} else {
 				list ?: emptyList()
 			}
-
+			
+			// Update the transaction summary
+			updateTransactionSummary(filteredList)
+			
+			// Update the adapter data
 			adapter.updateData(filteredList)
 		}
 	}

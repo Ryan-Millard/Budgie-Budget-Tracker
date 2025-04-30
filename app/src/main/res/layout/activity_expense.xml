@@ -142,12 +142,84 @@
 		</LinearLayout>
 	</com.google.android.material.card.MaterialCardView>
 
+	<!-- Transaction Summary Card -->
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/transaction_summary_card"
+		android:layout_below="@id/filter_expandable_card"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_marginHorizontal="16dp"
+		android:layout_marginTop="8dp"
+		android:layout_marginBottom="8dp"
+		app:cardCornerRadius="8dp"
+		app:cardElevation="2dp">
+
+		<LinearLayout
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:padding="12dp">
+
+			<TextView
+				android:id="@+id/transaction_summary_title"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:text="Summary"
+				android:textStyle="bold"
+				android:textSize="16sp" />
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_marginTop="8dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="wrap_content"
+					android:text="Total:"
+					android:textSize="14sp" />
+
+				<TextView
+					android:id="@+id/tv_total_amount"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"
+					android:textStyle="bold"
+					tools:text="$1,234.56" />
+			</LinearLayout>
+
+			<LinearLayout
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="horizontal"
+				android:layout_marginTop="4dp">
+
+				<TextView
+					android:layout_width="0dp"
+					android:layout_weight="1"
+					android:layout_height="wrap_content"
+					android:text="Transaction Count:"
+					android:textSize="14sp" />
+
+				<TextView
+					android:id="@+id/tv_transaction_count"
+					android:layout_width="wrap_content"
+					android:layout_height="wrap_content"
+					android:textSize="14sp"
+					android:textStyle="bold"
+					tools:text="42" />
+			</LinearLayout>
+		</LinearLayout>
+	</com.google.android.material.card.MaterialCardView>
+
 	<!-- Transactions list -->
 	<androidx.recyclerview.widget.RecyclerView
 		android:id="@+id/transactionsRecyclerView"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"
-		android:layout_below="@id/filter_expandable_card"
+		android:layout_below="@id/transaction_summary_card"
 		android:layout_marginTop="8dp"
 		android:paddingHorizontal="16dp"
 		android:clipToPadding="false"
