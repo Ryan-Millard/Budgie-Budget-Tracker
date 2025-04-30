@@ -14,6 +14,7 @@ import com.bumptech.glide.Glide
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.math.abs
 
 import com.example.budgiebudgettracking.entities.TransactionWithCategory
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
@@ -76,7 +77,13 @@ class TransactionDetailBottomSheet : BottomSheetDialogFragment() {
 		}
 
 		// Amount, category, date, description
-		root.findViewById<TextView>(R.id.amountDetailText).text = "${if (item.transaction.isExpense) "-" else "+"} R %.2f".format(item.transaction.amount)
+		val amountDetailText = root.findViewById<TextView>(R.id.amountDetailText)
+		amountDetailText.text = "${if (item.transaction.isExpense) "-" else "+"} R %.2f".format(abs(item.transaction.amount))
+		if(item.transaction.amount < 0) {
+			amountDetailText.setTextColor(android.graphics.Color.parseColor("#E76F51"))
+		} else if (item.transaction.amount > 0) {
+			amountDetailText.setTextColor(android.graphics.Color.parseColor("#2A9D8F"))
+		}
 		root.findViewById<TextView>(R.id.categoryDetailText).text = item.category?.categoryName ?: "Uncategorized"
 		root.findViewById<TextView>(R.id.dateDetailText).text = SimpleDateFormat("dd MMM yyyy", Locale.getDefault()) .format(item.transaction.date)
 		root.findViewById<TextView>(R.id.descriptionDetailText).text = item.transaction.description ?: "No description"
