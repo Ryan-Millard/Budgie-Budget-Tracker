@@ -1,5 +1,6 @@
 package com.example.budgiebudgettracking
 
+import android.content.Intent
 import android.widget.Toast
 import android.os.Bundle
 import android.widget.RadioGroup
@@ -12,6 +13,10 @@ import java.time.YearMonth
 import java.time.format.DateTimeFormatter
 import java.time.ZoneId
 import java.util.Locale
+import com.google.android.material.button.MaterialButton
+import androidx.activity.result.contract.ActivityResultContracts
+import android.app.Activity
+import androidx.activity.result.ActivityResult
 
 import com.example.budgiebudgettracking.components.NavigationSelector
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
@@ -27,10 +32,26 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 	private lateinit var filterGroup: RadioGroup
 
 	// Current filter state
+	private lateinit var btnCategory: MaterialButton
+	private var selectedCategoryId: Int = -1 // Default category
 	private var selectedStartMs: Long = 0L
 	private var selectedEndMs: Long = 0L
 	private enum class Mode { ALL, ONE_OFF, RECURRING }
 	private var currentMode = Mode.ALL
+
+	// Activity result launcher for category selection
+	private val categoryPickerLauncher = registerForActivityResult(
+		ActivityResultContracts.StartActivityForResult()
+	) { result ->
+		if (result.resultCode == Activity.RESULT_OK) {
+			result.data?.let { data ->
+				selectedCategoryId = data.getIntExtra("CATEGORY_ID", 1)
+				val categoryName = data.getStringExtra("CATEGORY_NAME") ?: "General"
+				btnCategory.text = categoryName
+				refreshTransactions()  // Refresh transactions right after category selection
+			}
+		}
+	}
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
@@ -41,12 +62,17 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		recyclerView   = findViewById(R.id.transactionsRecyclerView)
 		monthNavigator = findViewById(R.id.month_selector)
 		filterGroup    = findViewById(R.id.rg_recurring_filter)
+		btnCategory    = findViewById(R.id.btnCategory)
 
 		recyclerView.layoutManager = LinearLayoutManager(this)
 
 		// Initialize ViewModel first so we can safely use it in the adapter
 		viewModel = ViewModelProvider(this, TransactionViewModel.Factory(application))
 		.get(TransactionViewModel::class.java)
+
+		btnCategory.setOnClickListener {
+			openCategoryPicker()
+		}
 
 		// Setup adapter with fixed click listener
 		adapter = TransactionAdapter(emptyList(), object : TransactionAdapter.OnItemClickListener {
@@ -134,6 +160,7 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 	}
 
 	private fun refreshTransactions() {
+		// First get transactions based on the selected mode (ALL, ONE_OFF, RECURRING)
 		val live = when (currentMode) {
 			Mode.ALL -> viewModel.getTransactionsWithCategoryByDateRange(
 				selectedStartMs, selectedEndMs
@@ -144,10 +171,23 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 			Mode.RECURRING -> viewModel.getTransactionsByDateAndRecurring(
 				selectedStartMs, selectedEndMs, isRecurring = true
 			)
-		} // ← Now the when wraps all three cases
+		}
 
 		live.observe(this) { list ->
-			adapter.updateData(list ?: emptyList())
+			// Filter list by selected category if a category is selected
+			val filteredList = if (selectedCategoryId != -1) {
+				list?.filter { it?.category?.id == selectedCategoryId } ?: emptyList()
+			} else {
+				list ?: emptyList()
+			}
+
+			adapter.updateData(filteredList)
 		}
+	}
+
+	private fun openCategoryPicker() {
+		val intent = Intent(this, CategoryPickerActivity::class.java)
+		intent.putExtra("CURRENT_CATEGORY_ID", selectedCategoryId)
+		categoryPickerLauncher.launch(intent)
 	}
 }

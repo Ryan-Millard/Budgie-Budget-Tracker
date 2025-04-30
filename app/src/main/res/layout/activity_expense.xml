@@ -66,9 +66,21 @@
         </RadioGroup>
     </com.google.android.material.card.MaterialCardView>
 
+	<com.google.android.material.button.MaterialButton
+		android:id="@+id/btnCategory"
+        android:layout_below="@id/filter_card"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:text="Category"
+		app:icon="@drawable/ic_category"
+		app:iconGravity="textStart"
+		android:layout_marginStart="16dp"
+		android:layout_marginEnd="16dp"
+		style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
     <!-- Transactions list inside ScrollView -->
     <ScrollView
-        android:layout_below="@id/filter_card"
+        android:layout_below="@id/btnCategory"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:padding="16dp">
