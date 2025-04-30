@@ -11,11 +11,12 @@ import android.widget.TextView
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
-import com.example.budgiebudgettracking.entities.TransactionWithCategory
-import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import java.text.SimpleDateFormat
 import java.util.Locale
+
+import com.example.budgiebudgettracking.entities.TransactionWithCategory
+import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
 
 class TransactionDetailBottomSheet : BottomSheetDialogFragment() {
 
@@ -66,6 +67,12 @@ class TransactionDetailBottomSheet : BottomSheetDialogFragment() {
 			.placeholder(R.drawable.feather).into(receiptView)
 		} else {
 			receiptView.setImageResource(R.drawable.feather)
+		}
+		receiptView.setOnClickListener {
+			startActivity(
+				Intent(requireContext(), FullScreenImageActivity::class.java)
+				.putExtra(FullScreenImageActivity.EXTRA_IMAGE_PATH, item.transaction.receiptImagePath ?: "")
+			)
 		}
 
 		// Amount, category, date, description
