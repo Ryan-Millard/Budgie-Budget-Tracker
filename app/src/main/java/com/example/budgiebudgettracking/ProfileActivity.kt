@@ -87,8 +87,15 @@ class ProfileActivity : BaseActivity() {
 
 		// Load the profile picture if available
 		val profileImageView = findViewById<ImageView>(R.id.profileImageView)
-		user.profilePicPath?.let {
-			Glide.with(this).load(it).into(profileImageView)
+		user.profilePicPath?.let { imagePath ->
+			Glide.with(this).load(imagePath).into(profileImageView)
+
+			profileImageView.setOnClickListener {
+				startActivity(
+					Intent(this@ProfileActivity, FullScreenImageActivity::class.java)
+					.putExtra(FullScreenImageActivity.EXTRA_IMAGE_PATH, imagePath)
+				)
+			}
 		}
 	}
 
