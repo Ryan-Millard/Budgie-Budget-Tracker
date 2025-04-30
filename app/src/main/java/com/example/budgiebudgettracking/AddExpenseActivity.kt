@@ -451,6 +451,10 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 			Toast.makeText(this, "User session error, please try again", Toast.LENGTH_SHORT).show()
 			return
 		}
+		if (selectedStartDate > selectedEndDate) {
+			Toast.makeText(this, "Error: Start Date is after the End Date", Toast.LENGTH_SHORT).show()
+			return
+		}
 
 		// Get transaction type (income/expense)
 		val isExpense = findViewById<RadioButton>(R.id.radioExpense).isChecked
@@ -462,6 +466,7 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 
 		// Create transaction object
 		val transaction = Transaction(
+			id = if (transactionId != -1) transactionId else 0, // 0 for new, actual ID for updates
 			userId = currentUserId,
 			categoryId = selectedCategoryId,
 			amount = amount,
