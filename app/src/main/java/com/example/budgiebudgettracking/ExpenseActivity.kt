@@ -37,7 +37,7 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 	private lateinit var adapter: TransactionAdapter
 	private lateinit var monthNavigator: NavigationSelector
 	private lateinit var filterGroup: RadioGroup
-	
+
 	// Summary views
 	private lateinit var tvTotalAmount: TextView
 	private lateinit var tvTransactionCount: TextView
@@ -86,7 +86,7 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		filterGroup = findViewById(R.id.rg_recurring_filter)
 		btnCategory = findViewById(R.id.btnCategory)
 		categoryFilterSwitch = findViewById(R.id.categoryFilterSwitch)
-		
+	
 		// Initialize summary views
 		tvTotalAmount = findViewById(R.id.tv_total_amount)
 		tvTransactionCount = findViewById(R.id.tv_transaction_count)
@@ -105,13 +105,13 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		// Set up category filter toggle
 		categoryFilterSwitch.setOnCheckedChangeListener { _, isChecked ->
 			btnCategory.isEnabled = isChecked
-			
+		
 			if (!isChecked) {
 				// Reset category filter when turned off
 				selectedCategoryId = -1
 				btnCategory.text = "Category"
 			}
-			
+		
 			refreshTransactions()
 		}
 
@@ -199,7 +199,7 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		.atStartOfDay(ZoneId.systemDefault())
 		.toInstant().toEpochMilli()
 	}
-	
+
 	/**
 	 * Format amount as currency
 	 */
@@ -208,14 +208,20 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		format.currency = Currency.getInstance(Locale.getDefault())
 		return format.format(amount)
 	}
-	
+
 	/**
 	 * Calculate and display transaction summary
 	 */
 	private fun updateTransactionSummary(transactions: List<TransactionWithCategory>) {
 		// Calculate total amount
 		val totalAmount = transactions.sumOf { it.transaction.amount }
-		
+		if (totalAmount < 0) {
+			tvTotalAmount.setTextColor(android.graphics.Color.parseColor("#E76F51")) // Expense (negative)
+		} else if (totalAmount > 0) {
+			tvTotalAmount.setTextColor(android.graphics.Color.parseColor("#2A9D8F")) // Income (positive)
+		}
+		// Leave it normal if totalAmount == 0
+	
 		// Update UI
 		tvTotalAmount.text = formatCurrency(totalAmount)
 		tvTransactionCount.text = transactions.size.toString()
@@ -242,10 +248,10 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 			} else {
 				list ?: emptyList()
 			}
-			
+		
 			// Update the transaction summary
 			updateTransactionSummary(filteredList)
-			
+		
 			// Update the adapter data
 			adapter.updateData(filteredList)
 		}
