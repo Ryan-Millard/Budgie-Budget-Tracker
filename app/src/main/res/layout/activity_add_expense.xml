@@ -145,6 +145,62 @@
                     style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
             </LinearLayout>
 
+			<!-- Recurring Payment Section -->
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="16dp"
+				app:cardCornerRadius="8dp"
+				app:cardElevation="2dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="12dp">
+
+					<com.google.android.material.switchmaterial.SwitchMaterial
+						android:id="@+id/switchRecurring"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:text="Recurring Payment"
+						android:checked="false" />
+
+					<!-- Visible only if recurring is enabled -->
+					<LinearLayout
+						android:id="@+id/recurringDateLayout"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:orientation="vertical"
+						android:visibility="gone"
+						android:layout_marginTop="12dp"
+						android:layout_marginBottom="8dp">
+
+						<!-- Start Date -->
+						<com.google.android.material.button.MaterialButton
+							android:id="@+id/btnStartDatePicker"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="Start Date"
+							android:layout_marginTop="8dp"
+							app:icon="@drawable/ic_calendar"
+							app:iconGravity="textStart"
+							style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+
+						<!-- End Date -->
+						<com.google.android.material.button.MaterialButton
+							android:id="@+id/btnEndDatePicker"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:text="End Date"
+							android:layout_marginTop="8dp"
+							app:icon="@drawable/ic_calendar"
+							app:iconGravity="textStart"
+							style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+					</LinearLayout>
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+
             <!-- Amount Card with Calculator -->
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="match_parent"

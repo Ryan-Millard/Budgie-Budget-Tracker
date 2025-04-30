@@ -11,6 +11,7 @@ import android.os.Bundle
 import android.provider.MediaStore
 import android.view.View
 import android.widget.Button
+import android.widget.LinearLayout
 import com.google.android.material.textfield.TextInputEditText
 import com.google.android.material.textfield.TextInputLayout
 import android.widget.ImageView
@@ -29,6 +30,7 @@ import java.text.SimpleDateFormat
 import java.util.Calendar
 import java.util.Date
 import java.util.Locale
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 import com.example.budgiebudgettracking.components.CalculatorView
 import com.example.budgiebudgettracking.entities.Transaction
@@ -60,6 +62,14 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 	private var calculatedResult: Double = 0.0
 	private var selectedDate: Long = System.currentTimeMillis()
 	private var selectedCategoryId: Int = -1 // Default category
+
+	// Recurring payments
+	private lateinit var switchRecurring: SwitchMaterial
+	private lateinit var recurringDateLayout: LinearLayout
+	private lateinit var startDatePickerButton: Button
+	private var selectedStartDate: Long = selectedDate
+	private lateinit var endDatePickerButton: Button
+	private var selectedEndDate: Long = selectedDate
 
 	// Image related variables
 	private lateinit var receiptImageView: ImageView
@@ -195,6 +205,10 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 		datePickerButton       = findViewById(R.id.btnDatePicker)
 		receiptImageView       = findViewById(R.id.receiptImageView)
 		addPhotoButton         = findViewById(R.id.addPhotoButton)
+		switchRecurring        = findViewById(R.id.switchRecurring)
+		recurringDateLayout    = findViewById(R.id.recurringDateLayout)
+		startDatePickerButton    = findViewById(R.id.btnStartDatePicker)
+		endDatePickerButton    = findViewById(R.id.btnEndDatePicker)
 
 		// Set up calculator listener
 		calculatorView.setCalculatorListener(this)
@@ -205,8 +219,32 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 			calculatorView.requestFocus()
 		}
 
-		updateDateButtonText()
-		datePickerButton.setOnClickListener { showDatePicker() }
+		val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+		datePickerButton.setOnClickListener {
+			showDatePicker(selectedDate) { newDate ->
+				selectedDate = newDate
+				val date = Date(selectedDate)
+				datePickerButton.text = dateFormat.format(date)
+			}
+		}
+		startDatePickerButton.setOnClickListener {
+			showDatePicker(selectedStartDate) { newDate ->
+				selectedStartDate = newDate
+				val date = Date(selectedStartDate)
+				startDatePickerButton.text = dateFormat.format(date)
+			}
+		}
+		endDatePickerButton.setOnClickListener {
+			showDatePicker(selectedEndDate) { newDate ->
+				selectedEndDate = newDate
+				val date = Date(selectedEndDate)
+				endDatePickerButton.text = dateFormat.format(date)
+			}
+		}
+
+		switchRecurring.setOnCheckedChangeListener { _, isChecked ->
+			recurringDateLayout.visibility = if (isChecked) View.VISIBLE else View.GONE
+		}
 
 		findViewById<Button>(R.id.btnCategory).setOnClickListener {
 			openCategoryPicker()
@@ -234,7 +272,7 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 		transactionViewModel.getTransactionWithCategoryById(id).observe(this) { twc ->
 			twc?.let { (transaction, category) ->
 				// Set transaction type
-				val isExpense = transaction.amount < 0
+				val isExpense = transaction.isExpense
 				findViewById<RadioButton>(if (isExpense) R.id.radioExpense else R.id.radioIncome).isChecked = true
 
 				// Set amount (without negative sign for expenses)
@@ -252,11 +290,21 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 
 				// Set date
 				selectedDate = transaction.date
-				updateDateButtonText()
+				val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
+				datePickerButton.text = dateFormat.format(Date(selectedDate))
 
 				// Set category
 				selectedCategoryId = transaction.categoryId
 				findViewById<Button>(R.id.btnCategory).text = category?.categoryName ?: "General"
+
+				val isRecurring = transaction.isRecurring
+				switchRecurring.isChecked = isRecurring
+				if (isRecurring) {
+					selectedStartDate = transaction.startTime
+					selectedEndDate = transaction.endTime
+					startDatePickerButton.text = dateFormat.format(Date(selectedStartDate))
+					endDatePickerButton.text = dateFormat.format(Date(selectedEndDate))
+				}
 
 				// Set image if exists
 				transaction.receiptImagePath?.let { uriString ->
@@ -269,30 +317,18 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 		}
 	}
 
-	private fun showDatePicker() {
-		val calendar = Calendar.getInstance()
-		calendar.timeInMillis = selectedDate
-
-		val datePickerDialog = DatePickerDialog(
+	private fun showDatePicker(initialDate: Long, onDateChosen: (Long) -> Unit) {
+		val calendar = Calendar.getInstance().apply { timeInMillis = initialDate }
+		DatePickerDialog(
 			this,
 			{ _, year, month, day ->
-				calendar.set(Calendar.YEAR, year)
-				calendar.set(Calendar.MONTH, month)
-				calendar.set(Calendar.DAY_OF_MONTH, day)
-				selectedDate = calendar.timeInMillis
-				updateDateButtonText()
+				calendar.set(year, month, day)
+				onDateChosen(calendar.timeInMillis)
 			},
 			calendar.get(Calendar.YEAR),
 			calendar.get(Calendar.MONTH),
 			calendar.get(Calendar.DAY_OF_MONTH)
-		)
-		datePickerDialog.show()
-	}
-
-	private fun updateDateButtonText() {
-		val dateFormat = SimpleDateFormat("MMM dd, yyyy", Locale.getDefault())
-		val date = Date(selectedDate)
-		datePickerButton.text = dateFormat.format(date)
+		).show()
 	}
 
 	private fun openCategoryPicker() {
@@ -407,12 +443,10 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 			Toast.makeText(this, "Please enter a valid amount", Toast.LENGTH_SHORT).show()
 			return
 		}
-
 		if (selectedCategoryId == -1) {
 			Toast.makeText(this, "Please select a category", Toast.LENGTH_SHORT).show()
 			return
 		}
-
 		if (currentUserId == -1) {
 			Toast.makeText(this, "User session error, please try again", Toast.LENGTH_SHORT).show()
 			return
@@ -422,17 +456,21 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 		val isExpense = findViewById<RadioButton>(R.id.radioExpense).isChecked
 		val amount = if (isExpense) -calculatedResult else calculatedResult
 
+		val isRecurring = switchRecurring.isChecked
+
 		val description = descriptionInput.text.toString().trim()
 
 		// Create transaction object
 		val transaction = Transaction(
-			id = if (transactionId != -1) transactionId else 0, // 0 for new, actual ID for updates
 			userId = currentUserId,
 			categoryId = selectedCategoryId,
 			amount = amount,
 			description = description,
 			date = selectedDate,
 			receiptImagePath = receiptImagePath,
+			isRecurring = isRecurring,
+			startTime = if (isRecurring) selectedStartDate else selectedDate,
+			endTime = if (isRecurring) selectedEndDate else selectedDate,
 			isExpense = isExpense,
 			createdAt = if (transactionId != -1) 0L else System.currentTimeMillis() // Only set for new records
 		)
