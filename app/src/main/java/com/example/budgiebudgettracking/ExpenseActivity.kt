@@ -1,5 +1,8 @@
 package com.example.budgiebudgettracking
 
+import android.view.View
+import android.widget.ImageView
+import android.widget.LinearLayout
 import android.content.Intent
 import android.widget.Toast
 import android.os.Bundle
@@ -17,6 +20,7 @@ import com.google.android.material.button.MaterialButton
 import androidx.activity.result.contract.ActivityResultContracts
 import android.app.Activity
 import androidx.activity.result.ActivityResult
+import com.google.android.material.switchmaterial.SwitchMaterial
 
 import com.example.budgiebudgettracking.components.NavigationSelector
 import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
@@ -33,6 +37,7 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 
 	// Current filter state
 	private lateinit var btnCategory: MaterialButton
+	private lateinit var categoryFilterSwitch: SwitchMaterial
 	private var selectedCategoryId: Int = -1 // Default category
 	private var selectedStartMs: Long = 0L
 	private var selectedEndMs: Long = 0L
@@ -58,20 +63,45 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		setContentView(R.layout.activity_expense)
 		createAndAttachFab(destination = AddExpenseActivity::class.java)
 
+		val header = findViewById<LinearLayout>(R.id.filter_header)
+		val content = findViewById<LinearLayout>(R.id.filter_content)
+		val arrow = findViewById<ImageView>(R.id.filter_arrow)
+
+		header.setOnClickListener {
+			val expanded = content.visibility == View.VISIBLE
+			content.visibility = if (expanded) View.GONE else View.VISIBLE
+			arrow.animate().rotation(if (expanded) 0f else 90f).setDuration(200).start()
+		}
+
 		// --- Find & set up views ---
-		recyclerView   = findViewById(R.id.transactionsRecyclerView)
+		recyclerView = findViewById(R.id.transactionsRecyclerView)
 		monthNavigator = findViewById(R.id.month_selector)
-		filterGroup    = findViewById(R.id.rg_recurring_filter)
-		btnCategory    = findViewById(R.id.btnCategory)
+		filterGroup = findViewById(R.id.rg_recurring_filter)
+		btnCategory = findViewById(R.id.btnCategory)
+		categoryFilterSwitch = findViewById(R.id.categoryFilterSwitch)
 
 		recyclerView.layoutManager = LinearLayoutManager(this)
 
 		// Initialize ViewModel first so we can safely use it in the adapter
 		viewModel = ViewModelProvider(this, TransactionViewModel.Factory(application))
-		.get(TransactionViewModel::class.java)
+			.get(TransactionViewModel::class.java)
 
+		// Set up category button
 		btnCategory.setOnClickListener {
 			openCategoryPicker()
+		}
+
+		// Set up category filter toggle
+		categoryFilterSwitch.setOnCheckedChangeListener { _, isChecked ->
+			btnCategory.isEnabled = isChecked
+			
+			if (!isChecked) {
+				// Reset category filter when turned off
+				selectedCategoryId = -1
+				btnCategory.text = "Category"
+			}
+			
+			refreshTransactions()
 		}
 
 		// Setup adapter with fixed click listener
@@ -174,8 +204,8 @@ class ExpenseActivity : BaseActivity(), FloatingActionButtonHandler {
 		}
 
 		live.observe(this) { list ->
-			// Filter list by selected category if a category is selected
-			val filteredList = if (selectedCategoryId != -1) {
+			// Filter list by selected category if a category is selected and filter is enabled
+			val filteredList = if (categoryFilterSwitch.isChecked && selectedCategoryId != -1) {
 				list?.filter { it?.category?.id == selectedCategoryId } ?: emptyList()
 			} else {
 				list ?: emptyList()

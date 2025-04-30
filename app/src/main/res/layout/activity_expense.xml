@@ -1,96 +1,155 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/expenseLayout"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".ExpenseActivity">
+	xmlns:android="http://schemas.android.com/apk/res/android"
+	xmlns:app="http://schemas.android.com/apk/res-auto"
+	xmlns:tools="http://schemas.android.com/tools"
+	android:id="@+id/expenseLayout"
+	android:layout_width="match_parent"
+	android:layout_height="match_parent"
+	tools:context=".ExpenseActivity">
 
-    <!-- Background Image -->
-    <ImageView
-        android:id="@+id/abstract_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:scaleType="centerCrop"
-        android:src="@drawable/abstract_background"
-        android:alpha="0.3" />
+	<!-- Background Image -->
+	<ImageView
+		android:id="@+id/abstract_background"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:scaleType="centerCrop"
+		android:src="@drawable/abstract_background"
+		android:alpha="0.3" />
 
-    <!-- Month selector -->
-    <com.example.budgiebudgettracking.components.NavigationSelector
-        android:id="@+id/month_selector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:leftButtonIcon="@drawable/ic_arrow_left"
-        app:rightButtonIcon="@drawable/ic_arrow_right"
-        android:layout_margin="16dp" />
-
-    <!-- Filter card -->
-    <com.google.android.material.card.MaterialCardView
-        android:id="@+id/filter_card"
-        android:layout_below="@id/month_selector"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        app:cardCornerRadius="8dp"
-        app:cardElevation="4dp"
-        android:padding="12dp">
-
-        <RadioGroup
-            android:id="@+id/rg_recurring_filter"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/rb_all"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="All"
-                android:checked="true" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/rb_one_off"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="One-off only"
-                android:layout_marginStart="16dp" />
-
-            <com.google.android.material.radiobutton.MaterialRadioButton
-                android:id="@+id/rb_recurring"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Recurring only"
-                android:layout_marginStart="16dp" />
-        </RadioGroup>
-    </com.google.android.material.card.MaterialCardView>
-
-	<com.google.android.material.button.MaterialButton
-		android:id="@+id/btnCategory"
-        android:layout_below="@id/filter_card"
+	<!-- Month selector -->
+	<com.example.budgiebudgettracking.components.NavigationSelector
+		android:id="@+id/month_selector"
 		android:layout_width="match_parent"
 		android:layout_height="wrap_content"
-		android:text="Category"
-		app:icon="@drawable/ic_category"
-		app:iconGravity="textStart"
-		android:layout_marginStart="16dp"
-		android:layout_marginEnd="16dp"
-		style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+		app:leftButtonIcon="@drawable/ic_arrow_left"
+		app:rightButtonIcon="@drawable/ic_arrow_right"
+		android:layout_margin="16dp" />
 
-    <!-- Transactions list inside ScrollView -->
-    <ScrollView
-        android:layout_below="@id/btnCategory"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:padding="16dp">
+	<!-- Filter card -->
+	<com.google.android.material.card.MaterialCardView
+		android:id="@+id/filter_expandable_card"
+		android:layout_below="@id/month_selector"
+		android:layout_width="match_parent"
+		android:layout_height="wrap_content"
+		android:layout_margin="16dp"
+		app:cardCornerRadius="8dp"
+		app:cardElevation="4dp"
+		android:clickable="true"
+		android:focusable="true"
+		android:padding="12dp">
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/transactionsRecyclerView"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            tools:listitem="@layout/item_transaction" />
-    </ScrollView>
+		<LinearLayout
+			android:orientation="vertical"
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content">
 
+			<!-- Clickable summary/header like <summary> -->
+				<LinearLayout
+					android:id="@+id/filter_header"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:gravity="center_vertical"
+					android:padding="8dp"
+					android:background="?attr/selectableItemBackground"
+					android:clickable="true"
+					android:focusable="true">
+
+					<TextView
+						android:id="@+id/filter_header_text"
+						android:layout_width="0dp"
+						android:layout_weight="1"
+						android:layout_height="wrap_content"
+						android:text="Filters"
+						android:textStyle="bold"
+						android:textSize="16sp" />
+
+					<ImageView
+						android:id="@+id/filter_arrow"
+						android:layout_width="24dp"
+						android:layout_height="24dp"
+						android:src="@drawable/ic_arrow_right"
+						android:rotation="0"
+						android:contentDescription="Toggle filter expansion" />
+				</LinearLayout>
+
+			<!-- Collapsible content -->
+			<LinearLayout
+				android:id="@+id/filter_content"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:orientation="vertical"
+				android:visibility="gone">
+
+				<RadioGroup
+					android:id="@+id/rg_recurring_filter"
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:layout_marginTop="8dp">
+
+					<com.google.android.material.radiobutton.MaterialRadioButton
+						android:id="@+id/rb_all"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="All"
+						android:checked="true" />
+
+					<com.google.android.material.radiobutton.MaterialRadioButton
+						android:id="@+id/rb_one_off"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="One-off only"
+						android:layout_marginStart="16dp" />
+
+					<com.google.android.material.radiobutton.MaterialRadioButton
+						android:id="@+id/rb_recurring"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Recurring only"
+						android:layout_marginStart="16dp" />
+				</RadioGroup>
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="horizontal"
+					android:layout_marginTop="12dp">
+
+					<com.google.android.material.switchmaterial.SwitchMaterial
+						android:id="@+id/categoryFilterSwitch"
+						android:layout_width="wrap_content"
+						android:layout_height="wrap_content"
+						android:text="Category Filter"
+						android:checked="false"
+						android:layout_gravity="center_vertical" />
+
+					<com.google.android.material.button.MaterialButton
+						android:id="@+id/btnCategory"
+						android:layout_width="0dp"
+						android:layout_weight="1"
+						android:layout_height="wrap_content"
+						android:text="Category"
+						app:icon="@drawable/ic_category"
+						app:iconGravity="textStart"
+						android:layout_marginStart="8dp"
+						android:enabled="false"
+						style="@style/Widget.MaterialComponents.Button.OutlinedButton" />
+				</LinearLayout>
+
+			</LinearLayout>
+		</LinearLayout>
+	</com.google.android.material.card.MaterialCardView>
+
+	<!-- Transactions list -->
+	<androidx.recyclerview.widget.RecyclerView
+		android:id="@+id/transactionsRecyclerView"
+		android:layout_width="match_parent"
+		android:layout_height="match_parent"
+		android:layout_below="@id/filter_expandable_card"
+		android:layout_marginTop="8dp"
+		android:paddingHorizontal="16dp"
+		android:clipToPadding="false"
+		tools:listitem="@layout/item_transaction" />
 </RelativeLayout>
