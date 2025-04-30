@@ -19,9 +19,7 @@ class CategoryPickerActivity : AppCompatActivity(), FloatingActionButtonHandler 
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_category)
 
-		Toast.makeText(this, "1", Toast.LENGTH_SHORT).show()
 		createAndAttachFab(destination = AddCategoryActivity::class.java)
-		Toast.makeText(this, "2", Toast.LENGTH_SHORT).show()
 
 		// 1) Get DB instance
 		db = AppDatabase.getDatabase(this)

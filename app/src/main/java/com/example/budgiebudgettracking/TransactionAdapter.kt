@@ -10,6 +10,7 @@ import com.bumptech.glide.Glide
 import com.example.budgiebudgettracking.entities.TransactionWithCategory
 import java.text.SimpleDateFormat
 import java.util.Locale
+import kotlin.math.abs
 
 class TransactionAdapter(
 	private var transactions: List<TransactionWithCategory>,
@@ -43,7 +44,7 @@ class TransactionAdapter(
 
 		val tx = wrapper.transaction
 		val sign = if (tx.isExpense) "-" else "+"
-		holder.amountText.text = "$sign R ${"%.2f".format(tx.amount)}"
+		holder.amountText.text = "$sign R ${"%.2f".format(abs(tx.amount))}"
 
 		holder.categoryText.text = wrapper.category?.categoryName ?: "Uncategorized"
 		holder.descriptionText.text = tx.description ?: "No description"
@@ -55,10 +56,10 @@ class TransactionAdapter(
 		if (!tx.receiptImagePath.isNullOrEmpty()) {
 			Glide.with(holder.itemView)
 				.load(tx.receiptImagePath)
-				.placeholder(R.drawable.ic_camera)
+				.placeholder(R.drawable.feather)
 				.into(holder.receiptImage)
 		} else {
-			holder.receiptImage.setImageResource(R.drawable.ic_camera)
+			holder.receiptImage.setImageResource(R.drawable.feather)
 		}
 
 
