@@ -464,26 +464,53 @@ class AddExpenseActivity : AppCompatActivity(), CalculatorView.CalculatorListene
 
 		val description = descriptionInput.text.toString().trim()
 
-		// Create transaction object
-		val transaction = Transaction(
-			id = if (transactionId != -1) transactionId else 0, // 0 for new, actual ID for updates
-			userId = currentUserId,
-			categoryId = selectedCategoryId,
-			amount = amount,
-			description = description,
-			date = selectedDate,
-			receiptImagePath = receiptImagePath,
-			isRecurring = isRecurring,
-			startTime = if (isRecurring) selectedStartDate else selectedDate,
-			endTime = if (isRecurring) selectedEndDate else selectedDate,
-			isExpense = isExpense,
-			createdAt = if (transactionId != -1) 0L else System.currentTimeMillis() // Only set for new records
-		)
-
 		// Save transaction
 		if (transactionId != -1) {
-			transactionViewModel.updateTransaction(transaction)
+			// Fetch previous data for fallbacks if some data is not provided
+			transactionViewModel.getTransactionById(transactionId) { oldTransaction ->
+				if (oldTransaction != null) {
+					val transaction = Transaction(
+						id = oldTransaction.id,
+						userId = oldTransaction.userId,
+						categoryId = selectedCategoryId ?: oldTransaction.categoryId,
+						amount = amount ?: oldTransaction.amount,
+						description = description ?: oldTransaction.description,
+						date = selectedDate ?: oldTransaction.date,
+						receiptImagePath = receiptImagePath ?: oldTransaction.receiptImagePath,
+						isRecurring = isRecurring ?: oldTransaction.isRecurring,
+						startTime = if ((isRecurring ?: oldTransaction.isRecurring)) {
+							selectedStartDate ?: oldTransaction.startTime
+						} else {
+							selectedDate ?: oldTransaction.date
+						},
+						endTime = if ((isRecurring ?: oldTransaction.isRecurring)) {
+							selectedEndDate ?: oldTransaction.endTime
+						} else {
+							selectedDate ?: oldTransaction.date
+						},
+						isExpense = isExpense ?: oldTransaction.isExpense,
+						createdAt = oldTransaction.createdAt
+					)
+
+					transactionViewModel.updateTransaction(transaction)
+				}
+			}
 		} else {
+			// Create transaction object
+			val transaction = Transaction(
+				id = 0, // 0 for new, actual ID for updates
+				userId = currentUserId,
+				categoryId = selectedCategoryId,
+				amount = amount,
+				description = description,
+				date = selectedDate,
+				receiptImagePath = receiptImagePath,
+				isRecurring = isRecurring,
+				startTime = if (isRecurring) selectedStartDate else selectedDate,
+				endTime = if (isRecurring) selectedEndDate else selectedDate,
+				isExpense = isExpense,
+			)
+
 			transactionViewModel.addTransaction(transaction)
 		}
 	}
