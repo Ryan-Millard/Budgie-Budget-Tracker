@@ -92,9 +92,9 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 		}
 	}
 
-	fun getTotalExpensesForMonth(userId: Int, yearMonth: String, callback: (Double) -> Unit) {
+	fun getTotalExpensesForMonth(userId: Int, startTimestamp: Long, endTimestamp: Long, callback: (Double) -> Unit) {
 		viewModelScope.launch {
-			val spent = transactionDao.getTotalExpensesForMonth(userId, yearMonth) ?: 0.0
+			val spent = transactionDao.getTotalExpensesForMonth(userId, startTimestamp, endTimestamp) ?: 0.0
 			callback(spent)
 		}
 	}
