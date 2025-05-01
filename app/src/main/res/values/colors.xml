@@ -1,9 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <color name="colorPrimary">#2A9D8F</color> <!-- Teal/Green -->
+    <color name="colorPrimary2">#402A9D8F</color> <!-- Teal/Green -->
     <color name="colorAccent">#F4A261</color> <!-- Peach/Orange -->
     <color name="colorBackground">#EEEEEE</color> <!-- Almost White -->
-    <color name="colorSurface">#E9C46A</color> <!-- Warm Yellow -->
+    <color name="colorSurface">#F8DFA6</color> <!-- Warm Yellow -->
     <color name="colorTextPrimary">#264653</color> <!-- Dark Blue-Grey -->
     <color name="colorError">#E76F51</color> <!-- Coral Red -->
 
