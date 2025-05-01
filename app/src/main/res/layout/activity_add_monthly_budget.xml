@@ -1,0 +1,138 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.coordinatorlayout.widget.CoordinatorLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <!-- Background Image (if you want the same faint abstract background) -->
+    <ImageView
+        android:id="@+id/abstract_background"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/abstract_background"
+        android:alpha="0.2"
+        android:contentDescription="Background" />
+
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:gravity="center_horizontal">
+
+			<!-- Month selector -->
+			<com.example.budgiebudgettracking.components.NavigationSelector
+				android:id="@+id/month_selector"
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginTop="8dp"
+				app:leftButtonIcon="@drawable/ic_arrow_left"
+				app:rightButtonIcon="@drawable/ic_arrow_right"
+				app:layout_constraintTop_toBottomOf="@+id/expensesHeading"
+				app:layout_constraintStart_toStartOf="parent"
+				app:layout_constraintEnd_toEndOf="parent"
+				android:background="@color/colorPrimary2"/>
+
+				<!-- Minimum Goal Section -->
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="16dp"
+				app:cardCornerRadius="8dp"
+				app:cardElevation="2dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="8dp">
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:id="@+id/minAmountLayout"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="8dp"
+						style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/etMinAmount"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:hint="Minimum Goal"
+							android:inputType="textVisiblePassword"
+							android:digits="0123456789.+-*/()"
+							android:focusable="false"
+							android:clickable="true"
+							android:gravity="center"
+							android:textSize="20sp"
+							android:textStyle="bold"/>
+					</com.google.android.material.textfield.TextInputLayout>
+
+					<com.example.budgiebudgettracking.components.CalculatorView
+						android:id="@+id/calculatorViewMin"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"/>
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+			<!-- Maximum Goal Section -->
+			<com.google.android.material.card.MaterialCardView
+				android:layout_width="match_parent"
+				android:layout_height="wrap_content"
+				android:layout_marginBottom="16dp"
+				app:cardCornerRadius="8dp"
+				app:cardElevation="2dp">
+
+				<LinearLayout
+					android:layout_width="match_parent"
+					android:layout_height="wrap_content"
+					android:orientation="vertical"
+					android:padding="8dp">
+
+					<com.google.android.material.textfield.TextInputLayout
+						android:id="@+id/maxAmountLayout"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"
+						android:layout_marginBottom="8dp"
+						style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox">
+
+						<com.google.android.material.textfield.TextInputEditText
+							android:id="@+id/etMaxAmount"
+							android:layout_width="match_parent"
+							android:layout_height="wrap_content"
+							android:hint="Maximum Goal"
+							android:inputType="textVisiblePassword"
+							android:digits="0123456789.+-*/()"
+							android:focusable="false"
+							android:clickable="true"
+							android:gravity="center"
+							android:textSize="20sp"
+							android:textStyle="bold"/>
+					</com.google.android.material.textfield.TextInputLayout>
+
+					<com.example.budgiebudgettracking.components.CalculatorView
+						android:id="@+id/calculatorViewMax"
+						android:layout_width="match_parent"
+						android:layout_height="wrap_content"/>
+				</LinearLayout>
+			</com.google.android.material.card.MaterialCardView>
+
+            <!-- Save Button -->
+            <com.google.android.material.button.MaterialButton
+                android:id="@+id/btnSave"
+                android:layout_width="match_parent"
+                android:layout_height="60dp"
+                android:text="Save Budget"
+                android:textSize="16sp"
+                app:cornerRadius="8dp"
+                app:icon="@drawable/ic_save"
+                app:iconGravity="textStart"/>
+        </LinearLayout>
+    </androidx.core.widget.NestedScrollView>
+</androidx.coordinatorlayout.widget.CoordinatorLayout>
