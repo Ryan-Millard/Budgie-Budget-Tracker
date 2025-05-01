@@ -38,8 +38,8 @@ interface TransactionDao {
 	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 1 AND date BETWEEN :startDate AND :endDate")
 	fun getTotalExpensesByDateRangeLive(userId: Int, startDate: Int, endDate: Int): LiveData<Double?>
 
-	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 1 AND strftime('%Y-%m', datetime(date / 1000, 'unixepoch')) = :yearMonth")
-	suspend fun getTotalExpensesForMonth(userId: Int, yearMonth: String): Double?
+	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 1 AND date >= :startTimestamp AND date < :endTimestamp")
+	suspend fun getTotalExpensesForMonth(userId: Int, startTimestamp: Long, endTimestamp: Long): Double?
 
 	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 0")
 	fun getTotalIncomeLive(userId: Int): LiveData<Double?>

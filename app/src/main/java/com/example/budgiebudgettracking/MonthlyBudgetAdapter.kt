@@ -1,5 +1,6 @@
 package com.example.budgiebudgettracking
 
+import android.widget.Toast
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -38,28 +39,36 @@ class MonthlyGoalsAdapter(
 		fun bind(goal: MonthlyGoal, transactionViewModel: TransactionViewModel, userId: Int) {
 			val currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
 			val dateFormat = SimpleDateFormat("yyyy-MM", Locale.getDefault()) // Input format
-			val displayFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault()) // Desired output format
+			val displayFormat = SimpleDateFormat("MMMM yyyy", Locale.getDefault()) // Output format
 
-			// Parse the yearMonth and format it
+			// Parse yearMonth (e.g. "2025-05")
 			val date = dateFormat.parse(goal.yearMonth)
-			val formattedMonth = displayFormat.format(date)
+			val calendar = Calendar.getInstance().apply { time = date }
 
-			monthText.text = formattedMonth // Set the formatted month
+			// Set to start of month (midnight on day 1)
+			calendar.set(Calendar.DAY_OF_MONTH, 1)
+			calendar.set(Calendar.HOUR_OF_DAY, 0)
+			calendar.set(Calendar.MINUTE, 0)
+			calendar.set(Calendar.SECOND, 0)
+			calendar.set(Calendar.MILLISECOND, 0)
+			val startTimestamp = calendar.timeInMillis
 
-			minGoalText.text = "${currencyFormatter.format(goal.minGoal)}"
-			maxGoalText.text = "${currencyFormatter.format(goal.maxGoal)}"
+			// Move to start of next month
+			calendar.add(Calendar.MONTH, 1)
+			val endTimestamp = calendar.timeInMillis
 
-			// Default display before data loads
+			monthText.text = displayFormat.format(date)
+			minGoalText.text = currencyFormatter.format(goal.minGoal)
+			maxGoalText.text = currencyFormatter.format(goal.maxGoal)
 			spentText.text = "Spent: Loading..."
 			remainingText.text = "Remaining: ..."
 
-			// Query spent amount for that month
-			transactionViewModel.getTotalExpensesForMonth(userId, goal.yearMonth) { spent ->
-				val clampedSpent = spent.coerceAtLeast(0.0)
+			transactionViewModel.getTotalExpensesForMonth(userId, startTimestamp, endTimestamp) { spent ->
+				val clampedSpent = ( -1 * spent ).coerceAtLeast(0.0)
 				val remaining = (goal.maxGoal - clampedSpent).coerceAtLeast(0.0)
-
-				spentText.text = "${currencyFormatter.format(clampedSpent)}"
-				remainingText.text = "${currencyFormatter.format(remaining)}"
+				spentText.text = "Spent: ${currencyFormatter.format(clampedSpent)}"
+				remainingText.text = "Remaining: ${currencyFormatter.format(remaining)}"
+				Toast.makeText(itemView.context, "${currencyFormatter.format(clampedSpent)}", Toast.LENGTH_SHORT).show()
 			}
 		}
 	}
