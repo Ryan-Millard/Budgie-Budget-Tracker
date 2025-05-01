@@ -12,16 +12,28 @@
         android:src="@drawable/abstract_background"
         android:alpha="0.3" />
 
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="40dp"
+        android:contentDescription="App Logo"
+        android:src="@mipmap/ic_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true" />
+
+    <!-- Categories Title -->
     <TextView
         android:id="@+id/loginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="16dp"
-        android:text="Welcome Back!"
+        android:text="Categories"
         android:textColor="@color/colorPrimary"
         android:textSize="22sp"
-        android:textStyle="bold" />
+        android:textStyle="bold"
+        android:layout_below="@id/logoImageView"
+        android:layout_centerHorizontal="true" />
 
     <!-- RecyclerView for Expense Categories -->
     <androidx.recyclerview.widget.RecyclerView

@@ -1,44 +1,68 @@
-<LinearLayout
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/main"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:padding="16dp">
+    android:background="@color/colorBackground"
+    tools:context=".MainActivity">
 
-    <Button
-        android:id="@+id/btnLogin"
+    <!-- Background Image -->
+    <ImageView
+        android:id="@+id/abstract_background"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Login" />
+        android:layout_height="match_parent"
+        android:scaleType="centerCrop"
+        android:src="@drawable/abstract_background"
+        android:alpha="0.3" />
 
-    <Button
-        android:id="@+id/btnRegister"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Register" />
+    <!-- Logo -->
+    <ImageView
+        android:id="@+id/logoImageView"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:layout_marginTop="40dp"
+        android:contentDescription="App Logo"
+        android:src="@mipmap/ic_logo"
+        android:layout_centerHorizontal="true"
+        android:layout_alignParentTop="true" />
 
-    <Button
-        android:id="@+id/btnCategory"
-        android:layout_width="match_parent"
+    <!-- Home View Title -->
+    <TextView
+        android:id="@+id/loginTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Category" />
+        android:text="Home View"
+        android:textColor="@color/colorPrimary"
+        android:textSize="22sp"
+        android:textStyle="bold"
+        android:layout_below="@id/logoImageView"
+        android:layout_centerHorizontal="true" />
 
-    <Button
-        android:id="@+id/btnExpense"
-        android:layout_width="match_parent"
+    <!-- Line Chart Title -->
+    <TextView
+        android:id="@+id/chartTitle"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Expense" />
+        android:text="Income and Expenses (Jan - May)"
+        android:textColor="@color/colorTextPrimary"
+        android:textSize="20sp"
+        android:textStyle="bold"
+        android:layout_below="@id/loginTitle"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="16dp"
 
-    <Button
-        android:id="@+id/btnMonthlyBudget"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Monthly Budget" />
+        android:layout_marginTop="20dp"/>
 
-    <Button
-        android:id="@+id/btnProfile"
+    <!-- Line Chart -->
+    <com.github.mikephil.charting.charts.LineChart
+        android:id="@+id/lineChart"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Profile" />
-</LinearLayout>
+        android:layout_height="300dp"
+        android:background="#80FFFFFF"
+        android:layout_below="@id/chartTitle"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="8dp"
+        android:layout_weight="1" />
+
+</RelativeLayout>
