@@ -92,6 +92,13 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 		}
 	}
 
+	fun getTotalExpensesForMonth(userId: Int, yearMonth: String, callback: (Double) -> Unit) {
+		viewModelScope.launch {
+			val spent = transactionDao.getTotalExpensesForMonth(userId, yearMonth) ?: 0.0
+			callback(spent)
+		}
+	}
+
 	/** Returns LiveData filtered by date range AND recurring flag */
 	fun getTransactionsByDateAndRecurring(
 		startDate: Long,

@@ -96,9 +96,7 @@ class MonthlyBudgetActivity : BaseActivity(), FloatingActionButtonHandler {
 		maxValue = findViewById(R.id.maxValue)
 		recycler = findViewById(R.id.goalsRecyclerView)
 
-		adapter = MonthlyGoalsAdapter()
 		recycler.layoutManager = LinearLayoutManager(this)
-		recycler.adapter = adapter
 
 		sessionManager = SessionManager.getInstance(this)
 
@@ -125,6 +123,9 @@ class MonthlyBudgetActivity : BaseActivity(), FloatingActionButtonHandler {
 				finish()
 			} else {
 				userId = user.id
+				adapter = MonthlyGoalsAdapter(transactionViewModel, userId)
+				recycler.adapter = adapter
+
 				setupObservers()
 				monthlyBudgetViewModel.loadGoalForMonth(userId, yearMonth)
 			}

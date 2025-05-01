@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:layout_marginBottom="8dp"
-    app:cardCornerRadius="8dp"
-    app:cardElevation="2dp">
+    android:layout_marginBottom="12dp"
+    app:cardCornerRadius="12dp"
+    app:cardElevation="4dp">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -13,43 +13,110 @@
         android:orientation="vertical"
         android:padding="16dp">
 
+        <!-- Month -->
         <TextView
             android:id="@+id/goalMonth"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
+            android:textSize="18sp"
             android:textStyle="bold"
             android:textColor="@color/colorPrimary" />
 
-        <TextView
-            android:id="@+id/goalRange"
-            android:layout_width="wrap_content"
+        <!-- Goal Range -->
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="4dp"
-            android:textSize="14sp" />
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:weightSum="2">
 
-        <TextView
-            android:id="@+id/minGoalText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary" />
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Min Goal:"
+                android:textColor="@android:color/darker_gray" />
 
-        <TextView
-            android:id="@+id/maxGoalText"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary" />
+            <TextView
+                android:id="@+id/minGoalText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="R 0.00"
+                android:textStyle="bold" />
+        </LinearLayout>
 
-        <TextView
-            android:id="@+id/spentText"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:textSize="16sp"
-            android:textStyle="bold"
-            android:textColor="@color/colorPrimary" />
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Max Goal:"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/maxGoalText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="R 0.00"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Spent -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:layout_marginTop="8dp"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Spent:"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/spentText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="R 0.00"
+                android:textColor="@color/colorError"
+                android:textStyle="bold" />
+        </LinearLayout>
+
+        <!-- Remaining -->
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:weightSum="2">
+
+            <TextView
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="Remaining:"
+                android:textColor="@android:color/darker_gray" />
+
+            <TextView
+                android:id="@+id/remainingText"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="R 0.00"
+                android:textColor="#2a9d8f"
+                android:textStyle="bold" />
+        </LinearLayout>
+
     </LinearLayout>
 </androidx.cardview.widget.CardView>
+
