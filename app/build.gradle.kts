@@ -67,5 +67,9 @@ dependencies {
 
     implementation("net.objecthunter:exp4j:0.4.8")
     implementation("com.github.skydoves:colorpickerview:2.2.4")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+
+    implementation ("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
 
