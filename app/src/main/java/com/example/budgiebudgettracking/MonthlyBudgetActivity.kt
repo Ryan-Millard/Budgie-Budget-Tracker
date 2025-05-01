@@ -1,7 +1,5 @@
 package com.example.budgiebudgettracking
 
-import android.app.Activity
-import android.content.Intent
 import android.os.Bundle
 import android.widget.ProgressBar
 import android.widget.TextView
@@ -13,13 +11,22 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.budgiebudgettracking.entities.MonthlyGoal
 import com.example.budgiebudgettracking.utils.SessionManager
 import com.example.budgiebudgettracking.viewmodels.MonthlyBudgetViewModel
+import com.example.budgiebudgettracking.viewmodels.TransactionViewModel
 import java.text.NumberFormat
 import java.text.SimpleDateFormat
 import java.util.*
+import android.app.Activity
+import android.content.Intent
+import androidx.activity.result.ActivityResultLauncher
+import kotlin.math.abs
 
 class MonthlyBudgetActivity : BaseActivity(), FloatingActionButtonHandler {
 
-	private lateinit var viewModel: MonthlyBudgetViewModel
+	private lateinit var monthlyBudgetViewModel: MonthlyBudgetViewModel
+	private lateinit var transactionViewModel: TransactionViewModel
+
+	private lateinit var addGoalLauncher: ActivityResultLauncher<Intent>
+
 	private lateinit var sessionManager: SessionManager
 
 	// UI Components
@@ -31,26 +38,57 @@ class MonthlyBudgetActivity : BaseActivity(), FloatingActionButtonHandler {
 	private lateinit var recycler: RecyclerView
 	private lateinit var adapter: MonthlyGoalsAdapter
 
-	private val currencyFormatter = NumberFormat.getCurrencyInstance(Locale.getDefault())
+	// Hold the "source of truth" for max and spent:
+	private var currentMaxValue: Double? = null
+	private var amountSpentInCurrentMonth: Double? = null
+		set(value) {
+			field = value?.let { abs(it) }
+		}
+
+	private val currencyFormatter by lazy {
+		NumberFormat.getCurrencyInstance(Locale.getDefault())
+	}
+
 	private val yearMonth: String by lazy {
 		SimpleDateFormat("yyyy-MM", Locale.getDefault()).format(Date())
 	}
-	private var userId: Int = -1
 
-	private val addBudgetLauncher =
-	registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-		if (result.resultCode == Activity.RESULT_OK) {
-			viewModel.loadGoalForMonth(userId, yearMonth)
-		}
-	}
+	private var userId: Int = -1
 
 	override fun onCreate(savedInstanceState: Bundle?) {
 		super.onCreate(savedInstanceState)
 		setContentView(R.layout.activity_monthly_budget)
 
-		createAndAttachFab(destination = AddMonthlyBudgetActivity::class.java)
+		addGoalLauncher = registerForActivityResult(
+			ActivityResultContracts.StartActivityForResult()
+		) { result ->
+			if (result.resultCode == Activity.RESULT_OK) {
+				val data = result.data ?: return@registerForActivityResult
+				val newYearMonth = data.getStringExtra("NEW_YEAR_MONTH")!!
+				val newMin = data.getDoubleExtra("NEW_MIN_GOAL", 0.0)
+				val newMax = data.getDoubleExtra("NEW_MAX_GOAL", 0.0)
 
-		// Initialize UI components
+				// 1) Reload the current month’s goal from the database:
+				monthlyBudgetViewModel.loadGoalForMonth(userId, newYearMonth)
+
+				// 2) (Optionally) show a toast or update some UI immediately:
+				Toast.makeText(
+					this,
+					"Saved goals for $newYearMonth: min=${currencyFormatter.format(newMin)}, max=${currencyFormatter.format(newMax)}",
+					Toast.LENGTH_SHORT
+				).show()
+			}
+		}
+
+		createAndAttachFab(
+			destination = AddMonthlyBudgetActivity::class.java,
+			onClickFun = {
+				val intent = Intent(this, AddMonthlyBudgetActivity::class.java)
+				addGoalLauncher.launch(intent)
+			}
+		)
+
+		// Initialize UI
 		spentValue = findViewById(R.id.spentValue)
 		remainingValue = findViewById(R.id.remainingValue)
 		progressBar = findViewById(R.id.budgetProgressBar)
@@ -58,67 +96,88 @@ class MonthlyBudgetActivity : BaseActivity(), FloatingActionButtonHandler {
 		maxValue = findViewById(R.id.maxValue)
 		recycler = findViewById(R.id.goalsRecyclerView)
 
-		// Set up RecyclerView
 		adapter = MonthlyGoalsAdapter()
 		recycler.layoutManager = LinearLayoutManager(this)
 		recycler.adapter = adapter
 
-		// Initialize SessionManager and ViewModel
 		sessionManager = SessionManager.getInstance(this)
-		viewModel = ViewModelProvider(
+
+		monthlyBudgetViewModel = ViewModelProvider(
 			this,
 			MonthlyBudgetViewModel.Factory(application)
 		).get(MonthlyBudgetViewModel::class.java)
 
-		// Load user and observe data
+		transactionViewModel = ViewModelProvider(
+			this,
+			TransactionViewModel.Factory(application)
+		).get(TransactionViewModel::class.java)
+
+		// Load user & then data
 		val email = sessionManager.getUserEmail()
-		if (email.isNotEmpty()) {
-			viewModel.loadUserByEmail(email) { user ->
-				if (user == null) {
-					Toast.makeText(this, "Unknown user", Toast.LENGTH_LONG).show()
-					finish()
-				} else {
-					userId = user.id
-					setupObservers()
-					viewModel.loadGoalForMonth(userId, yearMonth)
-				}
-			}
-		} else {
+		if (email.isBlank()) {
 			Toast.makeText(this, "No user logged in", Toast.LENGTH_LONG).show()
-			finish()
+			finish(); return
+		}
+
+		monthlyBudgetViewModel.loadUserByEmail(email) { user ->
+			if (user == null) {
+				Toast.makeText(this, "Unknown user", Toast.LENGTH_LONG).show()
+				finish()
+			} else {
+				userId = user.id
+				setupObservers()
+				monthlyBudgetViewModel.loadGoalForMonth(userId, yearMonth)
+			}
 		}
 	}
 
 	private fun setupObservers() {
-		// Observe current month's goal
-		viewModel.currentMonthGoal.observe(this) { goal ->
-			val min = goal?.minGoal ?: 0.0
-			val max = goal?.maxGoal ?: 0.0
-			minValue.text = currencyFormatter.format(min)
-			maxValue.text = currencyFormatter.format(max)
-
-			// Update progress bar and remaining/spent values
-			// val spent = goal?.spentAmount ?: 0.0
-			// val remaining = max - spent
-			// spentValue.text = currencyFormatter.format(spent)
-			// remainingValue.text = currencyFormatter.format(remaining)
-			// progressBar.max = max.toInt()
-			// progressBar.progress = spent.toInt()
+		// When the monthly goal (min/max) loads:
+		monthlyBudgetViewModel.currentMonthGoal.observe(this) { goal ->
+			currentMaxValue = goal?.maxGoal ?: 0.0
+			// update the min/max labels:
+			minValue.text = currencyFormatter.format(goal?.minGoal ?: 0.0)
+			maxValue.text = currencyFormatter.format(currentMaxValue!!)
+			// and then refresh the UI:
+			refreshBudgetUI()
 		}
 
-		// Observe all goals
-		viewModel.allGoals.observe(this) { goals ->
+		// Observe all goals list
+		monthlyBudgetViewModel.allGoals.observe(this) { goals ->
 			adapter.submitList(goals)
 		}
 
-		// Observe operation result
-		viewModel.operationResult.observe(this) { success ->
+		// Observe save result
+		monthlyBudgetViewModel.operationResult.observe(this) { success ->
 			Toast.makeText(
 				this,
 				if (success) "Saved!" else "Error saving goal",
 				Toast.LENGTH_SHORT
 			).show()
-			viewModel.loadGoalForMonth(userId, yearMonth)
+			monthlyBudgetViewModel.loadGoalForMonth(userId, yearMonth)
 		}
+
+		// When monthly expenses arrive:
+		transactionViewModel.monthlyExpenses.observe(this) { spent ->
+			amountSpentInCurrentMonth = spent
+			refreshBudgetUI()
+		}
+	}
+
+	/** Call anytime `currentMaxValue` or `amountSpentInCurrentMonth` changes */
+	private fun refreshBudgetUI() {
+		val max   = currentMaxValue ?: return
+		val spent = amountSpentInCurrentMonth ?: return
+
+		// Compute remaining, clamped at 0…max:
+		val remaining = (max - spent).coerceAtLeast(0.0)
+
+		// Update the views:
+		spentValue.text     = currencyFormatter.format(spent)
+		remainingValue.text = currencyFormatter.format(remaining)
+
+		// Sync the progress bar:
+		progressBar.max      = max.toInt().coerceAtLeast(0)
+		progressBar.progress = spent.toInt().coerceIn(0, progressBar.max)
 	}
 }

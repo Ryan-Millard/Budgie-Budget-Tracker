@@ -35,6 +35,9 @@ interface TransactionDao {
 	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 1")
 	fun getTotalExpensesLive(userId: Int): LiveData<Double?>
 
+	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 1 AND date BETWEEN :startDate AND :endDate")
+	fun getTotalExpensesByDateRangeLive(userId: Int, startDate: Int, endDate: Int): LiveData<Double?>
+
 	@Query("SELECT SUM(amount) FROM transactions WHERE userId = :userId AND isExpense = 0")
 	fun getTotalIncomeLive(userId: Int): LiveData<Double?>
 

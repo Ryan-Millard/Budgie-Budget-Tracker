@@ -1,5 +1,7 @@
 package com.example.budgiebudgettracking.viewmodels
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.liveData
 import android.app.Application
 import androidx.lifecycle.*
 import com.example.budgiebudgettracking.database.AppDatabase
@@ -75,6 +77,18 @@ class TransactionViewModel(application: Application) : AndroidViewModel(applicat
 
 			// 4. Monthly stats
 			loadMonthlyStatistics(userId)
+		}
+	}
+
+	fun getTotalExpensesByDateRangeLive(startDate: Int, endDate: Int): LiveData<Double?> = liveData {
+		// Invoke your suspend helper to fetch userId
+		val userId = getUserId()
+		if (userId != null) {
+			// Then subscribe to the DAO’s LiveData and emit its values
+			emitSource(transactionDao.getTotalExpensesByDateRangeLive(userId, startDate, endDate))
+		} else {
+			// No user → emit null (or 0.0 if you prefer)
+			emit(null)
 		}
 	}
 
