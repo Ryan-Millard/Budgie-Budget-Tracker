@@ -1,4 +1,3 @@
-<?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/monthlyBudgetLayout"
@@ -6,106 +5,119 @@
     android:layout_height="match_parent"
     tools:context=".MonthlyBudgetActivity">
 
-    <!-- Background Image -->
+    <!-- Background -->
     <ImageView
         android:id="@+id/abstract_background"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:scaleType="centerCrop"
         android:src="@drawable/abstract_background"
-        android:alpha="0.3" /> <!-- 0.0 = fully transparent, 1.0 = fully opaque -->
+        android:alpha="0.3" />
 
     <!-- Logo -->
     <ImageView
         android:id="@+id/logoImageView"
         android:layout_width="120dp"
         android:layout_height="120dp"
-        android:contentDescription="App Logo"
-        android:src="@mipmap/ic_logo"
         android:layout_centerHorizontal="true"
-        android:layout_marginTop="40dp" />
+        android:layout_marginTop="40dp"
+        android:contentDescription="App Logo"
+        android:src="@mipmap/ic_logo" />
 
     <!-- Title -->
     <TextView
         android:id="@+id/titleMonthlyBudget"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Monthly Budget Overview"
-        android:textSize="22sp"
-        android:textStyle="bold"
-        android:textColor="@color/colorPrimary"
-        android:layout_centerHorizontal="true"
         android:layout_below="@id/logoImageView"
-        android:paddingBottom="20dp" />
-
-    <!-- Total Budget Label -->
-    <TextView
-        android:id="@+id/totalBudgetLabel"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Total Budget:"
-        android:textSize="16sp"
-        android:textColor="@color/colorOnBackground"
-        android:layout_below="@id/titleMonthlyBudget"
-        android:layout_marginLeft="24dp"/>
-
-    <!-- Total Budget Value -->
-    <TextView
-        android:id="@+id/totalBudgetValue"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="R 5000"
-        android:textSize="18sp"
+        android:layout_centerHorizontal="true"
+        android:paddingBottom="20dp"
+        android:text="Monthly Budget Overview"
         android:textColor="@color/colorPrimary"
-        android:layout_below="@id/totalBudgetLabel"
-        android:paddingBottom="10dp"
-        android:layout_marginLeft="24dp"/>
+        android:textSize="22sp"
+        android:textStyle="bold" />
 
-    <!-- Spent Label -->
+    <!-- Min/Max Display -->
+    <LinearLayout
+        android:id="@+id/minMaxDisplay"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/titleMonthlyBudget"
+        android:layout_centerHorizontal="true"
+        android:orientation="horizontal"
+        android:paddingBottom="20dp">
+
+        <TextView
+            android:id="@+id/minLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Min:" />
+
+        <TextView
+            android:id="@+id/minValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="16dp"
+            android:text="R 0"
+            android:textStyle="bold" />
+
+        <TextView
+            android:id="@+id/maxLabel"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Max:" />
+
+        <TextView
+            android:id="@+id/maxValue"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="R 0"
+            android:textStyle="bold" />
+    </LinearLayout>
+
+    <!-- Spent -->
     <TextView
         android:id="@+id/spentLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_below="@id/minMaxDisplay"
+        android:layout_marginLeft="24dp"
         android:text="Spent:"
-        android:textSize="16sp"
         android:textColor="@color/colorOnBackground"
-        android:layout_below="@id/totalBudgetValue"
-        android:layout_marginLeft="24dp"/>
+        android:textSize="16sp" />
 
-    <!-- Spent Value -->
     <TextView
         android:id="@+id/spentValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="R 1500"
-        android:textSize="18sp"
-        android:textColor="@color/colorError"
         android:layout_below="@id/spentLabel"
+        android:layout_marginLeft="24dp"
         android:paddingBottom="10dp"
-        android:layout_marginLeft="24dp"/>
+        android:text="R 0"
+        android:textColor="@color/colorError"
+        android:textSize="18sp" />
 
-    <!-- Remaining Label -->
+    <!-- Remaining -->
     <TextView
         android:id="@+id/remainingLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Remaining:"
-        android:textSize="16sp"
-        android:textColor="@color/colorOnBackground"
         android:layout_below="@id/spentValue"
-        android:layout_marginLeft="24dp"/>
+        android:layout_marginLeft="24dp"
+        android:text="Remaining:"
+        android:textColor="@color/colorOnBackground"
+        android:textSize="16sp" />
 
-    <!-- Remaining Value -->
     <TextView
         android:id="@+id/remainingValue"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="R 3500"
-        android:textSize="18sp"
-        android:textColor="#F4A261"
         android:layout_below="@id/remainingLabel"
+        android:layout_marginLeft="24dp"
         android:paddingBottom="20dp"
-        android:layout_marginLeft="24dp"/>
+        android:text="R 0"
+        android:textSize="18sp"
+        android:textColor="#F4A261" />
 
     <!-- Progress Bar -->
     <ProgressBar
@@ -113,36 +125,18 @@
         style="?android:attr/progressBarStyleHorizontal"
         android:layout_width="match_parent"
         android:layout_height="10dp"
-        android:progress="30"
-        android:max="100"
-        android:progressTint="@color/colorPrimary"
         android:layout_below="@id/remainingValue"
-        android:padding="24dp"/>
+        android:layout_margin="24dp"
+        android:max="100"
+        android:progress="0"
+        android:progressTint="@color/colorPrimary" />
 
-    <!-- Edit Monthly Budget -->
-    <EditText
-        android:id="@+id/editMonthlyBudget"
+    <!-- History List -->
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/goalsRecyclerView"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Update Monthly Budget"
-        android:inputType="numberDecimal"
-        android:backgroundTint="@color/colorPrimary"
-        android:textColor="@color/colorOnBackground"
-        android:padding="12dp"
         android:layout_below="@id/budgetProgressBar"
-        android:layout_marginBottom="16dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"/>
-
-    <!-- Update Budget Button -->
-    <Button
-        android:id="@+id/updateBudgetButton"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Update Budget"
-        style="@style/RoundedButton"
-        android:layout_below="@id/editMonthlyBudget"
-        android:layout_marginLeft="24dp"
-        android:layout_marginRight="24dp"/>
-
+        android:layout_marginHorizontal="24dp"
+        android:layout_marginVertical="8dp" />
 </RelativeLayout>
