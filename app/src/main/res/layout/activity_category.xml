@@ -15,8 +15,8 @@
     <!-- Logo -->
     <ImageView
         android:id="@+id/logoImageView"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
         android:layout_marginTop="40dp"
         android:contentDescription="App Logo"
         android:src="@mipmap/ic_logo"
@@ -28,7 +28,6 @@
         android:id="@+id/loginTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="16dp"
         android:text="Categories"
         android:textColor="@color/colorPrimary"
         android:textSize="22sp"
