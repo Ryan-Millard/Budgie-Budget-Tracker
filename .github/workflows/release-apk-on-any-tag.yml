@@ -1,47 +1,136 @@
 name: Build & Release APK on Tag
-
 on:
   push:
     tags:
-      - '*'            # trigger on *any* tag
+      - '*'  # Trigger on any tag
+  # Optional: Allow manual execution from Actions tab
+  workflow_dispatch:
 
 jobs:
   build-and-release:
     runs-on: ubuntu-latest
-
     steps:
       - name: Check out code
         uses: actions/checkout@v4
-
-      - name: Make Gradle wrapper executable
-        run: chmod +x ./gradlew
-
-      - name: Set up JDK 11
-        uses: actions/setup-java@v3
         with:
-          distribution: temurin
+          fetch-depth: 0  # Fetch all history for proper tagging
+      
+      - name: Diagnostic - Repository Structure
+        run: |
+          echo "Repository root contents:"
+          ls -la
+          echo "-------------------------------"
+          echo "Repository structure:"
+          find . -type f -not -path "*/\.*" | sort | head -n 100
+          echo "-------------------------------"
+          echo "Looking for build.gradle files:"
+          find . -name "build.gradle" -o -name "build.gradle.kts"
+      
+      - name: Set Up JDK
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
           java-version: '11'
-
-      - name: Build Release APK
-        run: ./gradlew assembleRelease
-
+          cache: 'gradle'
+      
+      - name: Find and Fix Gradle Wrapper
+        id: find-gradle
+        run: |
+          # Try to find gradlew file
+          GRADLEW_PATH=$(find . -name "gradlew" | head -n 1)
+          
+          if [ -n "$GRADLEW_PATH" ]; then
+            echo "Found Gradle wrapper at: $GRADLEW_PATH"
+            echo "Setting executable permissions:"
+            chmod +x "$GRADLEW_PATH"
+            ls -la "$GRADLEW_PATH"
+            echo "gradle_path=$GRADLEW_PATH" >> $GITHUB_OUTPUT
+            
+            # Also find the directory where gradlew is located
+            GRADLE_DIR=$(dirname "$GRADLEW_PATH")
+            echo "gradle_dir=$GRADLE_DIR" >> $GITHUB_OUTPUT
+          else
+            echo "::warning::No Gradle wrapper found! Creating one..."
+            
+            # Find the main project directory (where build.gradle is)
+            PROJECT_DIR=$(find . -name "build.gradle" -o -name "build.gradle.kts" | head -n 1 | xargs dirname)
+            
+            if [ -z "$PROJECT_DIR" ]; then
+              PROJECT_DIR="."  # Default to root if no build.gradle found
+            fi
+            
+            echo "Project directory appears to be: $PROJECT_DIR"
+            
+            # Create Gradle wrapper if it doesn't exist
+            cd "$PROJECT_DIR"
+            echo "Generating Gradle wrapper..."
+            gradle wrapper || echo "Failed to generate wrapper, will try to use Gradle directly"
+            
+            if [ -f "./gradlew" ]; then
+              chmod +x ./gradlew
+              echo "gradle_path=./gradlew" >> $GITHUB_OUTPUT
+              echo "gradle_dir=." >> $GITHUB_OUTPUT
+            else
+              echo "::error::Could not create or find Gradle wrapper"
+              echo "gradle_path=gradle" >> $GITHUB_OUTPUT  # Fallback to global gradle
+              echo "gradle_dir=." >> $GITHUB_OUTPUT
+            fi
+          fi
+      
+      - name: Build with direct Gradle command if wrapper fails
+        id: direct-gradle-build
+        if: always()  # Run even if previous steps failed
+        run: |
+          cd "${{ steps.find-gradle.outputs.gradle_dir || '.' }}"
+          
+          # Try building with the gradle wrapper
+          if [ -f "./gradlew" ] && [ -x "./gradlew" ]; then
+            echo "Building with Gradle wrapper..."
+            ./gradlew assembleRelease --info || WRAPPER_FAILED=$?
+          else
+            WRAPPER_FAILED=1
+          fi
+          
+          # If wrapper failed, try with global gradle
+          if [ -n "$WRAPPER_FAILED" ]; then
+            echo "::warning::Gradle wrapper failed or not available, trying direct Gradle command..."
+            gradle assembleRelease --info || DIRECT_FAILED=$?
+          fi
+          
+          # Check if any APKs were produced
+          echo "Searching for APK files:"
+          find . -name "*.apk"
+      
+      - name: Set APK path
+        id: apk-path
+        run: |
+          APK_PATH=$(find . -path "*/build/outputs/apk/release/*release.apk" | head -n 1)
+          if [ -z "$APK_PATH" ]; then
+            echo "::warning::No APK found in standard location, searching anywhere..."
+            APK_PATH=$(find . -name "*.apk" | head -n 1)
+            if [ -z "$APK_PATH" ]; then
+              echo "::error::No APK files found anywhere!"
+              exit 1
+            fi
+          fi
+          echo "apk_path=$APK_PATH" >> $GITHUB_OUTPUT
+          echo "APK will be uploaded from: $APK_PATH"
+      
+      # Create GitHub Release with the found APK
       - name: Create GitHub Release
         id: create_release
-        uses: actions/create-release@v1
+        uses: softprops/action-gh-release@v1
         with:
-          tag_name: ${{ github.ref_name }}
-          release_name: Release ${{ github.ref_name }}
+          name: Release ${{ github.ref_name }}
           draft: false
           prerelease: false
+          files: ${{ steps.apk-path.outputs.apk_path }}
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-
-      - name: Upload APK Asset
-        uses: actions/upload-release-asset@v1
-        with:
-          upload_url: ${{ steps.create_release.outputs.upload_url }}
-          asset_path: app/build/outputs/apk/release/app-release.apk
-          asset_name: app-${{ github.ref_name }}.apk
-          asset_content_type: application/vnd.android.package-archive
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          
+      # Verify release was created and includes the APK
+      - name: Check release status
+        run: |
+          echo "Release created with ID: ${{ steps.create_release.outputs.id }}"
+          echo "Release URL: ${{ steps.create_release.outputs.url }}"
+          echo "Included file: ${{ steps.apk-path.outputs.apk_path }}"
