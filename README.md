@@ -8,6 +8,9 @@
 **Budgie** is your personal financial assistant, designed to make budgeting simple, engaging, and stress-free. Whether you're managing day-to-day expenses, keeping track of bills, or aiming for long-term savings, Budgie is here to guide you with powerful, intuitive tools. Budgie features a sleek design and real-time insights.
 
 ---
+## 📽 Demo Video
+[![Watch on YouTube] (https://youtu.be/d2s0mmedYs0)
+---
 
 ## Features
 
