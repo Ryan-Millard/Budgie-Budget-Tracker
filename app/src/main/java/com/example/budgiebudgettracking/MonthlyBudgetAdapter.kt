@@ -1,6 +1,5 @@
 package com.example.budgiebudgettracking
 
-import android.widget.Toast
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -68,7 +67,6 @@ class MonthlyGoalsAdapter(
 				val remaining = (goal.maxGoal - clampedSpent).coerceAtLeast(0.0)
 				spentText.text = "Spent: ${currencyFormatter.format(clampedSpent)}"
 				remainingText.text = "Remaining: ${currencyFormatter.format(remaining)}"
-				Toast.makeText(itemView.context, "${currencyFormatter.format(clampedSpent)}", Toast.LENGTH_SHORT).show()
 			}
 		}
 	}
