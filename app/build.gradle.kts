@@ -1,3 +1,13 @@
+import java.util.Properties
+import java.io.FileInputStream
+
+val keystoreProperties = Properties().apply {
+    val keystoreFile = rootProject.file("keystore.properties")
+    if (keystoreFile.exists()) {
+        load(FileInputStream(keystoreFile))
+    }
+}
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
@@ -19,15 +29,29 @@ android {
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
     }
 
-    buildTypes {
-        release {
-            isMinifyEnabled = false
-            proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
-            )
-        }
-    }
+	signingConfigs {
+		if (keystoreProperties.isNotEmpty()) {
+			create("release") {
+				storeFile = file(keystoreProperties["storeFile"] as String)
+				storePassword = keystoreProperties["storePassword"] as String
+				keyAlias = keystoreProperties["keyAlias"] as String
+				keyPassword = keystoreProperties["keyPassword"] as String
+			}
+		}
+	}
+
+	buildTypes {
+		getByName("release") {
+			isMinifyEnabled = false
+			if (signingConfigs.findByName("release") != null) {
+				signingConfig = signingConfigs.getByName("release")
+			}
+			proguardFiles(
+				getDefaultProguardFile("proguard-android-optimize.txt"),
+				"proguard-rules.pro"
+			)
+		}
+	}
 
     compileOptions {
         // Enable Java 8+ API desugaring

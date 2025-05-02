@@ -27,3 +27,7 @@ local.properties
 
 # Vim info file
 .viminfo
+
+# Uh-oh
+budgie-release-key.jks
+keystore.properties
