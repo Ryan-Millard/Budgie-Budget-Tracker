@@ -1,90 +1,66 @@
+name: Build & Release APK on Tag
 
-name: Generated APK AAB (Upload - Create Artifact To Github Action)
-
-env:
-  main_project_module: app
-
-  playstore_name: Budgie Budget Tracker
-
+# Trigger on any tag push, plus manual dispatch
 on:
-  pull_request:
-    branches:
-      - 'main'
   push:
-    branches:
-      - 'release/**'
-      - 'main'
     tags:
       - '*'
-
-  # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
-jobs:
-  build:
+# Give this workflow permission to write repo contents (needed for creating releases)
+permissions:
+  contents: write
 
+jobs:
+  build-and-release:
+    name: Build & Release APK
     runs-on: ubuntu-latest
 
+    # Extra guard: only run this job for tag refs
+    if: ${{ github.event_name == 'push' && startsWith(github.ref, 'refs/tags/') }}
+
     steps:
-      - uses: actions/checkout@v4
+      # 1. Check out the repo (with full history so tags are available)
+      - name: Check out repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
-      # Set Current Date As Env Variable
-      - name: Set current date as env variable
-        run: echo "date_today=$(date +'%Y-%m-%d')" >> $GITHUB_ENV
+      # 2. Make the Gradle wrapper executable
+      - name: Ensure Gradle wrapper is executable
+        run: chmod +x gradlew
 
-      # Set Repository Name As Env Variable
-      - name: Set repository name as env variable
-        run: echo "repository_name=$(echo '${{ github.repository }}' | awk -F '/' '{print $2}')" >> $GITHUB_ENV
-
-      - name: Set Up JDK
+      # 3. Set up Java (Temurin 11)
+      - name: Set up JDK 11
         uses: actions/setup-java@v4
         with:
-          distribution: 'zulu' # See 'Supported distributions' for available options
-          java-version: '17'
+          distribution: 'temurin'
+          java-version: '11'
           cache: 'gradle'
 
-      - name: Change wrapper permissions
-        run: chmod +x ./gradlew
+      # 4. Assemble the release APK
+      - name: Assemble Release APK
+        run: ./gradlew assembleRelease --no-daemon
 
-      # Run Tests Build
-      - name: Run gradle tests
-        run: ./gradlew test
+      # 5. Locate the generated APK
+      - name: Locate APK path
+        id: find_apk
+        run: |
+          APK=$(find . -type f -path "*/build/outputs/apk/release/*release.apk" | head -n 1)
+          if [ -z "$APK" ]; then
+            echo "::error::No release APK found!"
+            exit 1
+          fi
+          echo "Found APK at $APK"
+          echo "apk_path=$APK" >> "$GITHUB_OUTPUT"
 
-      # Run Build Project
-      - name: Build gradle project
-        run: ./gradlew build
-
-      # Create APK Debug
-      - name: Build apk debug project (APK) - ${{ env.main_project_module }} module
-        run: ./gradlew assembleDebug
-
-      # Create APK Release
-      - name: Build apk release project (APK) - ${{ env.main_project_module }} module
-        run: ./gradlew assemble
-
-      # Create Bundle AAB Release
-      # Noted for main module build [main_project_module]:bundleRelease
-      - name: Build app bundle release (AAB) - ${{ env.main_project_module }} module
-        run: ./gradlew ${{ env.main_project_module }}:bundleRelease
-
-      # Upload Artifact Build
-      # Noted For Output [main_project_module]/build/outputs/apk/debug/
-      - name: Upload APK Debug - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v4
+      # 6. Create GitHub Release and upload the APK
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        if: ${{ github.ref_type == 'tag' }}
         with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) debug generated
-          path: ${{ env.main_project_module }}/build/outputs/apk/debug/
-
-      # Noted For Output [main_project_module]/build/outputs/apk/release/
-      - name: Upload APK Release - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - APK(s) release generated
-          path: ${{ env.main_project_module }}/build/outputs/apk/release/
-
-      # Noted For Output [main_project_module]/build/outputs/bundle/release/
-      - name: Upload AAB (App Bundle) Release - ${{ env.repository_name }}
-        uses: actions/upload-artifact@v4
-        with:
-          name: ${{ env.date_today }} - ${{ env.playstore_name }} - ${{ env.repository_name }} - App bundle(s) AAB release generated
-          path: ${{ env.main_project_module }}/build/outputs/bundle/release/
+          name: Release ${{ github.ref_name }}
+          tag_name: ${{ github.ref_name }}
+          files: ${{ steps.find_apk.outputs.apk_path }}
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
