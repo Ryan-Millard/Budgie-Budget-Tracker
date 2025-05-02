@@ -12,15 +12,20 @@ jobs:
     steps:
       - name: Check out code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0  # Ensures tags are available
+
+      - name: Ensure gradlew is executable
+        run: |
+          ls -l
+          file ./gradlew || echo "gradlew not found"
+          chmod +x ./gradlew
 
       - name: Set up JDK
         uses: actions/setup-java@v3
         with:
           distribution: temurin
           java-version: '11'
-
-      - name: Make gradlew executable
-        run: chmod +x ./gradlew
 
       - name: Build Release APK
         run: ./gradlew assembleRelease
