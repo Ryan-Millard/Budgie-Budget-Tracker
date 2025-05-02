@@ -15,28 +15,50 @@
         android:alpha="0.2"
         android:contentDescription="Background" />
 
+
     <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fillViewport="true">
 
         <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:gravity="center_horizontal">
+			android:layout_width="match_parent"
+			android:layout_height="wrap_content"
+			android:orientation="vertical"
+			android:gravity="center_horizontal"
+			android:paddingHorizontal="24dp"
+			android:paddingTop="40dp"
+			android:paddingBottom="24dp">
+
+			<!-- Logo -->
+			<ImageView
+				android:id="@+id/logoImageView"
+				android:layout_width="80dp"
+				android:layout_height="80dp"
+				android:src="@mipmap/ic_logo"
+				android:contentDescription="App Logo" />
+
+			<!-- Title -->
+			<TextView
+				android:id="@+id/titleAddBudget"
+				android:layout_width="wrap_content"
+				android:layout_height="wrap_content"
+				android:text="Set Your Monthly Goals"
+				android:textColor="@color/colorPrimary"
+				android:textSize="22sp"
+				android:textStyle="bold"
+				android:layout_marginBottom="24dp" />
 
 			<!-- Month selector -->
 			<com.example.budgiebudgettracking.components.NavigationSelector
 				android:id="@+id/month_selector"
 				android:layout_width="match_parent"
-				android:layout_height="wrap_content"
+				android:layout_height="40dp"
 				android:layout_marginTop="8dp"
+				android:layout_marginBottom="24dp"
 				app:leftButtonIcon="@drawable/ic_arrow_left"
 				app:rightButtonIcon="@drawable/ic_arrow_right"
 				app:layout_constraintTop_toBottomOf="@+id/expensesHeading"
-				app:layout_constraintStart_toStartOf="parent"
-				app:layout_constraintEnd_toEndOf="parent"
 				android:background="@color/colorPrimary2"/>
 
 				<!-- Minimum Goal Section -->
@@ -71,7 +93,8 @@
 							android:clickable="true"
 							android:gravity="center"
 							android:textSize="20sp"
-							android:textStyle="bold"/>
+							android:textStyle="bold"
+							android:textColor="@color/colorOnBackground"/>
 					</com.google.android.material.textfield.TextInputLayout>
 
 					<com.example.budgiebudgettracking.components.CalculatorView
@@ -113,7 +136,8 @@
 							android:clickable="true"
 							android:gravity="center"
 							android:textSize="20sp"
-							android:textStyle="bold"/>
+							android:textStyle="bold"
+							android:textColor="@color/colorOnBackground"/>
 					</com.google.android.material.textfield.TextInputLayout>
 
 					<com.example.budgiebudgettracking.components.CalculatorView
@@ -130,9 +154,13 @@
                 android:layout_height="60dp"
                 android:text="Save Budget"
                 android:textSize="16sp"
-                app:cornerRadius="8dp"
+				android:textStyle="bold"
+				android:textColor="@color/white"
+				app:backgroundTint="@color/colorPrimary"
+				app:cornerRadius="8dp"
                 app:icon="@drawable/ic_save"
-                app:iconGravity="textStart"/>
+                app:iconGravity="textStart"
+				android:layout_marginTop="16dp" />
         </LinearLayout>
     </androidx.core.widget.NestedScrollView>
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

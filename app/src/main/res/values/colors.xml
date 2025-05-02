@@ -16,4 +16,5 @@
     <color name="bottom_nav_item_color">#2A9D8F</color> <!-- Teal/Green -->
     <color name="bottom_nav_item_color_selected">#264653</color> <!-- Dark Blue-Grey -->
 
+    <color name="white">#FFFFFF</color>
 </resources>
