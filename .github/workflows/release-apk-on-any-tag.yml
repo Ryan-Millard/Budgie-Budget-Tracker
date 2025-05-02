@@ -20,6 +20,9 @@ jobs:
           distribution: temurin
           java-version: '11'
 
+      - name: Change wrapper permissions
+        run: chmod +x ./gradlew
+
       - name: Build Release APK
         run: ./gradlew assembleRelease
 
