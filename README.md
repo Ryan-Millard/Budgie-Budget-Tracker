@@ -7,9 +7,13 @@
 
 **Budgie** is your personal financial assistant, designed to make budgeting simple, engaging, and stress-free. Whether you're managing day-to-day expenses, keeping track of bills, or aiming for long-term savings, Budgie is here to guide you with powerful, intuitive tools. Budgie features a sleek design and real-time insights.
 
----
+
 ## 📽 Demo Video
 [Watch the video for Part 2 of the POE](https://youtu.be/d2s0mmedYs0)
+
+## 🤖 Releases
+[v1.0.0 - POE Part 2](https://github.com/Ryan-Millard/Budgie-Budget-Tracker/releases/tag/v1.0.0-POE_Part_2)
+
 ---
 
 ## Features
@@ -117,7 +121,6 @@ For any questions, suggestions, or feedback, feel free to contact me:
 | Contributor | GitHub Profile | Student Email |
 |------------|------------|------------|
 | Ryan Millard | [![Ryan Millard](https://img.shields.io/badge/GitHub-Profile-informational?logo=github&style=for-the-badge)](https://github.com/Ryan-Millard) | <a href="mailto:st10383326@imconnect.edu.za"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a> |
-| Krival Haridass | [![Krival Haridass](https://img.shields.io/badge/GitHub-Profile-informational?logo=github&style=for-the-badge)](https://github.com/Krivz304) | <a href="mailto:st10108583@imconnect.edu.za"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a> |
 | Alec van Aswegen | [![Alec van Aswegen](https://img.shields.io/badge/GitHub-Profile-informational?logo=github&style=for-the-badge)](https://github.com/AlecvanAswegen) | <a href="mailto:st10108565@imconnect.edu.za"><img src="https://img.shields.io/badge/Email-D14836?style=for-the-badge&logo=gmail&logoColor=white" alt="Email"/></a> |
 
 
