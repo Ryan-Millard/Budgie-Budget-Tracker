@@ -9,7 +9,7 @@
 
 ---
 ## 📽 Demo Video
-[Watch the video](https://youtu.be/d2s0mmedYs0)
+[Watch the video for Part 2 of the POE](https://youtu.be/d2s0mmedYs0)
 ---
 
 ## Features
